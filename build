@@ -1,0 +1,3 @@
+
+echo "Compiling analysis code with name:" $1
+g++ -O3 skimmer.cc `root-config --cflags --glibs` -lRooFit -lRooFitCore -o $1
