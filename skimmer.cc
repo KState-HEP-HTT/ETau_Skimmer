@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
     std::string suffix = "Skim_";
-    auto fout = new TFile((outprefix+suffix+ifile).c_str(), "RECREATE");
+    auto fout = new TFile((outprefix+"/"+suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("skim","skim");
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
