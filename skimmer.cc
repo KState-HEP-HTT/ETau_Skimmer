@@ -1,7 +1,7 @@
 #include <sys/types.h>
+#include <sys/stat.h>
 #include <dirent.h>
 #include <vector>
-
 
 #include "TFile.h"
 #include "TChain.h"
@@ -23,13 +23,15 @@ void read_directory(const std::string &name, std::vector<std::string> &v) {
 
 int main(int argc, char* argv[]) {
 
+
   std::vector<std::string> all_files;
   std::string dir_name = "test";
   if (argc > 1)
     dir_name = argv[1];
 
   std::string in = samples[dir_name];
-
+  auto outprefix = ("/hdfs/store/user/tmitchel/skims_2016/"+dir_name).c_str();
+  const int dir_err = mkdir(outprefix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   read_directory(in, all_files);
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 1, 0.5, 1.5);
@@ -52,7 +54,7 @@ int main(int argc, char* argv[]) {
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
     std::string suffix = "Skim_";
-    auto fout = new TFile(("out/"+suffix+ifile).c_str(), "RECREATE");
+    auto fout = new TFile((outprefix+suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("skim","skim");
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
@@ -64,8 +66,6 @@ int main(int argc, char* argv[]) {
     skimmed_tree->Write();
     fout->Close();
   }
-  std::cout << std::endl;
-
 
   return 0;
 }

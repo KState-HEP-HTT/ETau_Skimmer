@@ -2131,16 +2131,11 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
   original->SetBranchAddress("vispX", &vispX);
   original->SetBranchAddress("vispY", &vispY);
   original->SetBranchAddress("idx", &idx);
-
 }
 
 TTree* etau_tree::do_skimming() {
   Int_t nevt = (Int_t)original->GetEntries();
   for (auto i = 0; i < nevt; i++) {
-
-    // if (i % 10000 == 0)
-    //   std::cout << "Processed: " << i << " out of " << nevt << " events.\r" << std::flush;
-
     original->GetEntry(i);
 
     if (ePVDXY > 0.045 || ePVDZ < 0.2 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1 || ePt < 25 || abs(eEta) > 2.5)
@@ -2154,6 +2149,5 @@ TTree* etau_tree::do_skimming() {
 
     tree->Fill();
   }
-
   return tree;
 }
