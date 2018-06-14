@@ -30,8 +30,8 @@ int main(int argc, char* argv[]) {
     dir_name = argv[1];
 
   std::string in = samples[dir_name];
-  auto outprefix = "/hdfs/store/user/tmitchel/skims_2016/"+dir_name;
-  const int dir_err = system(("gsido mkdir "+outprefix).c_str());
+  auto outprefix = "/store/user/tmitchel/skims_2016/"+dir_name;
+  const int dir_err = system(("mkdir /nfs_scratch/tmitchel/skims_2016/"+dir_name).c_str());
   // const int dir_err = mkdir(outprefix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   read_directory(in, all_files);
 
@@ -54,8 +54,8 @@ int main(int argc, char* argv[]) {
 
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
-    std::string suffix = "Skim_";
-    auto fout = new TFile((outprefix+"/"+suffix+ifile).c_str(), "RECREATE");
+    std::string suffix = "/nfs_scratch/tmitchel/skims_2016/"+dir_name+"/Skim_";
+    auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("skim","skim");
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
@@ -66,6 +66,8 @@ int main(int argc, char* argv[]) {
     nweights->Write();
     skimmed_tree->Write();
     fout->Close();
+   
+    //const int cp_err = system(("xrdcp "+suffix+ifile+" root://cmsxrootd.hep.wisc.edu/"+outprefix).c_str());
   }
 
   return 0;
