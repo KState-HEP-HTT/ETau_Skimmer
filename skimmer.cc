@@ -1,5 +1,5 @@
 #include <sys/types.h>
-#include <sys/stat.h>
+// #include <sys/stat.h>
 #include <dirent.h>
 #include <vector>
 
@@ -30,8 +30,9 @@ int main(int argc, char* argv[]) {
     dir_name = argv[1];
 
   std::string in = samples[dir_name];
-  auto outprefix = ("/hdfs/store/user/tmitchel/skims_2016/"+dir_name).c_str();
-  const int dir_err = mkdir(outprefix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
+  auto outprefix = "/hdfs/store/user/tmitchel/skims_2016/"+dir_name;
+  const int dir_err = system(("gsido mkdir "+outprefix).c_str());
+  // const int dir_err = mkdir(outprefix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   read_directory(in, all_files);
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 1, 0.5, 1.5);
