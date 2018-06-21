@@ -10,7 +10,8 @@ private:
 
 public:
   // variables copied directly tree to tree
-  Float_t run, lumi, evt, genweight, genpX, genpY, vispX, vispY, genpT, genM, met, metphi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
+  ULong64_t evt;
+  Float_t run, lumi, genweight, genpX, genpY, vispX, vispY, genpT, genM, met, metphi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
@@ -48,7 +49,7 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
 
    tree->Branch("run", &run, "run/I");
    tree->Branch("lumi", &lumi, "lumi/I");
-   tree->Branch("evt", &evt, "evt/I");
+   tree->Branch("evt", &evt, "evt/l");
    tree->Branch("isZtt", &isZtt, "isZtt/O");
    tree->Branch("isZet", &isZet, "isZet/O");
    tree->Branch("NUP", &NUP, "NUP/I");
