@@ -30,8 +30,8 @@ int main(int argc, char* argv[]) {
     dir_name = argv[1];
 
   std::string in = samples[dir_name];
-  auto outprefix = "/store/user/tmitchel/skims_2016/"+dir_name;
-  const int dir_err = system(("mkdir /nfs_scratch/tmitchel/skims_2016/"+dir_name).c_str());
+  auto outprefix = "/store/user/tmitchel/mc2017_ntuples_Jun18/"+dir_name;
+  const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2017_ntuples_Jun18_skim/"+dir_name).c_str());
   // const int dir_err = mkdir(outprefix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   read_directory(in, all_files);
 
@@ -54,7 +54,7 @@ int main(int argc, char* argv[]) {
 
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
-    std::string suffix = "/nfs_scratch/tmitchel/skims_2016/"+dir_name+"/Skim_";
+    std::string suffix = "/nfs_scratch/tmitchel/mc2017_ntuples_Jun18_skim/"+dir_name+"/Skim_";
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("skim","skim");
