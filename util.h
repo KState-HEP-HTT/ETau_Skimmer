@@ -104,6 +104,7 @@ static std::map<std::string, std::string> samples = {
   {"ZZTo4L"                   , "/hdfs/store/user/caillol/SMHTT_mc_feb13/ZZTo4L_13TeV-amcatnloFXFX-pythia8_v6_ext1-v1"},
   {"ZZ"                       , "/hdfs/store/user/tmitchel/mc2017_ntuples_Jun18/ZZ_TuneCP5_13TeV-pythia8_v14-v1"},
   {"ttHJetToTT_M125"          , "/hdfs/store/user/caillol/SMHTT_mc_feb13/ttHJetToTT_M125_13TeV_amcatnloFXFX_madspin_pythia8_v6_ext4-v1"},
+  {"sync"                     , "/hdfs/store/user/tmitchel"},
 
 
 };
