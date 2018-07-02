@@ -15,8 +15,8 @@ public:
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, njets, nbtag, njetspt20, njets_JESDown, njetspt20_JESDown, njets_JESUp, njetspt20_JESUp, gen_match_1, gen_match_2, pt_tt, pzetavis, pzetamiss;
-  Float_t m_vis, l2_decayMode, mt_1, dZ_1, d0_1, iso_1, q_1, mt_2, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
+  Float_t pt_top1, pt_top2, njets, nbtag, njetspt20, njets_JESDown, njetspt20_JESDown, njets_JESUp, njetspt20_JESUp, gen_match_1, gen_match_2;
+  Float_t m_vis, l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
   Float_t byCombinedIsolationDeltaBetaCorrRaw3Hits_2, byIsolationMVA3oldDMwLTraw_2, byIsolationMVA3newDMwLTraw_2, byVLooseIsolationMVArun2v1DBoldDMwLT_2, byLooseIsolationMVArun2v1DBoldDMwLT_2;
@@ -34,8 +34,8 @@ public:
   Float_t gen_Higgs_pt, gen_Higgs_mass, weight;
 
   // forgotten
-  Float_t byIsolationMVA3oldDMwoLTraw_2, trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, numGenJets, vbfDeta_JetEnDown, vbfDeta_JetEnUp, vbfDphi;
-  Float_t vbfDphi_JetEnDown, vbfDphi_JetEnUp, vbfMass, vbfJetVeto20, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp, vbfJetVeto30, vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp, eGenPdgId, vbfDeta, extramuon_veto;
+  Float_t byIsolationMVA3oldDMwoLTraw_2, trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, numGenJets, vbfDeta_JetEnDown, vbfDeta_JetEnUp;
+  Float_t vbfMass, vbfJetVeto20, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp, vbfJetVeto30, vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp, eGenPdgId, vbfDeta, extramuon_veto;
   Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR;
 
   etau_tree (TTree* orig, TTree* itree);
@@ -63,12 +63,10 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     tree->Branch("q_1", &q_1, "q_1/F");
     tree->Branch("d0_1", &d0_1, "d0_1/F");
     tree->Branch("dZ_1", &dZ_1, "dZ_1/F");
-    tree->Branch("mt_1", &mt_1, "mt_1/F");
     tree->Branch("iso_1", &iso_1, "iso_1/F");
     tree->Branch("q_2", &q_2, "q_2/F");
     tree->Branch("d0_2", &d0_2, "d0_2/F");
     tree->Branch("dZ_2", &dZ_2, "dZ_2/F");
-    tree->Branch("mt_2", &mt_2, "mt_2/F");
     tree->Branch("iso_2", &iso_2, "iso_2/F");
     tree->Branch("dilepton_veto", &dilepton_veto, "dilepton_veto/F");
     tree->Branch("extraelec_veto", &extraelec_veto, "extraelec/F");
@@ -101,8 +99,6 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     tree->Branch("idisoweight_2", &idisoweight_2, "idisoweight_2/F");
     tree->Branch("met", &met, "met/F");
     tree->Branch("metphi", &metphi, "metphi/F");
-    tree->Branch("pzetavis", &pzetavis, "pzetavis/F");
-    tree->Branch("pzetamiss", &pzetamiss, "pzetamiss/F");
     tree->Branch("nbtag", &nbtag, "nbtag/I");
     tree->Branch("njets", &njets, "njets/I");
     tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
@@ -154,9 +150,6 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     tree->Branch("hdijetphi", &hdijetphi, "hdijetphi/F");
     tree->Branch("visjeteta", &visjeteta, "visjeteta/F");
 
-    // from svFit
-    //tree->Branch("pt_tt", &pt_tt, "pt_tt/F");
-    //tree->Branch("m_vis", &m_vis, "m_vis/F");
 
 //    // others not for sync
 //    tree->Branch("isZtt", &isZtt, "isZtt/O");
@@ -233,17 +226,12 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     original->SetBranchAddress("jetVeto20", &njetspt20);
     original->SetBranchAddress("eZTTGenMatching", &gen_match_1);
     original->SetBranchAddress("tZTTGenMatching", &gen_match_2);
-    //original->SetBranchAddress("e_t_pt_tt", &pt_tt);
-    original->SetBranchAddress("e_t_PZetaVis", &pzetavis);
-    original->SetBranchAddress("e_t_PZeta", &pzetamiss);
     original->SetBranchAddress("e_t_Mass", &m_vis);
     original->SetBranchAddress("tDecayMode", &l2_decayMode);
-    original->SetBranchAddress("eMtToPfMet_type1", &mt_1);
     original->SetBranchAddress("ePVDZ", &dZ_1);
     original->SetBranchAddress("ePVDXY", &d0_1);
     original->SetBranchAddress("eIsoDB03", &iso_1);
     original->SetBranchAddress("eCharge", &q_1);
-    original->SetBranchAddress("tMtToPfMet_type1", &mt_1);
     original->SetBranchAddress("tPVDXY", &dZ_2);
     original->SetBranchAddress("tPVDZ", &d0_2);
     original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &iso_2);
@@ -305,7 +293,6 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     original->SetBranchAddress("tEta", &tEta);
     original->SetBranchAddress("tPhi", &tPhi);
     original->SetBranchAddress("vbfDeta", &vbfDeta);
-    original->SetBranchAddress("vbfDphi", &vbfDphi);
     original->SetBranchAddress("vbfMass", &vbfMass);
     original->SetBranchAddress("vbfJetVeto20", &vbfJetVeto20);
     original->SetBranchAddress("vbfJetVeto30", &vbfJetVeto30);
@@ -325,8 +312,6 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
 //    original->SetBranchAddress("vbfJetVeto30_JetEnUp", &vbfJetVeto30_JetEnUp);
 //    original->SetBranchAddress("vbfDeta_JetEnDown", &vbfDeta_JetEnDown);
 //    original->SetBranchAddress("vbfDeta_JetEnUp", &vbfDeta_JetEnUp);
-//    original->SetBranchAddress("vbfDphi_JetEnDown", &vbfDphi_JetEnDown);
-//    original->SetBranchAddress("vbfDphi_JetEnUp", &vbfDphi_JetEnUp);
 //    original->SetBranchAddress("tauVetoPt20Loose3HitsVtx", &extratau_veto);
 //    original->SetBranchAddress("isZtautau", &isZtt);
 //    original->SetBranchAddress("e_t_collinearmass", &m_coll);
@@ -446,7 +431,6 @@ TTree* etau_tree::do_skimming() {
 
     if (njetspt20 > 1){
        jdeta = vbfDeta;
-       jdphi = vbfDphi;
        dijetphi = dijet.Phi();
        hdijetphi = h.DeltaPhi(dijet);
        visjeteta = h.Eta()-dijet.Eta();
