@@ -21,8 +21,9 @@ public:
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
   Float_t byCombinedIsolationDeltaBetaCorrRaw3Hits_2, byIsolationMVA3oldDMwLTraw_2, byIsolationMVA3newDMwLTraw_2, byVLooseIsolationMVArun2v1DBoldDMwLT_2, byLooseIsolationMVArun2v1DBoldDMwLT_2;
   Float_t byMediumIsolationMVArun2v1DBoldDMwLT_2, byTightIsolationMVArun2v1DBoldDMwLT_2, byVTightIsolationMVArun2v1DBoldDMwLT_2, byVVTightIsolationMVArun2v1DBoldDMwLT_2;
-  Float_t neutralIsoPtSum_2, chargedIsoPtSum_2, puCorrPtSum_2, decawyModeFinding_2, decayModeFindingNewDMs_2, jpt_1, jpt_2, jeta_1, jeta_2, jphi_1, jphi_2, jcsv_1, jcsv_2, bpt_1, bpt_2;
-  Float_t beta_1, beta_2, bphi_1, bphi_2, bcsv_1, bcsv_2, NUP, npu, npv, rho, extratau_veto, isZtt, idisoweight_2, decayModeFinding_2;
+  Float_t neutralIsoPtSum_2, chargedIsoPtSum_2, puCorrPtSum_2, decayModeFinding_2, decayModeFindingNewDMs_2, jpt_1, jpt_2, jeta_1, jeta_2, jphi_1, jphi_2, jcsv_1, jcsv_2, bpt_1, bpt_2;
+  Float_t beta_1, beta_2, bphi_1, bphi_2, bcsv_1, bcsv_2, NUP, npu, npv, rho, extratau_veto, isZtt, idisoweight_2;
+  Float_t eMVAIsoWP90;
 
   // temporary storage variables
   Float_t eVetoZTTp001dxyzR0, muVetoZTTp001dxyzR0, dielectronVeto, vbfMass_JetEnUp, vbfMass_JetEnDown;
@@ -168,7 +169,7 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
 //    tree->Branch("vispY", &vispY, "vispY/F");
 //    tree->Branch("l2_decayMode", &l2_decayMode, "l2_decayMode/F");
 //    tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &byMediumIsolationMVArun2v1DBoldDMwLT_2, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
-//    tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &byTightIsolationMVArun2v1DBoldDMwLT_2, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
+   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &byTightIsolationMVArun2v1DBoldDMwLT_2, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
 //    tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2", &byVTightIsolationMVArun2v1DBoldDMwLT_2, "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
 //    tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &byVVTightIsolationMVArun2v1DBoldDMwLT_2, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
 //    tree->Branch("metSig", &metSig, "metSig/F");
@@ -310,6 +311,7 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     original->SetBranchAddress("vbfJetVeto30", &vbfJetVeto30);
     original->SetBranchAddress("eGenPdgId", &eGenPdgId);
     original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
+    original->SetBranchAddress("eMVAIsoWP90", &eMVAIsoWP90);
     original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
     original->SetBranchAddress("eMissingHits", &eMissingHits);
     original->SetBranchAddress("e_t_DR", &e_t_DR);
@@ -379,7 +381,6 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
 //    original->SetBranchAddress("tDPhiToPfMet_type1", &dphi_taumet);
 //    original->SetBranchAddress("topQuarkPt1", &pt_top1);
 //    original->SetBranchAddress("topQuarkPt2", &pt_top2);
-
 }
 
 TTree* etau_tree::do_skimming() {
@@ -387,14 +388,23 @@ TTree* etau_tree::do_skimming() {
   for (auto i = 0; i < nevt; i++) {
     original->GetEntry(i);
 
-    if (d0_1 > 0.045 || dZ_1 < 0.2 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1 || ePt < 25 || abs(eEta) > 2.5)
+    if (ePt < 24 || fabs(eEta) > 2.1 || !eMVAIsoWP90 || !ePassesConversionVeto || dZ_1 > 0.2 || fabs(d0_1) > 0.045)
       continue;
-    if (dZ_2 > 0.2 || !byMediumIsolationMVArun2v1DBoldDMwLT_2 || !decayModeFinding_2 || abs(q_2) > 1 || tPt < 19 || abs(tEta) > 2.3)
+
+    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || dZ_2 > 0.2 || !byVLooseIsolationMVArun2v1DBoldDMwLT_2 || !byTightIsolationMVArun2v1DBoldDMwLT_2)
       continue;
-    if (muVetoZTTp001dxyzR0 > 0)
+      
+    if (dielectronVeto > 0  || !againstMuonLoose3_2 || !againstElectronTightMVA6_2 || abs(q_2) > 1 || iso_1 > 0.1 || (q_1 + q_2) != 0)
       continue;
-    if (e_t_DR < 0.5 || dielectronVeto > 0)
-      continue;
+      
+    // if (d0_1 > 0.045 || dZ_1 < 0.2 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1 || ePt < 25 || abs(eEta) > 2.5)
+    //   continue;
+    // if (dZ_2 > 0.2 || !byMediumIsolationMVArun2v1DBoldDMwLT_2 || !decayModeFinding_2 || abs(q_2) > 1 || tPt < 19 || abs(tEta) > 2.3)
+    //   continue;
+    // if (muVetoZTTp001dxyzR0 > 0)
+    //   continue;
+    // if (e_t_DR < 0.5 || dielectronVeto > 0)
+    //   continue;
 
     met_px = met*cos(metphi);
     met_py = met*sin(metphi);
