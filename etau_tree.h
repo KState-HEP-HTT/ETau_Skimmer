@@ -10,6 +10,8 @@ private:
   std::vector<Int_t> good_events;
 
 public:
+  // Member variables
+
   // variables copied directly tree to tree
   ULong64_t evt;
   Float_t genweight, genpX, genpY, vispX, vispY, genpT, genM, met, metphi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
@@ -34,7 +36,7 @@ public:
 
   // new variables to store in new tree
   Float_t met_px, met_py, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi, hdijetphi, visjeteta, isZet;
-  Float_t jdeta, jdphi, mjj, dijetpt, mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown;
+  Float_t jdeta, mjj, dijetpt, mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown;
   Float_t gen_Higgs_pt, gen_Higgs_mass, weight;
 
   // forgotten
@@ -42,6 +44,7 @@ public:
   Float_t vbfMass, vbfJetVeto20, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp, vbfJetVeto30, vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp, eGenPdgId, vbfDeta, extramuon_veto;
   Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR;
 
+  // Member functions
   etau_tree (TTree* orig, TTree* itree);
   virtual ~etau_tree () {};
   void do_skimming();
@@ -49,6 +52,17 @@ public:
   TTree* fill_tree();
 };
 
+//////////////////////////////////////////////////////////////////
+// Purpose: Initialize tree and original, then read branches    //
+//          needed for skimming/sorting from Original           //
+//////////////////////////////////////////////////////////////////
+// Parameters                                                   //
+//   - Original: A tree read from an input root file.           //
+//               At this point, only the branches necessary     //
+//               for skim selection and sorting are read        //
+//   - itree: A newly constructed tree. This tree will be       //
+//            filled for all events passing the skim selection  //
+//////////////////////////////////////////////////////////////////
 etau_tree::etau_tree(TTree* Original, TTree* itree) :
 tree(itree),
 original(Original)
@@ -78,6 +92,11 @@ original(Original)
 
 }
 
+//////////////////////////////////////////////////////////////////
+// Purpose: Skim original then apply Isolation-based sorting.   //
+//          Good events will be placed in the good_events       //
+//          vector for later                                    //
+//////////////////////////////////////////////////////////////////
 void etau_tree::do_skimming() {
 
   // declare variables for sorting
@@ -143,9 +162,20 @@ void etau_tree::do_skimming() {
   }
 }
 
+//////////////////////////////////////////////////////////////////
+// Purpose: Fill tree with variables from original and new      //
+//          variables. Only events that have been skimmed,      //
+//          sorted, and stored in the good_events vector will   //
+//          be stored in the tree.                              //
+//////////////////////////////////////////////////////////////////
+// Return: The same TTree passed to the constructor and stored  //
+//         in original, but now it is filled with good events   //
+//////////////////////////////////////////////////////////////////
 TTree* etau_tree::fill_tree() {
 
-  set_branches();
+  set_branches();  // get all the branches set up
+
+  // loop through all events pasing skimming/sorting
   for (auto& ievt : good_events) {
     original->GetEntry(ievt);
 
@@ -197,7 +227,6 @@ TTree* etau_tree::fill_tree() {
        njetingap = vbfJetVeto30;
     }
     else{
-       jdphi = -10000;
        jdeta = -10000;
        dijetpt = -10000;
        dijetphi = -10000;
@@ -239,9 +268,13 @@ TTree* etau_tree::fill_tree() {
   return tree;
 }
 
-
-
-
+//////////////////////////////////////////////////////////////////
+// Purpose:                                                     //
+//   - Read all branches we need from original. These branches  //
+//          branches may be directly stored, be copied with a   //
+//          new name, or used to construct new variables.       //
+//   - Create branches in tree to store any variable we want    //
+//////////////////////////////////////////////////////////////////
 void etau_tree::set_branches() {
 
   // straight from input tree
@@ -338,7 +371,6 @@ void etau_tree::set_branches() {
   tree->Branch("e_2", &m_2, "e_2/F");
   tree->Branch("mjj", &mjj, "mjj/F");
   tree->Branch("jdeta", &jdeta, "jdeta/F");
-  tree->Branch("jdphi", &jdphi, "jdphi/F");
   tree->Branch("njetingap", &njetingap, "njetingap/I");
   tree->Branch("njetingap20", &njetingap20, "njetingap20/I");
   tree->Branch("dijetpt", &dijetpt, "dijetpt/F");
