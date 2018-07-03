@@ -12,26 +12,29 @@ private:
 public:
   // variables copied directly tree to tree
   ULong64_t evt;
-  Float_t run, lumi, genweight, genpX, genpY, vispX, vispY, genpT, genM, met, metphi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
+  Float_t genweight, genpX, genpY, vispX, vispY, genpT, genM, met, metphi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, njets, nbtag, njetspt20, njets_JESDown, njetspt20_JESDown, njets_JESUp, njetspt20_JESUp, gen_match_1, gen_match_2;
+  Float_t pt_top1, pt_top2;
   Float_t m_vis, l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
   Float_t byCombinedIsolationDeltaBetaCorrRaw3Hits_2, byIsolationMVA3oldDMwLTraw_2, byIsolationMVA3newDMwLTraw_2, byVLooseIsolationMVArun2v1DBoldDMwLT_2, byLooseIsolationMVArun2v1DBoldDMwLT_2;
   Float_t byMediumIsolationMVArun2v1DBoldDMwLT_2, byTightIsolationMVArun2v1DBoldDMwLT_2, byVTightIsolationMVArun2v1DBoldDMwLT_2, byVVTightIsolationMVArun2v1DBoldDMwLT_2;
   Float_t neutralIsoPtSum_2, chargedIsoPtSum_2, puCorrPtSum_2, decayModeFinding_2, decayModeFindingNewDMs_2, jpt_1, jpt_2, jeta_1, jeta_2, jphi_1, jphi_2, jcsv_1, jcsv_2, bpt_1, bpt_2;
-  Float_t beta_1, beta_2, bphi_1, bphi_2, bcsv_1, bcsv_2, NUP, npu, npv, rho, extratau_veto, isZtt, idisoweight_2;
+  Float_t beta_1, beta_2, bphi_1, bphi_2, bcsv_1, bcsv_2, npu, npv, rho, extratau_veto, isZtt, idisoweight_2;
   Float_t eMVAIsoWP90;
+
+  Int_t run, lumi, NUP, gen_match_1, gen_match_2, nbtag, njets, njetspt20, njetingap, njetingap20;
+  Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
 
   // temporary storage variables
   Float_t eVetoZTTp001dxyzR0, muVetoZTTp001dxyzR0, dielectronVeto, vbfMass_JetEnUp, vbfMass_JetEnDown;
 
   // new variables to store in new tree
   Float_t met_px, met_py, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi, hdijetphi, visjeteta, isZet;
-  Float_t jdeta, jdphi, mjj, njetingap20, njetingap, dijetpt, njetingap20_JESUp, njetingap_JESUp, mjj_JESUp, jdeta_JESUp, njetingap20_JESDown, njetingap_JESDown, mjj_JESDown, jdeta_JESDown;
+  Float_t jdeta, jdphi, mjj, dijetpt, mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown;
   Float_t gen_Higgs_pt, gen_Higgs_mass, weight;
 
   // forgotten
