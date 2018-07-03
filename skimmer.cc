@@ -59,15 +59,14 @@ int main(int argc, char* argv[]) {
 
     TTree* newtree = new TTree("skim","skim");
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
-    auto skimmed_tree = skimmer->do_skimming();
+    skimmer->do_skimming();
+    auto skimmed_tree = skimmer->fill_tree();
 
     fout->cd();
     nevents->Write();
     nweights->Write();
     skimmed_tree->Write();
     fout->Close();
-   
-    //const int cp_err = system(("xrdcp "+suffix+ifile+" root://cmsxrootd.hep.wisc.edu/"+outprefix).c_str());
   }
 
   return 0;

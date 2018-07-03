@@ -7,6 +7,7 @@ class etau_tree {
 private:
   TTree *tree;
   TTree *original;
+  std::vector<Int_t> good_events;
 
 public:
   // variables copied directly tree to tree
@@ -40,7 +41,8 @@ public:
 
   etau_tree (TTree* orig, TTree* itree);
   virtual ~etau_tree () {};
-  TTree* do_skimming();
+  void do_skimming();
+  TTree* fill_tree();
 };
 
 etau_tree::etau_tree(TTree* Original, TTree* itree) :
@@ -226,7 +228,7 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     original->SetBranchAddress("jetVeto20", &njetspt20);
     original->SetBranchAddress("eZTTGenMatching", &gen_match_1);
     original->SetBranchAddress("tZTTGenMatching", &gen_match_2);
-    original->SetBranchAddress("e_t_Mass", &m_vis);
+    // original->SetBranchAddress("e_t_Mass", &m_vis);
     original->SetBranchAddress("tDecayMode", &l2_decayMode);
     original->SetBranchAddress("ePVDZ", &dZ_1);
     original->SetBranchAddress("ePVDXY", &d0_1);
@@ -301,7 +303,7 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
     original->SetBranchAddress("eMVAIsoWP90", &eMVAIsoWP90);
     original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
     original->SetBranchAddress("eMissingHits", &eMissingHits);
-    original->SetBranchAddress("e_t_DR", &e_t_DR);
+    // original->SetBranchAddress("e_t_DR", &e_t_DR);
 
 //    // not needed for sync
 //    original->SetBranchAddress("vbfMass_JetEnUp", &vbfMass_JetEnUp);
@@ -368,11 +370,20 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
 //    original->SetBranchAddress("topQuarkPt2", &pt_top2);
 }
 
-TTree* etau_tree::do_skimming() {
-  Int_t nevt = (Int_t)original->GetEntries();
-  for (auto i = 0; i < nevt; i++) {
-    original->GetEntry(i);
+void etau_tree::do_skimming() {
 
+  // declare variables for sorting
+  ULong64_t evt_now(0);
+  ULong64_t evt_before(1);
+  int best_evt(-1);
+  std::pair<float, float> eleCandidate, tauCandidate;
+
+  Int_t nevt = (Int_t)original->GetEntries();
+  for (auto ievt = 0; ievt < nevt; ievt++) {
+    original->GetEntry(ievt);
+    evt_now = evt;
+
+    // apply event selection
     if (ePt < 24 || fabs(eEta) > 2.1 || !eMVAIsoWP90 || !ePassesConversionVeto || dZ_1 > 0.2 || fabs(d0_1) > 0.045)
       continue;
 
@@ -381,15 +392,53 @@ TTree* etau_tree::do_skimming() {
       
     if (dielectronVeto > 0  || !againstMuonLoose3_2 || !againstElectronTightMVA6_2 || abs(q_2) > 1 || iso_1 > 0.1 || (q_1 + q_2) != 0)
       continue;
+
+    // implement new sorting per 
+	  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
+	  if (evt_now != evt_before) { // new event, save the tau candidates
+      //   since it is new event, do we have the best entry to save? If yes, save it!
+      if ( best_evt > -1  )
+        good_events.push_back(best_evt);
       
-    // if (d0_1 > 0.045 || dZ_1 < 0.2 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1 || ePt < 25 || abs(eEta) > 2.5)
-    //   continue;
-    // if (dZ_2 > 0.2 || !byMediumIsolationMVArun2v1DBoldDMwLT_2 || !decayModeFinding_2 || abs(q_2) > 1 || tPt < 19 || abs(tEta) > 2.3)
-    //   continue;
-    // if (muVetoZTTp001dxyzR0 > 0)
-    //   continue;
-    // if (e_t_DR < 0.5 || dielectronVeto > 0)
-    //   continue;
+      //  this is a new event, so the first tau pair is the best! :)
+      best_evt = ievt;
+      eleCandidate  = std::make_pair(ePt,  iso_1);
+      tauCandidate  = std::make_pair(tPt,  byVLooseIsolationMVArun2v1DBoldDMwLT_2);
+    } 
+    else { // not a new event
+
+      std::pair<float, float> currEleCandidate(ePt, iso_1);
+      std::pair<float, float> currTauCandidate(tPt, byVLooseIsolationMVArun2v1DBoldDMwLT_2);
+      
+      // // comparison between previous tau pair and the new one takes place here!
+      // currEleCandidate = make_pair(ePt,  iso_1);
+      // currTauCandidate = make_pair(tPt,  byVLooseIsolationMVArun2v1DBoldDMwLT_2);
+
+      // clause 1, select the pair that has most isolated tau lepton 1
+      if (currEleCandidate.second - eleCandidate.second  > 0.0001 ) best_evt = ievt;
+
+      // check if the first tau is the same, and if so - move to clause 2
+      if ( fabs(currEleCandidate.second - eleCandidate.second)  <  0.0001 ) {
+        // pick up  the pair with the highest pT of the first candidate
+        if (currEleCandidate.first - eleCandidate.first > 0.0001 ) best_evt = ievt;
+        if ( fabs(currEleCandidate.first -eleCandidate.first) < 0.0001 ) { 
+          // same pT, same iso, move to clause 3
+          if (currTauCandidate.second - tauCandidate.second > 0.0001 ) best_evt = ievt;
+          if ( fabs(currTauCandidate.second - tauCandidate.second) < 0.0001 ) {
+            // same iso - pick the pair with the highest pT
+            if ( currTauCandidate.first - tauCandidate.first  > 0.0001 ) best_evt = ievt;
+          } // tau2 has the same isolation
+        } // tau1 has the same pT
+      } // tau1 has the same isolation
+    } // not a new event
+    evt_before = evt_now;
+  }
+}
+
+TTree* etau_tree::fill_tree() {
+
+  for (auto& ievt : good_events) {
+    original->GetEntry(ievt);
 
     met_px = met*cos(metphi);
     met_py = met*sin(metphi);
@@ -474,7 +523,7 @@ TTree* etau_tree::do_skimming() {
        njetingap_JESDown  = -100000;
     }
 
-  isZet = isZtt && fabs(eGenPdgId) == 11;
+    isZet = isZtt && fabs(eGenPdgId) == 11;
 
     tree->Fill();
   }
