@@ -366,11 +366,15 @@ void etau_tree::set_branches() {
   tree->Branch("beta_2", &beta_2, "beta_2/F");
   tree->Branch("bphi_2", &bphi_2, "bphi_2/F");
   tree->Branch("bcsv_2", &bcsv_2, "bcsv_2/F");
-
-  //tree->Branch("passEle25", &passEle25, "passEle25/F");
-  //tree->Branch("passEle27", &passEle27, "passEle27/F");
-  //tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
-  //tree->Branch("filterEle27", &filterEle27, "filterEle27/F");
+  tree->SetBranchAddress("RerunMVArun2v2DBoldDMwLTVVLoose_2", &RerunMVArun2v2DBoldDMwLTVVLoose_2, "RerunMVArun2v2DBoldDMwLTVVLoose_2/F");
+  tree->SetBranchAddress("Ele35WPTightPass", &Ele35WPTightPass, "Ele35WPTightPass/F");
+  tree->SetBranchAddress("MatchesEle35Path_1", &MatchesEle35Path_1, "MatchesEle35Path_1/F");
+  tree->SetBranchAddress("Ele32WPTightPass", &Ele32WPTightPass, "Ele32WPTightPass/F");
+  tree->SetBranchAddress("MatchesEle32Path_1", &MatchesEle32Path_1, "MatchesEle32Path_1/F");
+  tree->SetBranchAddress("Ele24Tau30Pass", &Ele24Tau30Pass, "Ele24Tau30Pass/F");
+  tree->SetBranchAddress("MatchesEle24Tau30Path_1", &MatchesEle24Tau30Path_1, "MatchesEle24Tau30Path_1/F");
+  tree->SetBranchAddress("MVANoisoWP80_1", &MVANoisoWP80_1, "MVANoisoWP80_1/F");
+  tree->SetBranchAddress("MVAIsoWP80_1", &MVAIsoWP80_1, "MVAIsoWP80_1/F");
 
   // created during skimming
   tree->Branch("pt_1", &pt_1, "pt_1/F");
@@ -538,6 +542,7 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("nTruePU", &npu);
   original->SetBranchAddress("numGenJets", &numGenJets);
   original->SetBranchAddress("nvtx", &npv);
+  
 
   // used to construct something
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
