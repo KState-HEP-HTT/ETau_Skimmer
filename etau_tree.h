@@ -366,15 +366,15 @@ void etau_tree::set_branches() {
   tree->Branch("beta_2", &beta_2, "beta_2/F");
   tree->Branch("bphi_2", &bphi_2, "bphi_2/F");
   tree->Branch("bcsv_2", &bcsv_2, "bcsv_2/F");
-  tree->SetBranchAddress("RerunMVArun2v2DBoldDMwLTVVLoose_2", &RerunMVArun2v2DBoldDMwLTVVLoose_2, "RerunMVArun2v2DBoldDMwLTVVLoose_2/F");
-  tree->SetBranchAddress("Ele35WPTightPass", &Ele35WPTightPass, "Ele35WPTightPass/F");
-  tree->SetBranchAddress("MatchesEle35Path_1", &MatchesEle35Path_1, "MatchesEle35Path_1/F");
-  tree->SetBranchAddress("Ele32WPTightPass", &Ele32WPTightPass, "Ele32WPTightPass/F");
-  tree->SetBranchAddress("MatchesEle32Path_1", &MatchesEle32Path_1, "MatchesEle32Path_1/F");
-  tree->SetBranchAddress("Ele24Tau30Pass", &Ele24Tau30Pass, "Ele24Tau30Pass/F");
-  tree->SetBranchAddress("MatchesEle24Tau30Path_1", &MatchesEle24Tau30Path_1, "MatchesEle24Tau30Path_1/F");
-  tree->SetBranchAddress("MVANoisoWP80_1", &MVANoisoWP80_1, "MVANoisoWP80_1/F");
-  tree->SetBranchAddress("MVAIsoWP80_1", &MVAIsoWP80_1, "MVAIsoWP80_1/F");
+  tree->Branch("RerunMVArun2v2DBoldDMwLTVVLoose_2", &RerunMVArun2v2DBoldDMwLTVVLoose_2, "RerunMVArun2v2DBoldDMwLTVVLoose_2/F");
+  tree->Branch("Ele35WPTightPass", &Ele35WPTightPass, "Ele35WPTightPass/F");
+  tree->Branch("MatchesEle35Path_1", &MatchesEle35Path_1, "MatchesEle35Path_1/F");
+  tree->Branch("Ele32WPTightPass", &Ele32WPTightPass, "Ele32WPTightPass/F");
+  tree->Branch("MatchesEle32Path_1", &MatchesEle32Path_1, "MatchesEle32Path_1/F");
+  tree->Branch("Ele24Tau30Pass", &Ele24Tau30Pass, "Ele24Tau30Pass/F");
+  tree->Branch("MatchesEle24Tau30Path_1", &MatchesEle24Tau30Path_1, "MatchesEle24Tau30Path_1/F");
+  tree->Branch("MVANoisoWP80_1", &MVANoisoWP80_1, "MVANoisoWP80_1/F");
+  tree->Branch("MVAIsoWP80_1", &MVAIsoWP80_1, "MVAIsoWP80_1/F");
 
   // created during skimming
   tree->Branch("pt_1", &pt_1, "pt_1/F");
