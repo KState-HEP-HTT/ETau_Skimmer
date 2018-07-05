@@ -129,7 +129,7 @@ void etau_tree::do_skimming() {
     if (ePt < 25 || fabs(eEta) > 2.1 || !MVAIsoWP80_1 || !ePassesConversionVeto || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || eMissingHits > 1) // electron selection/ID
       continue;
 
-    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || fabs(dZ_2) > 0.2 || abs(q_2) != 1 || !RerunMVArun2v2DBoldDMwLTVVLoose_2) // tau selection
+    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || fabs(dZ_2) > 0.2 || abs(q_2) != 1 || RerunMVArun2v2DBoldDMwLTVVLoose_2 < 0.5) // tau selection
       continue;
       
     double dR = sqrt( pow(eEta - tEta, 2) + pow(ePhi - tPhi, 2) ); // pair selection

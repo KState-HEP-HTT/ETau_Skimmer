@@ -56,7 +56,7 @@ int main(int argc, char* argv[]) {
     std::string suffix = "/nfs_scratch/tmitchel/mc2017_ntuples_Jun18_skim/"+dir_name+"/Skim_";
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
-    TTree* newtree = new TTree("skim","skim");
+    TTree* newtree = new TTree("et_tree","et_tree");
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
     skimmer->do_skimming();
     auto skimmed_tree = skimmer->fill_tree();
