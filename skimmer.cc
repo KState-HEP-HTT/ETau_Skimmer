@@ -67,6 +67,7 @@ int main(int argc, char* argv[]) {
     skimmed_tree->Write();
     fout->Close();
   }
+  std::cout << std::endl;
 
   return 0;
 }

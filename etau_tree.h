@@ -18,7 +18,7 @@ public:
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2, MVANoisoWP80_1;
+  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2, MVANoisoWP80_1, MVAIsoWP80_1;
   Float_t m_vis, l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
@@ -99,6 +99,7 @@ original(Original)
   original->SetBranchAddress("Ele24Tau30Pass", &Ele24Tau30Pass);
   original->SetBranchAddress("eMatchesEle24Tau30Path", &MatchesEle24Tau30Path_1);
   original->SetBranchAddress("eMVANoisoWP80", &MVANoisoWP80_1);
+  original->SetBranchAddress("eMVAIsoWP80", &MVAIsoWP80_1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -122,10 +123,10 @@ void etau_tree::do_skimming() {
     // apply event selection from baseline
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_e_tau_h
 
-    if ((!Ele32WPTightPass || !MatchesEle32Path_1) && (!MatchesEle24Tau30Path_1 || !Ele24Tau30Pass)) // OR of listed triggers with matching dR < 0.5
-      continue;
+    // if ((!Ele32WPTightPass || !MatchesEle32Path_1) && (!MatchesEle24Tau30Path_1 || !Ele24Tau30Pass)) // OR of listed triggers with matching dR < 0.5
+    //   continue;
 
-    if (ePt < 25 || fabs(eEta) > 2.1 || !MVANoisoWP80_1 || !ePassesConversionVeto || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || eMissingHits > 1) // electron selection/ID
+    if (ePt < 25 || fabs(eEta) > 2.1 || !MVAIsoWP80_1 || !ePassesConversionVeto || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || eMissingHits > 1) // electron selection/ID
       continue;
 
     if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || fabs(dZ_2) > 0.2 || abs(q_2) != 1 || !RerunMVArun2v2DBoldDMwLTVVLoose_2) // tau selection
