@@ -81,8 +81,8 @@ original(Original)
   original->SetBranchAddress("tEta", &tEta);
   original->SetBranchAddress("tPhi", &tPhi);
   original->SetBranchAddress("tDecayModeFinding", &decayModeFinding_2);
-  original->SetBranchAddress("tPVDXY", &dZ_2);
-  original->SetBranchAddress("tPVDZ", &d0_2);
+  original->SetBranchAddress("tPVDXY", &d0_2);
+  original->SetBranchAddress("tPVDZ", &dZ_2);
   original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &byVLooseIsolationMVArun2v1DBoldDMwLT_2);
   original->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &byTightIsolationMVArun2v1DBoldDMwLT_2);
   original->SetBranchAddress("dielectronVeto", &dielectronVeto);
@@ -129,7 +129,7 @@ void etau_tree::do_skimming() {
     if (ePt < 25 || fabs(eEta) > 2.1 || !MVAIsoWP80_1 || !ePassesConversionVeto || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || eMissingHits > 1) // electron selection/ID
       continue;
 
-    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || fabs(dZ_2) > 0.2 || abs(q_2) != 1 || RerunMVArun2v2DBoldDMwLTVVLoose_2 < 0.5) // tau selection
+    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || fabs(dZ_2) > 0.2 || fabs(q_2) != 1 || RerunMVArun2v2DBoldDMwLTVVLoose_2 < 0.5) // tau selection
       continue;
       
     double dR = sqrt( pow(eEta - tEta, 2) + pow(ePhi - tPhi, 2) ); // pair selection
@@ -299,7 +299,7 @@ void etau_tree::set_branches() {
   // straight from input tree
   tree->Branch("run", &run, "run/I");
   tree->Branch("lumi", &lumi, "lumi/I");
-  tree->Branch("evt", &evt);
+  tree->Branch("evt", &evt, "evt");
   tree->Branch("rho", &rho, "rho/F");
   tree->Branch("metcov00", &metcov00, "metcov00/F");
   tree->Branch("metcov10", &metcov10, "metcov10/F");
@@ -392,7 +392,7 @@ void etau_tree::set_branches() {
   tree->Branch("py_2", &py_2, "py_2/F");
   tree->Branch("pz_2", &pz_2, "pz_2/F");
   tree->Branch("m_2", &m_2, "m_2/F");
-  tree->Branch("e_2", &m_2, "e_2/F");
+  tree->Branch("e_2", &e_2, "e_2/F");
   tree->Branch("mjj", &mjj, "mjj/F");
   tree->Branch("jdeta", &jdeta, "jdeta/F");
   tree->Branch("njetingap", &njetingap, "njetingap/I");
