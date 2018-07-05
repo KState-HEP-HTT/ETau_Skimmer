@@ -18,7 +18,7 @@ public:
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2;
+  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2, MVANoisoWP80_1;
   Float_t m_vis, l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
@@ -26,7 +26,7 @@ public:
   Float_t byMediumIsolationMVArun2v1DBoldDMwLT_2, byTightIsolationMVArun2v1DBoldDMwLT_2, byVTightIsolationMVArun2v1DBoldDMwLT_2, byVVTightIsolationMVArun2v1DBoldDMwLT_2;
   Float_t neutralIsoPtSum_2, chargedIsoPtSum_2, puCorrPtSum_2, decayModeFinding_2, decayModeFindingNewDMs_2, jpt_1, jpt_2, jeta_1, jeta_2, jphi_1, jphi_2, jcsv_1, jcsv_2, bpt_1, bpt_2;
   Float_t beta_1, beta_2, bphi_1, bphi_2, bcsv_1, bcsv_2, npu, npv, rho, extratau_veto, isZtt, idisoweight_2;
-  Float_t eMVAIsoWP90;
+  Float_t eMVAIsoWP90, RerunMVArun2v2DBoldDMwLTVVLoose_2, Ele35WPTightPass, MatchesEle35Path_1, Ele32WPTightPass, MatchesEle32Path_1, Ele24Tau30Pass, MatchesEle24Tau30Path_1;
 
   Int_t run, lumi, njetingap, njetingap20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
@@ -72,12 +72,14 @@ original(Original)
   original->SetBranchAddress("evt", &evt);
   original->SetBranchAddress("ePt", &ePt);
   original->SetBranchAddress("eEta", &eEta);
+  original->SetBranchAddress("ePhi", &ePhi);
   original->SetBranchAddress("eMVAIsoWP90", &eMVAIsoWP90);
   original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
   original->SetBranchAddress("ePVDZ", &dZ_1);
   original->SetBranchAddress("ePVDXY", &d0_1);
   original->SetBranchAddress("tPt", &tPt);
   original->SetBranchAddress("tEta", &tEta);
+  original->SetBranchAddress("tPhi", &tPhi);
   original->SetBranchAddress("tDecayModeFinding", &decayModeFinding_2);
   original->SetBranchAddress("tPVDXY", &dZ_2);
   original->SetBranchAddress("tPVDZ", &d0_2);
@@ -89,7 +91,14 @@ original(Original)
   original->SetBranchAddress("eCharge", &q_1);
   original->SetBranchAddress("tCharge", &q_2);
   original->SetBranchAddress("eIsoDB03", &iso_1);
-
+  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVLoose", &RerunMVArun2v2DBoldDMwLTVVLoose_2);
+  original->SetBranchAddress("Ele35WPTightPass", &Ele35WPTightPass);
+  original->SetBranchAddress("eMatchesEle35Path", &MatchesEle35Path_1);
+  original->SetBranchAddress("Ele32WPTightPass", &Ele32WPTightPass);
+  original->SetBranchAddress("eMatchesEle32Path", &MatchesEle32Path_1);
+  original->SetBranchAddress("Ele24Tau30Pass", &Ele24Tau30Pass);
+  original->SetBranchAddress("eMatchesEle24Tau30Path", &MatchesEle24Tau30Path_1);
+  original->SetBranchAddress("eMVANoisoWP80", &MVANoisoWP80_1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -110,15 +119,24 @@ void etau_tree::do_skimming() {
     original->GetEntry(ievt);
     evt_now = evt;
 
-    // apply event selection
-    if (ePt < 24 || fabs(eEta) > 2.1 || !eMVAIsoWP90 || !ePassesConversionVeto || dZ_1 > 0.2 || fabs(d0_1) > 0.045)
+    // apply event selection from baseline
+    // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_e_tau_h
+
+    if ((!Ele32WPTightPass || !MatchesEle32Path_1) && (!MatchesEle24Tau30Path_1 || !Ele24Tau30Pass)) // OR of listed triggers with matching dR < 0.5
       continue;
 
-    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || dZ_2 > 0.2 || !byVLooseIsolationMVArun2v1DBoldDMwLT_2 || !byTightIsolationMVArun2v1DBoldDMwLT_2)
+    if (ePt < 25 || fabs(eEta) > 2.1 || !MVANoisoWP80_1 || !ePassesConversionVeto || dZ_1 > 0.2 || fabs(d0_1) > 0.045 || eMissingHits > 1) // electron selection/ID
+      continue;
+
+    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || dZ_2 > 0.2 || abs(q_2) != 1 || !RerunMVArun2v2DBoldDMwLTVVLoose_2) // tau selection
       continue;
       
-    if (dielectronVeto > 0  || !againstMuonLoose3_2 || !againstElectronTightMVA6_2 || abs(q_2) > 1 || iso_1 > 0.1 || (q_1 + q_2) != 0)
+    double dR = sqrt( pow(eEta - tEta, 2) + pow(ePhi - tPhi, 2) ); // pair selection
+    if (dR < 0.5)
       continue;
+      
+    // if (dielectronVeto > 0  || !againstMuonLoose3_2 || !againstElectronTightMVA6_2 || iso_1 > 0.1 || (q_1 + q_2) != 0) // fix
+    //   continue;
 
     // implement new sorting per 
 	  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -280,7 +298,7 @@ void etau_tree::set_branches() {
   // straight from input tree
   tree->Branch("run", &run, "run/I");
   tree->Branch("lumi", &lumi, "lumi/I");
-  tree->Branch("evt", &evt, "evt/l");
+  tree->Branch("evt", &evt);
   tree->Branch("rho", &rho, "rho/F");
   tree->Branch("metcov00", &metcov00, "metcov00/F");
   tree->Branch("metcov10", &metcov10, "metcov10/F");
@@ -347,6 +365,7 @@ void etau_tree::set_branches() {
   tree->Branch("beta_2", &beta_2, "beta_2/F");
   tree->Branch("bphi_2", &bphi_2, "bphi_2/F");
   tree->Branch("bcsv_2", &bcsv_2, "bcsv_2/F");
+
   //tree->Branch("passEle25", &passEle25, "passEle25/F");
   //tree->Branch("passEle27", &passEle27, "passEle27/F");
   //tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
@@ -436,7 +455,6 @@ void etau_tree::set_branches() {
   // original->SetBranchAddress("tDecayModeFinding", &decayModeFinding_2);
   // original->SetBranchAddress("tPVDXY", &dZ_2);
   // original->SetBranchAddress("tPVDZ", &d0_2);
-  // original->SetBranchAddress("tByVLooseIsolationMVArun2v1DBoldDMwLT", &byVLooseIsolationMVArun2v1DBoldDMwLT_2);
   // original->SetBranchAddress("tByTightIsolationMVArun2v1DBoldDMwLT", &byTightIsolationMVArun2v1DBoldDMwLT_2);
   // original->SetBranchAddress("dielectronVeto", &dielectronVeto);
   // original->SetBranchAddress("tAgainstMuonLoose3", &againstMuonLoose3_2);
@@ -444,7 +462,9 @@ void etau_tree::set_branches() {
   // original->SetBranchAddress("eCharge", &q_1);
   // original->SetBranchAddress("tCharge", &q_2);
   // original->SetBranchAddress("eIsoDB03", &iso_1);
-
+  // original->SetBranchAddress("ePhi", &ePhi);
+  // original->SetBranchAddress("tPhi", &tPhi);
+  // original->SetBranchAddress("eMVANoisoWP80", &eMVANoisoWP80);
 
   // straight from input tree
   original->SetBranchAddress("run", &run); 
@@ -522,15 +542,12 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
   original->SetBranchAddress("eMass", &eMass);
-  original->SetBranchAddress("ePhi", &ePhi);
   original->SetBranchAddress("tMass", &tMass);
-  original->SetBranchAddress("tPhi", &tPhi);
   original->SetBranchAddress("vbfDeta", &vbfDeta);
   original->SetBranchAddress("vbfMass", &vbfMass);
   original->SetBranchAddress("vbfJetVeto20", &vbfJetVeto20);
   original->SetBranchAddress("vbfJetVeto30", &vbfJetVeto30);
   original->SetBranchAddress("eGenPdgId", &eGenPdgId);
-  original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
   original->SetBranchAddress("eMissingHits", &eMissingHits);
   // original->SetBranchAddress("e_t_DR", &e_t_DR);
 

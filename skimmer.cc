@@ -32,7 +32,6 @@ int main(int argc, char* argv[]) {
   std::string in = samples[dir_name];
   auto outprefix = "/store/user/tmitchel/mc2017_ntuples_Jun18/"+dir_name;
   const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2017_ntuples_Jun18_skim/"+dir_name).c_str());
-  // const int dir_err = mkdir(outprefix, S_IRWXU | S_IRWXG | S_IROTH | S_IXOTH);
   read_directory(in, all_files);
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 1, 0.5, 1.5);
