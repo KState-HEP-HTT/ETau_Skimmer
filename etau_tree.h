@@ -299,7 +299,7 @@ void etau_tree::set_branches() {
   // straight from input tree
   tree->Branch("run", &run, "run/I");
   tree->Branch("lumi", &lumi, "lumi/I");
-  tree->Branch("evt", &evt, "evt");
+  tree->Branch("evt", &evt);
   tree->Branch("rho", &rho, "rho/F");
   tree->Branch("metcov00", &metcov00, "metcov00/F");
   tree->Branch("metcov10", &metcov10, "metcov10/F");
