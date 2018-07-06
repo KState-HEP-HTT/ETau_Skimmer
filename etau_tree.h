@@ -161,7 +161,7 @@ void etau_tree::do_skimming() {
       // currTauCandidate = make_pair(tPt,  byVLooseIsolationMVArun2v1DBoldDMwLT_2);
 
       // clause 1, select the pair that has most isolated tau lepton 1
-      if (currEleCandidate.second - eleCandidate.second  > 0.0001 ) best_evt = ievt;
+      if (currEleCandidate.second - eleCandidate.second  < 0.0001 ) best_evt = ievt;
 
       // check if the first tau is the same, and if so - move to clause 2
       if ( fabs(currEleCandidate.second - eleCandidate.second)  <  0.0001 ) {
@@ -492,16 +492,12 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("type1_pfMetEt", &met);
   original->SetBranchAddress("type1_pfMetPhi", &metphi);
   original->SetBranchAddress("metSig", &metSig);
-  //original->SetBranchAddress("singleE25eta2p1TightPass", &passEle25);
-  //original->SetBranchAddress("singleE27TightPass", &passEle27);
-  //original->SetBranchAddress("eMatchesEle25TightFilter", &filterEle25);
   original->SetBranchAddress("GenWeight", &weight);
   original->SetBranchAddress("jetVeto30", &njets);
   original->SetBranchAddress("bjetCISVVeto20Medium", &nbtag);
   original->SetBranchAddress("jetVeto20", &njetspt20);
   original->SetBranchAddress("eZTTGenMatching", &gen_match_1);
   original->SetBranchAddress("tZTTGenMatching", &gen_match_2);
-  // original->SetBranchAddress("e_t_Mass", &m_vis);
   original->SetBranchAddress("tDecayMode", &l2_decayMode);
   original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTraw", &iso_2);
   original->SetBranchAddress("tAgainstMuonTight3", &againstMuonTight3_2);
