@@ -370,6 +370,7 @@ void etau_tree::set_branches() {
   tree->Branch("Ele35WPTightPass", &Ele35WPTightPass, "Ele35WPTightPass/F");
   tree->Branch("MatchesEle35Path_1", &MatchesEle35Path_1, "MatchesEle35Path_1/F");
   tree->Branch("Ele32WPTightPass", &Ele32WPTightPass, "Ele32WPTightPass/F");
+  tree->Branch("trg_singleelectron", &Ele32WPTightPass, "trg_singleelectron/F");
   tree->Branch("MatchesEle32Path_1", &MatchesEle32Path_1, "MatchesEle32Path_1/F");
   tree->Branch("Ele24Tau30Pass", &Ele24Tau30Pass, "Ele24Tau30Pass/F");
   tree->Branch("MatchesEle24Tau30Path_1", &MatchesEle24Tau30Path_1, "MatchesEle24Tau30Path_1/F");
