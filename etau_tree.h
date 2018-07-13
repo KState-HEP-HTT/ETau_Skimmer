@@ -18,7 +18,7 @@ public:
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2, MVANoisoWP80_1, MVAIsoWP80_1;
+  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2;
   Float_t m_vis, l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
@@ -26,7 +26,6 @@ public:
   Float_t byMediumIsolationMVArun2v1DBoldDMwLT_2, byTightIsolationMVArun2v1DBoldDMwLT_2, byVTightIsolationMVArun2v1DBoldDMwLT_2, byVVTightIsolationMVArun2v1DBoldDMwLT_2;
   Float_t neutralIsoPtSum_2, chargedIsoPtSum_2, puCorrPtSum_2, decayModeFinding_2, decayModeFindingNewDMs_2, jpt_1, jpt_2, jeta_1, jeta_2, jphi_1, jphi_2, jcsv_1, jcsv_2, bpt_1, bpt_2;
   Float_t beta_1, beta_2, bphi_1, bphi_2, bcsv_1, bcsv_2, npu, npv, rho, extratau_veto, isZtt, idisoweight_2;
-  Float_t eMVAIsoWP90, RerunMVArun2v2DBoldDMwLTVVLoose_2, Ele35WPTightPass, MatchesEle35Path_1, Ele32WPTightPass, MatchesEle32Path_1, Ele24Tau30Pass, MatchesEle24Tau30Path_1;
 
   Int_t run, lumi, njetingap, njetingap20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
@@ -73,7 +72,6 @@ original(Original)
   original->SetBranchAddress("ePt", &ePt);
   original->SetBranchAddress("eEta", &eEta);
   original->SetBranchAddress("ePhi", &ePhi);
-  original->SetBranchAddress("eMVAIsoWP90", &eMVAIsoWP90);
   original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
   original->SetBranchAddress("ePVDZ", &dZ_1);
   original->SetBranchAddress("ePVDXY", &d0_1);
@@ -91,15 +89,6 @@ original(Original)
   original->SetBranchAddress("eCharge", &q_1);
   original->SetBranchAddress("tCharge", &q_2);
   original->SetBranchAddress("eIsoDB03", &iso_1);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTVVLoose", &RerunMVArun2v2DBoldDMwLTVVLoose_2);
-  original->SetBranchAddress("Ele35WPTightPass", &Ele35WPTightPass);
-  original->SetBranchAddress("eMatchesEle35Path", &MatchesEle35Path_1);
-  original->SetBranchAddress("Ele32WPTightPass", &Ele32WPTightPass);
-  original->SetBranchAddress("eMatchesEle32Path", &MatchesEle32Path_1);
-  original->SetBranchAddress("Ele24Tau30Pass", &Ele24Tau30Pass);
-  original->SetBranchAddress("eMatchesEle24Tau30Path", &MatchesEle24Tau30Path_1);
-  original->SetBranchAddress("eMVANoisoWP80", &MVANoisoWP80_1);
-  original->SetBranchAddress("eMVAIsoWP80", &MVAIsoWP80_1);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -360,16 +349,6 @@ void etau_tree::set_branches() {
   tree->Branch("beta_2", &beta_2, "beta_2/F");
   tree->Branch("bphi_2", &bphi_2, "bphi_2/F");
   tree->Branch("bcsv_2", &bcsv_2, "bcsv_2/F");
-  tree->Branch("RerunMVArun2v2DBoldDMwLTVVLoose_2", &RerunMVArun2v2DBoldDMwLTVVLoose_2, "RerunMVArun2v2DBoldDMwLTVVLoose_2/F");
-  tree->Branch("Ele35WPTightPass", &Ele35WPTightPass, "Ele35WPTightPass/F");
-  tree->Branch("MatchesEle35Path_1", &MatchesEle35Path_1, "MatchesEle35Path_1/F");
-  tree->Branch("Ele32WPTightPass", &Ele32WPTightPass, "Ele32WPTightPass/F");
-  tree->Branch("trg_singleelectron", &Ele32WPTightPass, "trg_singleelectron/F");
-  tree->Branch("MatchesEle32Path_1", &MatchesEle32Path_1, "MatchesEle32Path_1/F");
-  tree->Branch("Ele24Tau30Pass", &Ele24Tau30Pass, "Ele24Tau30Pass/F");
-  tree->Branch("MatchesEle24Tau30Path_1", &MatchesEle24Tau30Path_1, "MatchesEle24Tau30Path_1/F");
-  tree->Branch("MVANoisoWP80_1", &MVANoisoWP80_1, "MVANoisoWP80_1/F");
-  tree->Branch("MVAIsoWP80_1", &MVAIsoWP80_1, "MVAIsoWP80_1/F");
   tree->Branch("MVANonTrigWP80_1", &eMVANonTrigWP80, "MVANonTrigWP80_1/F");
   tree->Branch("passEle25", &passEle25, "passEle25/F");
   tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
@@ -449,7 +428,6 @@ void etau_tree::set_branches() {
   // original->SetBranchAddress("evt", &evt);
   // original->SetBranchAddress("ePt", &ePt);
   // original->SetBranchAddress("eEta", &eEta);
-  // original->SetBranchAddress("eMVAIsoWP90", &eMVAIsoWP90);
   // original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
   // original->SetBranchAddress("ePVDZ", &dZ_1);
   // original->SetBranchAddress("ePVDXY", &d0_1);
@@ -467,7 +445,6 @@ void etau_tree::set_branches() {
   // original->SetBranchAddress("eIsoDB03", &iso_1);
   // original->SetBranchAddress("ePhi", &ePhi);
   // original->SetBranchAddress("tPhi", &tPhi);
-  // original->SetBranchAddress("eMVANoisoWP80", &eMVANoisoWP80);
 
   // straight from input tree
   original->SetBranchAddress("run", &run); 
@@ -497,7 +474,7 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("eZTTGenMatching", &gen_match_1);
   original->SetBranchAddress("tZTTGenMatching", &gen_match_2);
   original->SetBranchAddress("tDecayMode", &l2_decayMode);
-  original->SetBranchAddress("tRerunMVArun2v2DBoldDMwLTraw", &iso_2);
+  original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &iso_2);
   original->SetBranchAddress("tAgainstMuonTight3", &againstMuonTight3_2);
   original->SetBranchAddress("tAgainstElectronVLooseMVA6", &againstElectronVLooseMVA6_2);
   original->SetBranchAddress("tAgainstElectronLooseMVA6", &againstElectronLooseMVA6_2);
