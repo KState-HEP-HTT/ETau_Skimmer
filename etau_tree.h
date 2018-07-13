@@ -120,24 +120,22 @@ void etau_tree::do_skimming() {
     original->GetEntry(ievt);
     evt_now = evt;
 
-    // apply event selection from baseline
-    // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_e_tau_h
-
-    // if ((!Ele32WPTightPass || !MatchesEle32Path_1) && (!MatchesEle24Tau30Path_1 || !Ele24Tau30Pass)) // OR of listed triggers with matching dR < 0.5
-    //   continue;
-
-    if (ePt < 25 || fabs(eEta) > 2.1 || !MVANoisoWP80_1 || !ePassesConversionVeto || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || eMissingHits > 1) // electron selection/ID
+    // apply event selection 
+    if (!passEle25 || !filterEle25) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
       continue;
 
-    if (tPt < 20 || fabs(tEta) > 2.3 || !decayModeFinding_2 || fabs(dZ_2) > 0.2 || fabs(q_2) != 1 || RerunMVArun2v2DBoldDMwLTVVLoose_2 < 0.5) // tau selection
+    if (ePt < 25 || fabs(eEta) > 2.5 || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1) // electron selection
       continue;
-      
+
+    if (tPt < 19 || fabs(tEta) > 2.3 || fabs(dZ_2) > 0.2 || !byMediumIsolationMVArun2v1DBoldDMwLT_2 || !decayModeFinding_2 || fabs(q_2) > 1) // tau selection
+      continue;
+
+    if (muVetoZTTp001dxyzR0 > 0 || dielectronVeto > 0)
+      continue;
+
     double dR = sqrt( pow(eEta - tEta, 2) + pow(ePhi - tPhi, 2) ); // pair selection
     if (dR < 0.5)
       continue;
-
-    // if (dielectronVeto > 0  || !againstMuonLoose3_2 || !againstElectronTightMVA6_2 || iso_1 > 0.1 || (q_1 + q_2) != 0) // fix
-    //   continue;
 
     // implement new sorting per 
 	  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -155,10 +153,6 @@ void etau_tree::do_skimming() {
 
       std::pair<float, float> currEleCandidate(ePt, iso_1);
       std::pair<float, float> currTauCandidate(tPt, byVLooseIsolationMVArun2v1DBoldDMwLT_2);
-      
-      // // comparison between previous tau pair and the new one takes place here!
-      // currEleCandidate = make_pair(ePt,  iso_1);
-      // currTauCandidate = make_pair(tPt,  byVLooseIsolationMVArun2v1DBoldDMwLT_2);
 
       // clause 1, select the pair that has most isolated tau lepton 1
       if (currEleCandidate.second - eleCandidate.second  < 0.0001 ) best_evt = ievt;
@@ -376,6 +370,9 @@ void etau_tree::set_branches() {
   tree->Branch("MatchesEle24Tau30Path_1", &MatchesEle24Tau30Path_1, "MatchesEle24Tau30Path_1/F");
   tree->Branch("MVANoisoWP80_1", &MVANoisoWP80_1, "MVANoisoWP80_1/F");
   tree->Branch("MVAIsoWP80_1", &MVAIsoWP80_1, "MVAIsoWP80_1/F");
+  tree->Branch("MVANonTrigWP80_1", &eMVANonTrigWP80, "MVANonTrigWP80_1/F");
+  tree->Branch("passEle25", &passEle25, "passEle25/F");
+  tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
 
   // created during skimming
   tree->Branch("pt_1", &pt_1, "pt_1/F");
@@ -539,6 +536,9 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("nTruePU", &npu);
   original->SetBranchAddress("numGenJets", &numGenJets);
   original->SetBranchAddress("nvtx", &npv);
+  original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
+  original->SetBranchAddress("singleE25eta2p1TightPass", &passEle25);
+  original->SetBranchAddress("eMatchesEle25TightFilter", &filterEle25);
   
 
   // used to construct something
