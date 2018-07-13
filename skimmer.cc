@@ -30,8 +30,7 @@ int main(int argc, char* argv[]) {
     dir_name = argv[1];
 
   std::string in = samples[dir_name];
-  auto outprefix = "/store/user/tmitchel/mc2017_ntuples_Jun18/"+dir_name;
-  const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2017_ntuples_Jun18_skim/"+dir_name).c_str());
+  const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2016_ntuples_July13_skim/"+dir_name).c_str());
   read_directory(in, all_files);
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 1, 0.5, 1.5);
@@ -53,7 +52,7 @@ int main(int argc, char* argv[]) {
 
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
-    std::string suffix = "/nfs_scratch/tmitchel/mc2017_ntuples_Jun18_skim/"+dir_name+"/Skim_";
+    std::string suffix = "/nfs_scratch/tmitchel/mc2016_ntuples_July13_skim/"+dir_name+"/Skim_";
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("et_tree","et_tree");
