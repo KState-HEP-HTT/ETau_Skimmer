@@ -289,6 +289,11 @@ void etau_tree::set_branches() {
   tree->Branch("metcov11", &metcov11, "metcov11/F");
   tree->Branch("metcov01", &metcov01, "metcov01/F");
   tree->Branch("NUP", &NUP, "NUP/I");
+  tree->Branch("genpX", &genpX, "genpX/F");
+  tree->Branch("genpY", &genpY, "genpY/F");
+  tree->Branch("genM", &genM, "genM/F");
+  tree->Branch("genpT", &genpT, "genpT/F");
+  tree->Branch("numGenJets", &numGenJets, "numGenJets/F");
 
   // from input tree, but change name
   tree->Branch("q_1", &q_1, "q_1/F");
@@ -352,6 +357,7 @@ void etau_tree::set_branches() {
   tree->Branch("MVANonTrigWP80_1", &eMVANonTrigWP80, "MVANonTrigWP80_1/F");
   tree->Branch("passEle25", &passEle25, "passEle25/F");
   tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
+  tree->Branch("l2_decayMode", &l2_decayMode, "l2_decayMode/F");
 
   // created during skimming
   tree->Branch("pt_1", &pt_1, "pt_1/F");
@@ -378,18 +384,17 @@ void etau_tree::set_branches() {
   tree->Branch("dijetphi", &dijetphi, "dijetphi/F");
   tree->Branch("hdijetphi", &hdijetphi, "hdijetphi/F");
   tree->Branch("visjeteta", &visjeteta, "visjeteta/F");
+  tree->Branch("met_px", &met_px, "met_px/F");
+  tree->Branch("met_py", &met_py, "met_py/F");
+
+
 
 
   //    // others not for sync
   //    tree->Branch("isZtt", &isZtt, "isZtt/O");
   //    tree->Branch("isZet", &isZet, "isZet/O");
-  //    tree->Branch("genpX", &genpX, "genpX/F");
-  //    tree->Branch("genpY", &genpY, "genpY/F");
-  //    tree->Branch("genM", &genM, "genM/F");
-  //    tree->Branch("genpT", &genpT, "genpT/F");
   //    tree->Branch("vispX", &vispX, "vispX/F");
   //    tree->Branch("vispY", &vispY, "vispY/F");
-  //    tree->Branch("l2_decayMode", &l2_decayMode, "l2_decayMode/F");
   //    tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &byMediumIsolationMVArun2v1DBoldDMwLT_2, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &byTightIsolationMVArun2v1DBoldDMwLT_2, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
   //    tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2", &byVTightIsolationMVArun2v1DBoldDMwLT_2, "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
@@ -401,8 +406,6 @@ void etau_tree::set_branches() {
   //    tree->Branch("mvaMetcov11", &mvaMetcov11, "mvaMetcov11/F");
   //    tree->Branch("mvaMetcov01", &mvaMetcov01, "mvaMetcov01/F");
   //    tree->Branch("mvaMetphi", &mvaMetphi, "mvaMetphi/F");
-  //    tree->Branch("met_py", &met_py, "met_py/F");
-  //    tree->Branch("met_px", &met_px, "met_px/F");
   //    tree->Branch("mjj_JESUp", &mjj_JESUp, "mjj_JESUp/F");
   //    tree->Branch("jdeta_JESUp", &jdeta_JESUp, "jdeta_JESUp/F");
   //    tree->Branch("njetingap_JESUp", &njetingap_JESUp, "njetingap_JESUp/I");
