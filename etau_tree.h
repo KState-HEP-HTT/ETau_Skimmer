@@ -18,7 +18,7 @@ public:
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2, m_sv, pt_sv, m_vis, pt_tt;
+  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2;
   Float_t l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
@@ -293,10 +293,6 @@ void etau_tree::set_branches() {
   tree->Branch("genM", &genM, "genM/F");
   tree->Branch("genpT", &genpT, "genpT/F");
   tree->Branch("numGenJets", &numGenJets, "numGenJets/F");
-  tree->Branch("m_sv", &m_sv, "m_sv/F");
-  tree->Branch("pt_sv", &pt_sv, "pt_sv/F");
-  tree->Branch("m_vis", &m_vis, "m_vis/F");
-  tree->Branch("pt_tt", &pt_tt, "pt_tt/F");
 
   // from input tree, but change name
   tree->Branch("q_1", &q_1, "q_1/F");
@@ -457,10 +453,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("metcov10", &metcov10);
   original->SetBranchAddress("metcov11", &metcov11);
   original->SetBranchAddress("NUP", &NUP);
-  original->SetBranchAddress("m_sv", &m_sv);
-  original->SetBranchAddress("pt_sv", &pt_sv);
-  original->SetBranchAddress("m_vis", &m_vis);
-  original->SetBranchAddress("pt_tt", &pt_tt);
 
   // read from tree and change name
   original->SetBranchAddress("GenWeight", &genweight);
