@@ -18,7 +18,7 @@ public:
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
   Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
-  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2;
+  Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2, m_sv, pt_sv, m_vis, pt_tt;
   Float_t m_vis, l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
   Float_t againstElectronVTightMVA6_2, byLooseCombinedIsolationDeltaBetaCorr3Hits_2, byMediumCombinedIsolationDeltaBetaCorr3Hits_2, byTightCombinedIsolationDeltaBetaCorr3Hits_2;
@@ -66,7 +66,6 @@ etau_tree::etau_tree(TTree* Original, TTree* itree) :
 tree(itree),
 original(Original)
 {
-
   // read only what is needed for skimming and sorting
   original->SetBranchAddress("evt", &evt);
   original->SetBranchAddress("ePt", &ePt);
@@ -294,6 +293,10 @@ void etau_tree::set_branches() {
   tree->Branch("genM", &genM, "genM/F");
   tree->Branch("genpT", &genpT, "genpT/F");
   tree->Branch("numGenJets", &numGenJets, "numGenJets/F");
+  tree->Branch("m_sv", &m_sv, "m_sv/F");
+  tree->Branch("pt_sv", &pt_sv, "pt_sv/F");
+  tree->Branch("m_vis", &m_vis, "m_vis/F");
+  tree->Branch("pt_tt", &pt_tt, "pt_tt/F");
 
   // from input tree, but change name
   tree->Branch("q_1", &q_1, "q_1/F");
@@ -358,6 +361,9 @@ void etau_tree::set_branches() {
   tree->Branch("passEle25", &passEle25, "passEle25/F");
   tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
   tree->Branch("l2_decayMode", &l2_decayMode, "l2_decayMode/F");
+  tree->Branch("genweight", &genweight, "genweight/F");
+  tree->Branch("gen_Higgs_pt", &gen_Higgs_pt, "gen_Higgs_pt/F");
+  tree->Branch("gen_Higgs_mass", &gen_Higgs_mass, "gen_Higgs_mass/F");
 
   // created during skimming
   tree->Branch("pt_1", &pt_1, "pt_1/F");
@@ -386,20 +392,19 @@ void etau_tree::set_branches() {
   tree->Branch("visjeteta", &visjeteta, "visjeteta/F");
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
-
-
-
+  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &byTightIsolationMVArun2v1DBoldDMwLT_2, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &byMediumIsolationMVArun2v1DBoldDMwLT_2, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("pt_top1", &pt_top1, "pt_top1/F");
+  tree->Branch("pt_top2", &pt_top2, "pt_top2/F");
+  tree->Branch("metSig", &metSig, "metSig/F");
 
   //    // others not for sync
   //    tree->Branch("isZtt", &isZtt, "isZtt/O");
   //    tree->Branch("isZet", &isZet, "isZet/O");
   //    tree->Branch("vispX", &vispX, "vispX/F");
   //    tree->Branch("vispY", &vispY, "vispY/F");
-  //    tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &byMediumIsolationMVArun2v1DBoldDMwLT_2, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
-  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &byTightIsolationMVArun2v1DBoldDMwLT_2, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
   //    tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2", &byVTightIsolationMVArun2v1DBoldDMwLT_2, "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
   //    tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &byVVTightIsolationMVArun2v1DBoldDMwLT_2, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
-  //    tree->Branch("metSig", &metSig, "metSig/F");
   //    tree->Branch("mvaMet", &mvaMet, "mvaMet/F");
   //    tree->Branch("mvaMetcov00", &mvaMetcov00, "mvaMetcov00/F");
   //    tree->Branch("mvaMetcov10", &mvaMetcov10, "mvaMetcov10/F");
@@ -418,12 +423,6 @@ void etau_tree::set_branches() {
   //    tree->Branch("njetspt20_JESUp", &njetspt20_JESUp, "njetspt20_JESUp/I");
   //    tree->Branch("njets_JESDown", &njets_JESDown, "njets_JESDown/I");
   //    tree->Branch("njetspt20_JESDown", &njetspt20_JESDown, "njetspt20_JESDown/I");
-  //    tree->Branch("pt_top1", &pt_top1, "pt_top1/F");
-  //    tree->Branch("pt_top2", &pt_top2, "pt_top2/F");
-  //    tree->Branch("genweight", &genweight, "genweight/F");
-  //    tree->Branch("gen_Higgs_pt", &gen_Higgs_pt, "gen_Higgs_pt/F");
-  //    tree->Branch("gen_Higgs_mass", &gen_Higgs_mass, "gen_Higgs_mass/F");
-
 
   // read input tree
 
@@ -458,6 +457,10 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("metcov10", &metcov10);
   original->SetBranchAddress("metcov11", &metcov11);
   original->SetBranchAddress("NUP", &NUP);
+  original->SetBranchAddress("m_sv", &m_sv);
+  original->SetBranchAddress("pt_sv", &pt_sv);
+  original->SetBranchAddress("m_vis", &m_vis);
+  original->SetBranchAddress("pt_tt", &pt_tt);
 
   // read from tree and change name
   original->SetBranchAddress("GenWeight", &genweight);
@@ -519,7 +522,10 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
   original->SetBranchAddress("singleE25eta2p1TightPass", &passEle25);
   original->SetBranchAddress("eMatchesEle25TightFilter", &filterEle25);
-  
+  original->SetBranchAddress("topQuarkPt1", &pt_top1);
+  original->SetBranchAddress("topQuarkPt2", &pt_top2);
+  original->SetBranchAddress("genpT", &gen_Higgs_pt);
+  original->SetBranchAddress("genM", &gen_Higgs_mass);
 
   // used to construct something
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
@@ -590,11 +596,7 @@ void etau_tree::set_branches() {
   //    original->SetBranchAddress("e_t_MvaMetCovMatrix10", &mvaMetcov10);
   //    original->SetBranchAddress("e_t_MvaMetCovMatrix11", &mvaMetcov11);
   //    original->SetBranchAddress("e_t_MvaMetPhi", &mvaMetphi);
-  //    original->SetBranchAddress("genpT", &gen_Higgs_pt);
-  //    original->SetBranchAddress("genM", &gen_Higgs_mass);
   //    original->SetBranchAddress("e_t_DPhi", &dphi_12);
   //    original->SetBranchAddress("eDPhiToPfMet_type1", &dphi_emet);
   //    original->SetBranchAddress("tDPhiToPfMet_type1", &dphi_taumet);
-  //    original->SetBranchAddress("topQuarkPt1", &pt_top1);
-  //    original->SetBranchAddress("topQuarkPt2", &pt_top2);
 }
