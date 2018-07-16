@@ -88,6 +88,13 @@ original(Original)
   original->SetBranchAddress("eCharge", &q_1);
   original->SetBranchAddress("tCharge", &q_2);
   original->SetBranchAddress("eIsoDB03", &iso_1);
+  original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
+  original->SetBranchAddress("singleE25eta2p1TightPass", &passEle25);
+  original->SetBranchAddress("eMatchesEle25TightFilter", &filterEle25);
+  original->SetBranchAddress("eMissingHits", &eMissingHits);
+  original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
+  original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &byMediumIsolationMVArun2v1DBoldDMwLT_2);
+
 }
 
 //////////////////////////////////////////////////////////////////
@@ -111,7 +118,7 @@ void etau_tree::do_skimming() {
     // apply event selection 
     if (!passEle25 || !filterEle25) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
       continue;
-
+    
     if (ePt < 25 || fabs(eEta) > 2.5 || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1) // electron selection
       continue;
 
@@ -485,7 +492,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &byIsolationMVA3oldDMwLTraw_2);
   original->SetBranchAddress("tByIsolationMVArun2v1DBnewDMwLTraw", &byIsolationMVA3newDMwLTraw_2);
   original->SetBranchAddress("tByLooseIsolationMVArun2v1DBoldDMwLT", &byLooseIsolationMVArun2v1DBoldDMwLT_2);
-  original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &byMediumIsolationMVArun2v1DBoldDMwLT_2);
   original->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &byVTightIsolationMVArun2v1DBoldDMwLT_2);
   original->SetBranchAddress("tByVVTightIsolationMVArun2v1DBoldDMwLT", &byVVTightIsolationMVArun2v1DBoldDMwLT_2);
   original->SetBranchAddress("tNeutralIsoPtSum", &neutralIsoPtSum_2);
@@ -511,16 +517,12 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("nTruePU", &npu);
   original->SetBranchAddress("numGenJets", &numGenJets);
   original->SetBranchAddress("nvtx", &npv);
-  original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
-  original->SetBranchAddress("singleE25eta2p1TightPass", &passEle25);
-  original->SetBranchAddress("eMatchesEle25TightFilter", &filterEle25);
   original->SetBranchAddress("topQuarkPt1", &pt_top1);
   original->SetBranchAddress("topQuarkPt2", &pt_top2);
   original->SetBranchAddress("genpT", &gen_Higgs_pt);
   original->SetBranchAddress("genM", &gen_Higgs_mass);
 
   // used to construct something
-  original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
   original->SetBranchAddress("eMass", &eMass);
   original->SetBranchAddress("tMass", &tMass);
@@ -529,7 +531,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("vbfJetVeto20", &vbfJetVeto20);
   original->SetBranchAddress("vbfJetVeto30", &vbfJetVeto30);
   original->SetBranchAddress("eGenPdgId", &eGenPdgId);
-  original->SetBranchAddress("eMissingHits", &eMissingHits);
   // original->SetBranchAddress("e_t_DR", &e_t_DR);
 
   //    // not needed for sync

@@ -32,8 +32,7 @@ int main(int argc, char* argv[]) {
   const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2016_ntuples_July13_skim/"+dir_name).c_str());
   read_directory(in, all_files);
 
-  TH1F* nevents = new TH1F("nevents", "N(events)", 1, 0.5, 1.5);
-  TH1F* nweights = new TH1F("nweights", "N(weights)", 1, 0.5, 1.5);
+  TH1F* nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
 
   // I/O files and the ntuple
   std::cout << "Begin loading files..." << std::endl;
@@ -46,22 +45,21 @@ int main(int argc, char* argv[]) {
     auto evt_count = (TH1F*)open_file->Get("et/eventCount")->Clone();
     auto wt_count = (TH1F*)open_file->Get("et/summedWeights")->Clone();
 
-    nevents->SetBinContent(1, nevents->GetBinContent(1)+evt_count->Integral());
-    nweights->SetBinContent(1, nweights->GetBinContent(1)+wt_count->Integral());
+    nevents->SetBinContent(1, evt_count->Integral());
+    nevents->SetBinContent(2, wt_count->Integral());
 
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
     std::string suffix = "/nfs_scratch/tmitchel/mc2016_ntuples_July13_skim/"+dir_name+"/Skim_";
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
-    TTree* newtree = new TTree("et_tree","et_tree");
+    TTree* newtree = new TTree("etau_tree","etau_tree");
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
     skimmer->do_skimming();
     auto skimmed_tree = skimmer->fill_tree();
 
     fout->cd();
     nevents->Write();
-    nweights->Write();
     skimmed_tree->Write();
     fout->Close();
   }
