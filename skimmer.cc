@@ -19,7 +19,7 @@ void read_directory(const std::string &name, std::vector<std::string> &v) {
   }
   closedir(dirp);
 }
-
+static unsigned events(0);
 int main(int argc, char* argv[]) {
 
 
@@ -57,6 +57,7 @@ int main(int argc, char* argv[]) {
     etau_tree* skimmer = new etau_tree(ntuple, newtree);
     skimmer->do_skimming();
     auto skimmed_tree = skimmer->fill_tree();
+    events += skimmed_tree->GetEntries();
 
     fout->cd();
     nevents->Write();
@@ -64,6 +65,7 @@ int main(int argc, char* argv[]) {
     fout->Close();
   }
   std::cout << std::endl;
+  std::cout << events << "events saved in the tree." << std::endl;
 
   return 0;
 }

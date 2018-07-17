@@ -94,7 +94,8 @@ original(Original)
   original->SetBranchAddress("eMissingHits", &eMissingHits);
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &byMediumIsolationMVArun2v1DBoldDMwLT_2);
-
+  original->SetBranchAddress("e_t_DR", &e_t_DR);
+  original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -116,20 +117,19 @@ void etau_tree::do_skimming() {
     evt_now = evt;
 
     // apply event selection 
-    if (!passEle25 || !filterEle25) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
-      continue;
+    //if (!passEle25 || !filterEle25) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
+    //  continue;
     
-    if (ePt < 25 || fabs(eEta) > 2.5 || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1) // electron selection
+    if (ePt < 24 || fabs(eEta) > 2.1 || fabs(dZ_1) > 0.2 || fabs(d0_1) > 0.045 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1) // electron selection
       continue;
 
-    if (tPt < 19 || fabs(tEta) > 2.3 || fabs(dZ_2) > 0.2 || !byMediumIsolationMVArun2v1DBoldDMwLT_2 || !decayModeFinding_2 || fabs(q_2) > 1) // tau selection
+    if (tPt < 27 || fabs(tEta) > 2.3 || fabs(dZ_2) > 0.2 || !byVLooseIsolationMVArun2v1DBoldDMwLT_2 || !decayModeFinding_2 || fabs(q_2) > 1) // tau selection
       continue;
 
     if (muVetoZTTp001dxyzR0 > 0 || dielectronVeto > 0)
       continue;
 
-    double dR = sqrt( pow(eEta - tEta, 2) + pow(ePhi - tPhi, 2) ); // pair selection
-    if (dR < 0.5)
+    if (e_t_DR < 0.5)
       continue;
 
     // implement new sorting per 
@@ -341,9 +341,9 @@ void etau_tree::set_branches() {
   tree->Branch("idisoweight_2", &idisoweight_2, "idisoweight_2/F");
   tree->Branch("met", &met, "met/F");
   tree->Branch("metphi", &metphi, "metphi/F");
-  tree->Branch("nbtag", &nbtag, "nbtag/I");
-  tree->Branch("njets", &njets, "njets/I");
-  tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
+  tree->Branch("nbtag", &nbtag, "nbtag/F");
+  tree->Branch("njets", &njets, "njets/F");
+  tree->Branch("njetspt20", &njetspt20, "njetspt20/F");
   tree->Branch("jpt_1", &jpt_1, "jpt_1/F");
   tree->Branch("jeta_1", &jeta_1, "jeta_1/F");
   tree->Branch("jphi_1", &jphi_1, "jphi_1/F");
@@ -472,7 +472,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("type1_pfMetEt", &met);
   original->SetBranchAddress("type1_pfMetPhi", &metphi);
   original->SetBranchAddress("metSig", &metSig);
-  original->SetBranchAddress("GenWeight", &weight);
   original->SetBranchAddress("jetVeto30", &njets);
   original->SetBranchAddress("bjetCISVVeto20Medium", &nbtag);
   original->SetBranchAddress("jetVeto20", &njetspt20);
@@ -523,7 +522,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("genM", &gen_Higgs_mass);
 
   // used to construct something
-  original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
   original->SetBranchAddress("eMass", &eMass);
   original->SetBranchAddress("tMass", &tMass);
   original->SetBranchAddress("vbfDeta", &vbfDeta);
@@ -531,7 +529,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("vbfJetVeto20", &vbfJetVeto20);
   original->SetBranchAddress("vbfJetVeto30", &vbfJetVeto30);
   original->SetBranchAddress("eGenPdgId", &eGenPdgId);
-  // original->SetBranchAddress("e_t_DR", &e_t_DR);
 
   //    // not needed for sync
   //    original->SetBranchAddress("vbfMass_JetEnUp", &vbfMass_JetEnUp);
