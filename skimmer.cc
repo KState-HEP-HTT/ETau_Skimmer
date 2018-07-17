@@ -29,7 +29,7 @@ int main(int argc, char* argv[]) {
     dir_name = argv[1];
 
   std::string in = samples[dir_name];
-  const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2016_ntuples_July13_skim/"+dir_name).c_str());
+  const int dir_err = system(("mkdir -p /nfs_scratch/tmitchel/mc2016_ntuples_July17_skim/"+dir_name).c_str());
   read_directory(in, all_files);
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
@@ -50,7 +50,7 @@ int main(int argc, char* argv[]) {
 
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
-    std::string suffix = "/nfs_scratch/tmitchel/mc2016_ntuples_July13_skim/"+dir_name+"/Skim_";
+    std::string suffix = "/nfs_scratch/tmitchel/mc2016_ntuples_July17_skim/"+dir_name+"/Skim_";
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("etau_tree","etau_tree");
@@ -65,7 +65,7 @@ int main(int argc, char* argv[]) {
     fout->Close();
   }
   std::cout << std::endl;
-  std::cout << events << "events saved in the tree." << std::endl;
+  std::cout << "\n"  << events << " events saved in the tree.\n" << std::endl;
 
   return 0;
 }

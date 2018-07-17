@@ -43,19 +43,21 @@ public:
   Float_t vbfMass_JetSinglePionHCALDown, vbfMass_JetTimePtEtaDown;
 
   Float_t jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleUp, jetVeto30_JetAbsoluteStatUp;
-  Float_t jetVeto30_JetEnUp, jetVeto30_JetFlavorQCDUp, jetVeto30_JetFragmentationUp, jetVeto30_JetPileUpDataMCUp, jetVeto30_JetPileUpPtBBUp;
+  Float_t jetVeto30_JetFlavorQCDUp, jetVeto30_JetFragmentationUp, jetVeto30_JetPileUpDataMCUp, jetVeto30_JetPileUpPtBBUp;
   Float_t jetVeto30_JetPileUpPtEC1Up, jetVeto30_JetPileUpPtEC2Up, jetVeto30_JetPileUpPtHFUp, jetVeto30_JetPileUpPtRefUp;
   Float_t jetVeto30_JetRelativeBalUp, jetVeto30_JetRelativeFSRUp, jetVeto30_JetRelativeJEREC1Up, jetVeto30_JetRelativeJEREC2Up;
   Float_t jetVeto30_JetRelativeJERHFUp, jetVeto30_JetRelativePtBBUp, jetVeto30_JetRelativePtEC1Up, jetVeto30_JetRelativePtEC2Up;
   Float_t jetVeto30_JetRelativePtHFUp, jetVeto30_JetRelativeStatECUp, jetVeto30_JetRelativeStatFSRUp, jetVeto30_JetRelativeStatHFUp;
   Float_t jetVeto30_JetSinglePionECALUp, jetVeto30_JetSinglePionHCALUp, jetVeto30_JetTimePtEtaUp, jetVeto30_JetAbsoluteFlavMapDown;
-  Float_t jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteStatDown, jetVeto30_JetEnDown;
+  Float_t jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteStatDown;
   Float_t jetVeto30_JetFlavorQCDDown, jetVeto30_JetFragmentationDown, jetVeto30_JetPileUpDataMCDown, jetVeto30_JetPileUpPtBBDown;
   Float_t jetVeto30_JetPileUpPtEC1Down, jetVeto30_JetPileUpPtEC2Down, jetVeto30_JetPileUpPtHFDown, jetVeto30_JetPileUpPtRefDown;
   Float_t jetVeto30_JetRelativeBalDown, jetVeto30_JetRelativeFSRDown, jetVeto30_JetRelativeJEREC1Down, jetVeto30_JetRelativeJEREC2Down;
   Float_t jetVeto30_JetRelativeJERHFDown, jetVeto30_JetRelativePtBBDown, jetVeto30_JetRelativePtEC1Down, jetVeto30_JetRelativePtEC2Down;
   Float_t jetVeto30_JetRelativePtHFDown, jetVeto30_JetRelativeStatECDown, jetVeto30_JetRelativeStatFSRDown, jetVeto30_JetRelativeStatHFDown;
   Float_t jetVeto30_JetSinglePionECALDown, jetVeto30_JetSinglePionHCALDown, jetVeto30_JetTimePtEtaDown;
+
+  Float_t jetVeto30_JetEnUp, jetVeto30_JetEnDown, jetVeto20_JetEnUp, jetVeto20_JetEnDown;
 
   Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp, type1_pfMet_shiftedPhi_JetEnDown;
   Float_t type1_pfMet_shiftedPhi_JetEnUp, type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp;
@@ -68,7 +70,7 @@ public:
   Float_t type1_pfMet_shiftedPt_TauEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp;
   Float_t type1_pfMet_shiftedPt_TauEnDown;
 
-  Float_t m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD, jetVeto20_JetEnDown, jetVeto20_JetEnUp;
+  Float_t m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
 
   Int_t run, lumi, njetingap, njetingap20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
@@ -89,7 +91,8 @@ public:
   Float_t Flag_BadChargedCandidateFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter;
   Float_t Flag_badCloneMuonFilter, Flag_badGlobalMuonFilter;
   Float_t Flag_eeBadScFilter, Flag_globalTightHalo2016Filter, Flag_goodVertices, Flag_BadPFMuonFilter, Flag_HBHENoiseIsoFilter;
-
+  Float_t e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix11;
+  
   // Member functions
   etau_tree (TTree* orig, TTree* itree);
   virtual ~etau_tree () {};
@@ -165,8 +168,8 @@ void etau_tree::do_skimming() {
     evt_now = evt;
 
     // apply event selection 
-    //if (!passEle25 || !filterEle25) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
-    //  continue;
+    if (!singleE25eta2p1TightPass || !eMatchesEle25TightFilter || !eMatchesEle25eta2p1TightPath) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
+      continue;
 
     if (ePt < 24 || fabs(eEta) > 2.1 || fabs(ePVDZ) > 0.2 || fabs(ePVDXY) > 0.045 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1) // electron selection
       continue;
@@ -415,7 +418,7 @@ void etau_tree::set_branches() {
   tree->Branch("filterEle25", &eMatchesEle25TightFilter, "filterEle25/F");
   tree->Branch("matchEle25", &eMatchesEle25eta2p1TightPath, "matchEle25/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
-  tree->Branch("aMCatNLO_weight", &GenWeight, "aMCatNLO_weight/F");
+  tree->Branch("genweight", &GenWeight, "genweight/F");
   tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("pt_top1", &topQuarkPt1, "pt_top1/F");
@@ -431,6 +434,11 @@ void etau_tree::set_branches() {
   tree->Branch("flag_eeBadSc", &Flag_eeBadScFilter);
   tree->Branch("flag_globalTightHalo2016", &Flag_globalTightHalo2016Filter);
   tree->Branch("flag_goodVertices", &Flag_goodVertices);
+  tree->Branch("metcov00_v2", &e_t_MvaMetCovMatrix00, "metcov00_v2/F");
+  tree->Branch("metcov10_v2", &e_t_MvaMetCovMatrix10, "metcov10_v2/F");
+  tree->Branch("metcov11_v2", &e_t_MvaMetCovMatrix01, "metcov11_v2/F");
+  tree->Branch("metcov01_v2", &e_t_MvaMetCovMatrix11, "metcov01_v2/F");
+
 
   tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
   tree->Branch("njets_JetAbsoluteMPFBiasUp", &jetVeto30_JetAbsoluteMPFBiasUp);
@@ -557,7 +565,7 @@ void etau_tree::set_branches() {
   tree->Branch("njets_JESDown", &jetVeto20_JetEnDown);
   tree->Branch("njetspt20_JESDown", &jetVeto20_JetEnUp);
   tree->Branch("njets_JESUp", &jetVeto30_JetEnDown);
-  tree->Branch("njetspt20_JESUp", &jetVeto30_JetEnUp);
+  tree->Branch("njetspt20_JESUp", &jetVeto20_JetEnUp);
 
   tree->Branch("metphi_EESDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
   tree->Branch("metphi_EESUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
@@ -696,6 +704,10 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("Flag_eeBadScFilter", &Flag_eeBadScFilter);
   original->SetBranchAddress("Flag_globalTightHalo2016Filter", &Flag_globalTightHalo2016Filter);
   original->SetBranchAddress("Flag_goodVertices", &Flag_goodVertices);
+  original->SetBranchAddress("e_t_MvaMetCovMatrix00", &e_t_MvaMetCovMatrix00);
+  original->SetBranchAddress("e_t_MvaMetCovMatrix10", &e_t_MvaMetCovMatrix10);
+  original->SetBranchAddress("e_t_MvaMetCovMatrix01", &e_t_MvaMetCovMatrix01);
+  original->SetBranchAddress("e_t_MvaMetCovMatrix11", &e_t_MvaMetCovMatrix11);
 
   // used to construct something
   original->SetBranchAddress("eMass", &eMass);
@@ -826,10 +838,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("e_t_collinearmass_JetEnDown", &m_coll_jesD);
   original->SetBranchAddress("e_t_collinearmass_TauEnUp", &m_coll_tesU);
   original->SetBranchAddress("e_t_collinearmass_TauEnDown", &m_coll_tesD);
-  original->SetBranchAddress("jetVeto20_JetEnDown", &njets_JESDown);
-  original->SetBranchAddress("jetVeto20_JetEnUp", &njetspt20_JESDown);
-  original->SetBranchAddress("jetVeto30_JetEnDown", &njets_JESUp);
-  original->SetBranchAddress("jetVeto30_JetEnUp", &njetspt20_JESUp);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_ElectronEnDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_ElectronEnUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnDown", &type1_pfMet_shiftedPhi_JetEnDown);
