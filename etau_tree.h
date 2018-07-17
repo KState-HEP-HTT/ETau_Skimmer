@@ -17,7 +17,7 @@ public:
   Float_t genweight, genpX, genpY, vispX, vispY, genpT, genM, met, metphi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
   Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
   Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
-  Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25;
+  Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, passEle25, passEle27, filterEle25, matchEle25;
   Float_t pt_top1, pt_top2, NUP, njets, nbtag, njetspt20, gen_match_1, gen_match_2;
   Float_t l2_decayMode, dZ_1, d0_1, iso_1, q_1, dZ_2, d0_2, iso_2, q_2, m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
   Float_t againstMuonTight3_2, againstMuonLoose3_2, againstElectronVLooseMVA6_2, againstElectronLooseMVA6_2, againstElectronMediumMVA6_2, againstElectronTightMVA6_2;
@@ -91,6 +91,7 @@ original(Original)
   original->SetBranchAddress("eMVANonTrigWP80", &eMVANonTrigWP80);
   original->SetBranchAddress("singleE25eta2p1TightPass", &passEle25);
   original->SetBranchAddress("eMatchesEle25TightFilter", &filterEle25);
+  original->SetBranchAddress("eMatchesEle25eta2p1TightPath", &matchEle25);
   original->SetBranchAddress("eMissingHits", &eMissingHits);
   original->SetBranchAddress("eVetoZTTp001dxyzR0", &eVetoZTTp001dxyzR0);
   original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &byMediumIsolationMVArun2v1DBoldDMwLT_2);
@@ -363,6 +364,7 @@ void etau_tree::set_branches() {
   tree->Branch("MVANonTrigWP80_1", &eMVANonTrigWP80, "MVANonTrigWP80_1/F");
   tree->Branch("passEle25", &passEle25, "passEle25/F");
   tree->Branch("filterEle25", &filterEle25, "filterEle25/F");
+  tree->Branch("matchEle25", &matchEle25, "matchEle25/F");
   tree->Branch("l2_decayMode", &l2_decayMode, "l2_decayMode/F");
   tree->Branch("genweight", &genweight, "genweight/F");
   tree->Branch("gen_Higgs_pt", &gen_Higgs_pt, "gen_Higgs_pt/F");
