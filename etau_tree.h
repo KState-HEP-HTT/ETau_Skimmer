@@ -5,9 +5,10 @@
 
 class etau_tree {
 private:
-  TTree *tree;
-  TTree *original;
+  bool isMC;
+  TTree *tree, *original;
   std::vector<Int_t> good_events;
+  TLorentzVector ele, tau;
 
 public:
   // Member variables
@@ -86,7 +87,7 @@ public:
   // forgotten
   Float_t byIsolationMVA3oldDMwoLTraw_2, trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, numGenJets, vbfDeta_JetEnDown, vbfDeta_JetEnUp;
   Float_t vbfMass, vbfJetVeto20, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp, vbfJetVeto30, vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp, eGenPdgId, vbfDeta, extramuon_veto;
-  Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR;
+  Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose;
 
   Float_t Flag_BadChargedCandidateFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter;
   Float_t Flag_badCloneMuonFilter, Flag_badGlobalMuonFilter;
@@ -94,7 +95,7 @@ public:
   Float_t e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix11;
   
   // Member functions
-  etau_tree (TTree* orig, TTree* itree);
+  etau_tree (TTree* orig, TTree* itree, bool isMC);
   virtual ~etau_tree () {};
   void do_skimming();
   void set_branches();
@@ -112,21 +113,24 @@ public:
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-etau_tree::etau_tree(TTree* Original, TTree* itree) :
+etau_tree::etau_tree(TTree* Original, TTree* itree, bool IsMC) :
 tree(itree),
-original(Original)
+original(Original),
+isMC(IsMC)
 {
   // read only what is needed for skimming and sorting
   original->SetBranchAddress("evt", &evt);
   original->SetBranchAddress("ePt", &ePt);
   original->SetBranchAddress("eEta", &eEta);
   original->SetBranchAddress("ePhi", &ePhi);
+  original->SetBranchAddress("eMass", &eMass);
   original->SetBranchAddress("ePassesConversionVeto", &ePassesConversionVeto);
   original->SetBranchAddress("ePVDZ", &ePVDZ);
   original->SetBranchAddress("ePVDXY", &ePVDXY);
   original->SetBranchAddress("tPt", &tPt);
   original->SetBranchAddress("tEta", &tEta);
   original->SetBranchAddress("tPhi", &tPhi);
+  original->SetBranchAddress("tMass", &tMass);
   original->SetBranchAddress("tDecayModeFinding", &tDecayModeFinding);
   original->SetBranchAddress("tPVDXY", &tPVDXY);
   original->SetBranchAddress("tPVDZ", &tPVDZ);
@@ -147,6 +151,9 @@ original(Original)
   original->SetBranchAddress("tByMediumIsolationMVArun2v1DBoldDMwLT", &tByMediumIsolationMVArun2v1DBoldDMwLT);
   original->SetBranchAddress("e_t_DR", &e_t_DR);
   original->SetBranchAddress("muVetoZTTp001dxyzR0", &muVetoZTTp001dxyzR0);
+  original->SetBranchAddress("tDecayMode", &tDecayMode);
+  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
+  original->SetBranchAddress("tRerunMVArun2v1DBoldDMwLTVLoose", &tRerunMVArun2v1DBoldDMwLTVLoose);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -167,17 +174,44 @@ void etau_tree::do_skimming() {
     original->GetEntry(ievt);
     evt_now = evt;
 
+    // TLorentzVector ele, tau;
+    ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
+    tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    if (isMC) {
+      if (tDecayMode == 0)
+        tau *= 0.982;
+      else if (tDecayMode == 1)
+        tau *= 1.010;
+      else if (tDecayMode == 10)
+        tau *= 1.004;
+      
+      if (tZTTGenMatching < 5 && tDecayMode == 1)
+        tau *= (1.095/1.010);
+    }
+
+    float el_pt_min(24), tau_pt_min;
+    if (!isMC || tZTTGenMatching > 4)
+      tau_pt_min = 29.5;
+    else if (tZTTGenMatching <= 4) 
+      tau_pt_min = 27.0;
+
     // apply event selection 
-    if (!singleE25eta2p1TightPass || !eMatchesEle25TightFilter || !eMatchesEle25eta2p1TightPath) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
+    // if (!singleE25eta2p1TightPass || !eMatchesEle25TightFilter || !eMatchesEle25eta2p1TightPath) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
+    //   continue;
+
+    if (ePt < el_pt_min || fabs(eEta) > 2.1 || fabs(ePVDZ) > 0.2 || fabs(ePVDXY) > 0.045) // electron kinematic selection
       continue;
 
-    if (ePt < 24 || fabs(eEta) > 2.1 || fabs(ePVDZ) > 0.2 || fabs(ePVDXY) > 0.045 || !eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1 || eVetoZTTp001dxyzR0 > 1) // electron selection
+    if (!eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1) // electron quality selection
       continue;
 
-    if (tPt < 27 || fabs(tEta) > 2.3 || fabs(tPVDZ) > 0.2 || !tByVLooseIsolationMVArun2v1DBoldDMwLT || !tDecayModeFinding || fabs(tCharge) > 1) // tau selection
+    if (tPt < tau_pt_min || fabs(tEta) > 2.3 || fabs(tPVDZ) > 0.2) // tau kinematic selection
       continue;
 
-    if (muVetoZTTp001dxyzR0 > 0 || dielectronVeto > 0)
+    if (!tByVLooseIsolationMVArun2v1DBoldDMwLT || !tDecayModeFinding || fabs(tCharge) > 1) // tau quality selection
+      continue;
+
+    if (muVetoZTTp001dxyzR0 > 0 || eVetoZTTp001dxyzR0 > 1 || dielectronVeto > 0) // vetos
       continue;
 
     if (e_t_DR < 0.5)
@@ -245,10 +279,9 @@ TTree* etau_tree::fill_tree() {
     extramuon_veto = muVetoZTTp001dxyzR0 > 0;
     dilepton_veto = dielectronVeto > 0;
 
-    TLorentzVector ele;
-    TLorentzVector tau;
-    ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
-    tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    // TLorentzVector ele, tau;
+    // ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
+    // tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
 
     m_1 = ele.M();
     px_1 = ele.Px();
@@ -652,8 +685,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("bjetCISVVeto20Medium", &bjetCISVVeto20Medium);
   original->SetBranchAddress("jetVeto20", &jetVeto20);
   original->SetBranchAddress("eZTTGenMatching", &eZTTGenMatching);
-  original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
-  original->SetBranchAddress("tDecayMode", &tDecayMode);
   original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
   original->SetBranchAddress("tAgainstMuonTight3", &tAgainstMuonTight3);
   original->SetBranchAddress("tAgainstElectronVLooseMVA6", &tAgainstElectronVLooseMVA6);
@@ -710,8 +741,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("e_t_MvaMetCovMatrix11", &e_t_MvaMetCovMatrix11);
 
   // used to construct something
-  original->SetBranchAddress("eMass", &eMass);
-  original->SetBranchAddress("tMass", &tMass);
   original->SetBranchAddress("vbfDeta", &vbfDeta);
   original->SetBranchAddress("vbfMass", &vbfMass);
   original->SetBranchAddress("vbfJetVeto20", &vbfJetVeto20);

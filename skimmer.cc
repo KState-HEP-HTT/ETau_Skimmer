@@ -55,7 +55,7 @@ int main(int argc, char* argv[]) {
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("etau_tree","etau_tree");
-    etau_tree* skimmer = new etau_tree(ntuple, newtree);
+    etau_tree* skimmer = new etau_tree(ntuple, newtree, true); // hard-code true for now
     skimmer->do_skimming();
     auto skimmed_tree = skimmer->fill_tree();
     events += skimmed_tree->GetEntries();
