@@ -8,7 +8,7 @@ private:
   bool isMC;
   TTree *tree, *original;
   std::vector<Int_t> good_events;
-  TLorentzVector ele, tau;
+  TLorentzVector ele, tau, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown;
 
 public:
   // Member variables
@@ -26,7 +26,7 @@ public:
   Float_t tByCombinedIsolationDeltaBetaCorrRaw3Hits, tByIsolationMVA3oldDMwLTraw, tByIsolationMVA3newDMwLTraw, tByVLooseIsolationMVArun2v1DBoldDMwLT, tByLooseIsolationMVArun2v1DBoldDMwLT;
   Float_t tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT;
   Float_t tNeutralIsoPtSum, tChargedIsoPtSum, tPuCorrPtSum, tDecayModeFinding, tDecayModeFindingNewDMs, j1pt, j2pt, j1eta, j2eta, j1phi, j2phi, j1csv, j2csv, jb1pt, jb2pt;
-  Float_t jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, nTruePU, nvtx, rho, extratau_veto, isZtt, idisoweight_2, tByIsolationMVArun2v1DBnewDMwLTraw;
+  Float_t jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, nTruePU, nvtx, rho, extratau_veto, isZtt, idisoweight_2, tByIsolationMVArun2v1DBnewDMwLTraw, jb1hadronflavor, jb2hadronflavor;
 
   Float_t vbfMass_JetAbsoluteFlavMapUp, vbfMass_JetAbsoluteMPFBiasUp, vbfMass_JetAbsoluteScaleUp, vbfMass_JetAbsoluteStatUp;
   Float_t vbfMass_JetEnUp, vbfMass_JetFlavorQCDUp, vbfMass_JetFragmentationUp, vbfMass_JetPileUpDataMCUp, vbfMass_JetPileUpPtBBUp;
@@ -73,6 +73,9 @@ public:
 
   Float_t m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
 
+  Float_t pfmetcorr_ex, pfmetcorr_ey, pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
+  Float_t e_t_PZeta, e_t_PZetaVis, e_t_Mass, eMtToPfMet_type1, tMtToPfMet_type1, tJetPt, tLeadTrackPt, tNChrgHadrSignalCands, tNChrgHadrIsolationCands, tPhotonPtSumOutsideSignalCone, vbfDphi ;
+
   Int_t run, lumi, njetingap, njetingap20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
 
@@ -81,13 +84,13 @@ public:
 
   // new variables to store in new tree
   Float_t met_px, met_py, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi, hdijetphi, visjeteta, isZet;
-  Float_t jdeta, mjj, dijetpt, mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown;
+  Float_t jdeta, mjj, dijetpt, mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown, jdphi;
   Float_t weight;
 
   // forgotten
   Float_t byIsolationMVA3oldDMwoLTraw_2, trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, numGenJets, vbfDeta_JetEnDown, vbfDeta_JetEnUp;
   Float_t vbfMass, vbfJetVeto20, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp, vbfJetVeto30, vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp, eGenPdgId, vbfDeta, extramuon_veto;
-  Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose;
+  Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, photonIso_2;
 
   Float_t Flag_BadChargedCandidateFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter;
   Float_t Flag_badCloneMuonFilter, Flag_badGlobalMuonFilter;
@@ -178,6 +181,7 @@ void etau_tree::do_skimming() {
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+
     if (isMC) {
       if (tDecayMode == 0)
         tau *= 0.982;
@@ -285,6 +289,22 @@ TTree* etau_tree::fill_tree() {
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    MET.SetPtEtaPhiM(type1_pfMetEt, 0, type1_pfMetPhi, 0);
+    MET_UESUp.SetPtEtaPhiM(type1_pfMet_shiftedPt_UnclusteredEnUp, 0, type1_pfMet_shiftedPhi_UnclusteredEnUp, 0);
+    MET_UESDown.SetPtEtaPhiM(type1_pfMet_shiftedPt_UnclusteredEnDown, 0, type1_pfMet_shiftedPhi_UnclusteredEnDown, 0);
+    MET_JESUp.SetPtEtaPhiM(type1_pfMet_shiftedPt_JetEnUp, 0, type1_pfMet_shiftedPhi_JetEnUp, 0);
+    MET_JESDown.SetPtEtaPhiM(type1_pfMet_shiftedPt_JetEnDown, 0, type1_pfMet_shiftedPhi_JetEnDown, 0);
+
+    pfmetcorr_ex = MET.Px();
+    pfmetcorr_ey = MET.Py();
+    pfmetcorr_ex_UESUp = MET_UESUp.Px();
+    pfmetcorr_ey_UESUp = MET_UESUp.Py();
+    pfmetcorr_ex_UESDown = MET_UESDown.Px();
+    pfmetcorr_ey_UESDown = MET_UESDown.Py();
+    pfmetcorr_ex_JESUp = MET_JESUp.Px();
+    pfmetcorr_ey_JESUp = MET_JESUp.Py();
+    pfmetcorr_ex_JESDown = MET_JESDown.Px();
+    pfmetcorr_ey_JESDown = MET_JESDown.Py();
 
     m_1 = ele.M();
     px_1 = ele.Px();
@@ -315,6 +335,7 @@ TTree* etau_tree::fill_tree() {
     if (jetVeto20 > 1)
     {
       jdeta = vbfDeta;
+      jdphi = vbfDphi;
       dijetphi = dijet.Phi();
       hdijetphi = h.DeltaPhi(dijet);
       visjeteta = h.Eta() - dijet.Eta();
@@ -387,8 +408,11 @@ void etau_tree::set_branches() {
   tree->Branch("genpY", &genpY, "genpY/F");
   tree->Branch("genM", &genM, "genM/F");
   tree->Branch("genpT", &genpT, "genpT/F");
+  tree->Branch("vispX", &vispX, "vispX/F");
+  tree->Branch("vispY", &vispY, "vispY/F");
   tree->Branch("numGenJets", &numGenJets, "numGenJets/F");
   tree->Branch("tZTTGenDR", &tZTTGenDR, "tZTTGenDR/F");
+  tree->Branch("jetPt_2", &tJetPt, "jetPt_2/F");
 
   // from input tree, but change name
   tree->Branch("q_1", &eCharge, "q_1/F");
@@ -413,14 +437,24 @@ void etau_tree::set_branches() {
   tree->Branch("againstMuonTight3_2", &tAgainstMuonTight3, "againstMuonTight3_2/F");
   tree->Branch("npv", &nTruePU, "npv/F");
   tree->Branch("npu", &nvtx, "npu/F");
+  tree->Branch("byVLooseIsolationMVArun2v1DBoldDMwLT_2", &tByVLooseIsolationMVArun2v1DBoldDMwLT, "byVLooseIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byLooseIsolationMVArun2v1DBoldDMwLT_2", &tByLooseIsolationMVArun2v1DBoldDMwLT, "byLooseIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVTightIsolationMVArun2v1DBoldDMwLT, "byVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("byVVTightIsolationMVArun2v1DBoldDMwLT_2", &tByVVTightIsolationMVArun2v1DBoldDMwLT, "byVVTightIsolationMVArun2v1DBoldDMwLT_2/F");
+  tree->Branch("pzetavis", &e_t_PZetaVis, "petavis/F");
+  tree->Branch("pzetamiss", &e_t_PZeta, "pzetamiss/F");
+  tree->Branch("m_vis", &e_t_Mass, "e_t_Mass/F");
+
   tree->Branch("byLooseCombinedIsolationDeltaBetaCorr3Hits_2", &tByLooseCombinedIsolationDeltaBetaCorr3Hits, "byLooseCombinedIsolationDeltaBetaCorr3Hits_2/F");
   tree->Branch("byMediumCombinedIsolationDeltaBetaCorr3Hits_2", &tByMediumCombinedIsolationDeltaBetaCorr3Hits, "byMediumCombinedIsolationDeltaBetaCorr3Hits_2/F");
   tree->Branch("byTightCombinedIsolationDeltaBetaCorr3Hits_2", &tByTightCombinedIsolationDeltaBetaCorr3Hits, "byTightCombinedIsolationDeltaBetaCorr3Hits_2/F");
   tree->Branch("byCombinedIsolationDeltaBetaCorrRaw3Hits_2", &tByCombinedIsolationDeltaBetaCorrRaw3Hits, "byCombinedIsolationDeltaBetaCorrRaw3Hits_2/F");
-  tree->Branch("byIsolationMVA3oldDMwoLTraw_2", &byIsolationMVA3oldDMwoLTraw_2, "byIsolationMVA3oldDMwoLTraw_2/F");
+  //tree->Branch("byIsolationMVA3oldDMwoLTraw_2", &byIsolationMVA3oldDMwoLTraw_2, "byIsolationMVA3oldDMwoLTraw_2/F");
   tree->Branch("byIsolationMVA3oldDMwLTraw_2", &tByIsolationMVA3oldDMwLTraw, "byIsolationMVA3oldDMwLTraw_2/F");
-  tree->Branch("byIsolationMVA3newDMwoLTraw_2", &byIsolationMVA3newDMwoLTraw_2, "byIsolationMVA3newDMwoLTraw_2/F");
-  tree->Branch("byIsolationMVA3newDMwLTraw_2", &tByIsolationMVA3newDMwLTraw, "byIsolationMVA3newDMwLTraw_2/F");
+  //tree->Branch("byIsolationMVA3newDMwoLTraw_2", &byIsolationMVA3newDMwoLTraw_2, "byIsolationMVA3newDMwoLTraw_2/F");
+  //tree->Branch("byIsolationMVA3newDMwLTraw_2", &tByIsolationMVA3newDMwLTraw, "byIsolationMVA3newDMwLTraw_2/F");
   tree->Branch("chargedIsoPtSum_2", &tChargedIsoPtSum, "chargedIsoPtSum_2/F");
   tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &tDecayModeFindingNewDMs, "decayModeFindingNewDMs_2/F");
@@ -445,6 +479,8 @@ void etau_tree::set_branches() {
   tree->Branch("beta_1", &jb1eta, "beta_1/F");
   tree->Branch("bphi_1", &jb1phi, "bphi_1/F");
   tree->Branch("bcsv_1", &jb1csv, "bcsv_1/F");
+  tree->Branch("bflavor_1", &jb1hadronflavor, "bflavor_1/F");
+  tree->Branch("bflavor_2", &jb2hadronflavor, "bflavor_2/F");
   tree->Branch("bpt_2", &jb2pt, "bpt_2/F");
   tree->Branch("beta_2", &jb2eta, "beta_2/F");
   tree->Branch("bphi_2", &jb2phi, "bphi_2/F");
@@ -474,163 +510,180 @@ void etau_tree::set_branches() {
   tree->Branch("metcov10_v2", &e_t_MvaMetCovMatrix10, "metcov10_v2/F");
   tree->Branch("metcov11_v2", &e_t_MvaMetCovMatrix01, "metcov11_v2/F");
   tree->Branch("metcov01_v2", &e_t_MvaMetCovMatrix11, "metcov01_v2/F");
-
-
-  tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
-  tree->Branch("njets_JetAbsoluteMPFBiasUp", &jetVeto30_JetAbsoluteMPFBiasUp);
-  tree->Branch("njets_JetAbsoluteScaleUp", &jetVeto30_JetAbsoluteScaleUp);
-  tree->Branch("njets_JetAbsoluteStatUp", &jetVeto30_JetAbsoluteStatUp);
-  tree->Branch("njets_JetEnUp", &jetVeto30_JetEnUp);
-  tree->Branch("njets_JetFlavorQCDUp", &jetVeto30_JetFlavorQCDUp);
-  tree->Branch("njets_JetFragmentationUp", &jetVeto30_JetFragmentationUp);
-  tree->Branch("njets_JetPileUpDataMCUp", &jetVeto30_JetPileUpDataMCUp);
-  tree->Branch("njets_JetPileUpPtBBUp", &jetVeto30_JetPileUpPtBBUp);
-  tree->Branch("njets_JetPileUpPtEC1Up", &jetVeto30_JetPileUpPtEC1Up);
-  tree->Branch("njets_JetPileUpPtEC2Up", &jetVeto30_JetPileUpPtEC2Up);
-  tree->Branch("njets_JetPileUpPtHFUp", &jetVeto30_JetPileUpPtHFUp);
-  tree->Branch("njets_JetPileUpPtRefUp", &jetVeto30_JetPileUpPtRefUp);
-  tree->Branch("njets_JetRelativeBalUp", &jetVeto30_JetRelativeBalUp);
-  tree->Branch("njets_JetRelativeFSRUp", &jetVeto30_JetRelativeFSRUp);
-  tree->Branch("njets_JetRelativeJEREC1Up", &jetVeto30_JetRelativeJEREC1Up);
-  tree->Branch("njets_JetRelativeJEREC2Up", &jetVeto30_JetRelativeJEREC2Up);
-  tree->Branch("njets_JetRelativeJERHFUp", &jetVeto30_JetRelativeJERHFUp);
-  tree->Branch("njets_JetRelativePtBBUp", &jetVeto30_JetRelativePtBBUp);
-  tree->Branch("njets_JetRelativePtEC1Up", &jetVeto30_JetRelativePtEC1Up);
-  tree->Branch("njets_JetRelativePtEC2Up", &jetVeto30_JetRelativePtEC2Up);
-  tree->Branch("njets_JetRelativePtHFUp", &jetVeto30_JetRelativePtHFUp);
-  tree->Branch("njets_JetRelativeStatECUp", &jetVeto30_JetRelativeStatECUp);
-  tree->Branch("njets_JetRelativeStatFSRUp", &jetVeto30_JetRelativeStatFSRUp);
-  tree->Branch("njets_JetRelativeStatHFUp", &jetVeto30_JetRelativeStatHFUp);
-  tree->Branch("njets_JetSinglePionECALUp", &jetVeto30_JetSinglePionECALUp);
-  tree->Branch("njets_JetSinglePionHCALUp", &jetVeto30_JetSinglePionHCALUp);
-  tree->Branch("njets_JetTimePtEtaUp", &jetVeto30_JetTimePtEtaUp);
-
-  tree->Branch("njets_JetAbsoluteFlavMapDown", &jetVeto30_JetAbsoluteFlavMapDown);
-  tree->Branch("njets_JetAbsoluteMPFBiasDown", &jetVeto30_JetAbsoluteMPFBiasDown);
-  tree->Branch("njets_JetAbsoluteScaleDown", &jetVeto30_JetAbsoluteScaleDown);
-  tree->Branch("njets_JetAbsoluteStatDown", &jetVeto30_JetAbsoluteStatDown);
-  tree->Branch("njets_JetEnDown", &jetVeto30_JetEnDown);
-  tree->Branch("njets_JetFlavorQCDDown", &jetVeto30_JetFlavorQCDDown);
-  tree->Branch("njets_JetFragmentationDown", &jetVeto30_JetFragmentationDown);
-  tree->Branch("njets_JetPileUpDataMCDown", &jetVeto30_JetPileUpDataMCDown);
-  tree->Branch("njets_JetPileUpPtBBDown", &jetVeto30_JetPileUpPtBBDown);
-  tree->Branch("njets_JetPileUpPtEC1Down", &jetVeto30_JetPileUpPtEC1Down);
-  tree->Branch("njets_JetPileUpPtEC2Down", &jetVeto30_JetPileUpPtEC2Down);
-  tree->Branch("njets_JetPileUpPtHFDown", &jetVeto30_JetPileUpPtHFDown);
-  tree->Branch("njets_JetPileUpPtRefDown", &jetVeto30_JetPileUpPtRefDown);
-  tree->Branch("njets_JetRelativeBalDown", &jetVeto30_JetRelativeBalDown);
-  tree->Branch("njets_JetRelativeFSRDown", &jetVeto30_JetRelativeFSRDown);
-  tree->Branch("njets_JetRelativeJEREC1Down", &jetVeto30_JetRelativeJEREC1Down);
-  tree->Branch("njets_JetRelativeJEREC2Down", &jetVeto30_JetRelativeJEREC2Down);
-  tree->Branch("njets_JetRelativeJERHFDown", &jetVeto30_JetRelativeJERHFDown);
-  tree->Branch("njets_JetRelativePtBBDown", &jetVeto30_JetRelativePtBBDown);
-  tree->Branch("njets_JetRelativePtEC1Down", &jetVeto30_JetRelativePtEC1Down);
-  tree->Branch("njets_JetRelativePtEC2Down", &jetVeto30_JetRelativePtEC2Down);
-  tree->Branch("njets_JetRelativePtHFDown", &jetVeto30_JetRelativePtHFDown);
-  tree->Branch("njets_JetRelativeStatECDown", &jetVeto30_JetRelativeStatECDown);
-  tree->Branch("njets_JetRelativeStatFSRDown", &jetVeto30_JetRelativeStatFSRDown);
-  tree->Branch("njets_JetRelativeStatHFDown", &jetVeto30_JetRelativeStatHFDown);
-  tree->Branch("njets_JetSinglePionECALDown", &jetVeto30_JetSinglePionECALDown);
-  tree->Branch("njets_JetSinglePionHCALDown", &jetVeto30_JetSinglePionHCALDown);
-  tree->Branch("njets_JetTimePtEtaDown", &jetVeto30_JetTimePtEtaDown);
-
-  tree->Branch("mjj_JetAbsoluteFlavMapUp", &vbfMass_JetAbsoluteFlavMapUp);
-  tree->Branch("mjj_JetAbsoluteMPFBiasUp", &vbfMass_JetAbsoluteMPFBiasUp);
-  tree->Branch("mjj_JetAbsoluteScaleUp", &vbfMass_JetAbsoluteScaleUp);
-  tree->Branch("mjj_JetAbsoluteStatUp", &vbfMass_JetAbsoluteStatUp);
-  tree->Branch("mjj_JetEnUp", &vbfMass_JetEnUp);
-  tree->Branch("mjj_JetFlavorQCDUp", &vbfMass_JetFlavorQCDUp);
-  tree->Branch("mjj_JetFragmentationUp", &vbfMass_JetFragmentationUp);
-  tree->Branch("mjj_JetPileUpDataMCUp", &vbfMass_JetPileUpDataMCUp);
-  tree->Branch("mjj_JetPileUpPtBBUp", &vbfMass_JetPileUpPtBBUp);
-  tree->Branch("mjj_JetPileUpPtEC1Up", &vbfMass_JetPileUpPtEC1Up);
-  tree->Branch("mjj_JetPileUpPtEC2Up", &vbfMass_JetPileUpPtEC2Up);
-  tree->Branch("mjj_JetPileUpPtHFUp", &vbfMass_JetPileUpPtHFUp);
-  tree->Branch("mjj_JetPileUpPtRefUp", &vbfMass_JetPileUpPtRefUp);
-  tree->Branch("mjj_JetRelativeBalUp", &vbfMass_JetRelativeBalUp);
-  tree->Branch("mjj_JetRelativeFSRUp", &vbfMass_JetRelativeFSRUp);
-  tree->Branch("mjj_JetRelativeJEREC1Up", &vbfMass_JetRelativeJEREC1Up);
-  tree->Branch("mjj_JetRelativeJEREC2Up", &vbfMass_JetRelativeJEREC2Up);
-  tree->Branch("mjj_JetRelativeJERHFUp", &vbfMass_JetRelativeJERHFUp);
-  tree->Branch("mjj_JetRelativePtBBUp", &vbfMass_JetRelativePtBBUp);
-  tree->Branch("mjj_JetRelativePtEC1Up", &vbfMass_JetRelativePtEC1Up);
-  tree->Branch("mjj_JetRelativePtEC2Up", &vbfMass_JetRelativePtEC2Up);
-  tree->Branch("mjj_JetRelativePtHFUp", &vbfMass_JetRelativePtHFUp);
-  tree->Branch("mjj_JetRelativeStatECUp", &vbfMass_JetRelativeStatECUp);
-  tree->Branch("mjj_JetRelativeStatFSRUp", &vbfMass_JetRelativeStatFSRUp);
-  tree->Branch("mjj_JetRelativeStatHFUp", &vbfMass_JetRelativeStatHFUp);
-  tree->Branch("mjj_JetSinglePionECALUp", &vbfMass_JetSinglePionECALUp);
-  tree->Branch("mjj_JetSinglePionHCALUp", &vbfMass_JetSinglePionHCALUp);
-  tree->Branch("mjj_JetTimePtEtaUp", &vbfMass_JetTimePtEtaUp);
-
-  tree->Branch("mjj_JetAbsoluteFlavMapDown", &vbfMass_JetAbsoluteFlavMapDown);
-  tree->Branch("mjj_JetAbsoluteMPFBiasDown", &vbfMass_JetAbsoluteMPFBiasDown);
-  tree->Branch("mjj_JetAbsoluteScaleDown", &vbfMass_JetAbsoluteScaleDown);
-  tree->Branch("mjj_JetAbsoluteStatDown", &vbfMass_JetAbsoluteStatDown);
-  tree->Branch("mjj_JetEnDown", &vbfMass_JetEnDown);
-  tree->Branch("mjj_JetFlavorQCDDown", &vbfMass_JetFlavorQCDDown);
-  tree->Branch("mjj_JetFragmentationDown", &vbfMass_JetFragmentationDown);
-  tree->Branch("mjj_JetPileUpDataMCDown", &vbfMass_JetPileUpDataMCDown);
-  tree->Branch("mjj_JetPileUpPtBBDown", &vbfMass_JetPileUpPtBBDown);
-  tree->Branch("mjj_JetPileUpPtEC1Down", &vbfMass_JetPileUpPtEC1Down);
-  tree->Branch("mjj_JetPileUpPtEC2Down", &vbfMass_JetPileUpPtEC2Down);
-  tree->Branch("mjj_JetPileUpPtHFDown", &vbfMass_JetPileUpPtHFDown);
-  tree->Branch("mjj_JetPileUpPtRefDown", &vbfMass_JetPileUpPtRefDown);
-  tree->Branch("mjj_JetRelativeBalDown", &vbfMass_JetRelativeBalDown);
-  tree->Branch("mjj_JetRelativeFSRDown", &vbfMass_JetRelativeFSRDown);
-  tree->Branch("mjj_JetRelativeJEREC1Down", &vbfMass_JetRelativeJEREC1Down);
-  tree->Branch("mjj_JetRelativeJEREC2Down", &vbfMass_JetRelativeJEREC2Down);
-  tree->Branch("mjj_JetRelativeJERHFDown", &vbfMass_JetRelativeJERHFDown);
-  tree->Branch("mjj_JetRelativePtBBDown", &vbfMass_JetRelativePtBBDown);
-  tree->Branch("mjj_JetRelativePtEC1Down", &vbfMass_JetRelativePtEC1Down);
-  tree->Branch("mjj_JetRelativePtEC2Down", &vbfMass_JetRelativePtEC2Down);
-  tree->Branch("mjj_JetRelativePtHFDown", &vbfMass_JetRelativePtHFDown);
-  tree->Branch("mjj_JetRelativeStatECDown", &vbfMass_JetRelativeStatECDown);
-  tree->Branch("mjj_JetRelativeStatFSRDown", &vbfMass_JetRelativeStatFSRDown);
-  tree->Branch("mjj_JetRelativeStatHFDown", &vbfMass_JetRelativeStatHFDown);
-  tree->Branch("mjj_JetSinglePionECALDown", &vbfMass_JetSinglePionECALDown);
-  tree->Branch("mjj_JetSinglePionHCALDown", &vbfMass_JetSinglePionHCALDown);
-  tree->Branch("mjj_JetTimePtEtaDown", &vbfMass_JetTimePtEtaDown);
   tree->Branch("e_t_collinearmass", &m_coll);
+  tree->Branch("mt_1", &eMtToPfMet_type1, "mt_1/F");
+  tree->Branch("mt_2", &tMtToPfMet_type1, "mt_2/F");
+  tree->Branch("trackpt_2", &tLeadTrackPt, "trackpt_2/F");
+  tree->Branch("charged_signalCone_2", &tNChrgHadrSignalCands, "charged_signalCone_2/F");
+  tree->Branch("charged_isoCone_2", &tNChrgHadrIsolationCands, "charged_isoCone_2/F");
+  tree->Branch("tPhotonPtSumOutsideSignalCone", &photonIso_2, "tPhotonPtSumOutsideSignalCone/F");
+
+  if (isMC) {
+    tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
+    tree->Branch("njets_JetAbsoluteMPFBiasUp", &jetVeto30_JetAbsoluteMPFBiasUp);
+    tree->Branch("njets_JetAbsoluteScaleUp", &jetVeto30_JetAbsoluteScaleUp);
+    tree->Branch("njets_JetAbsoluteStatUp", &jetVeto30_JetAbsoluteStatUp);
+    tree->Branch("njets_JetEnUp", &jetVeto30_JetEnUp);
+    tree->Branch("njets_JetFlavorQCDUp", &jetVeto30_JetFlavorQCDUp);
+    tree->Branch("njets_JetFragmentationUp", &jetVeto30_JetFragmentationUp);
+    tree->Branch("njets_JetPileUpDataMCUp", &jetVeto30_JetPileUpDataMCUp);
+    tree->Branch("njets_JetPileUpPtBBUp", &jetVeto30_JetPileUpPtBBUp);
+    tree->Branch("njets_JetPileUpPtEC1Up", &jetVeto30_JetPileUpPtEC1Up);
+    tree->Branch("njets_JetPileUpPtEC2Up", &jetVeto30_JetPileUpPtEC2Up);
+    tree->Branch("njets_JetPileUpPtHFUp", &jetVeto30_JetPileUpPtHFUp);
+    tree->Branch("njets_JetPileUpPtRefUp", &jetVeto30_JetPileUpPtRefUp);
+    tree->Branch("njets_JetRelativeBalUp", &jetVeto30_JetRelativeBalUp);
+    tree->Branch("njets_JetRelativeFSRUp", &jetVeto30_JetRelativeFSRUp);
+    tree->Branch("njets_JetRelativeJEREC1Up", &jetVeto30_JetRelativeJEREC1Up);
+    tree->Branch("njets_JetRelativeJEREC2Up", &jetVeto30_JetRelativeJEREC2Up);
+    tree->Branch("njets_JetRelativeJERHFUp", &jetVeto30_JetRelativeJERHFUp);
+    tree->Branch("njets_JetRelativePtBBUp", &jetVeto30_JetRelativePtBBUp);
+    tree->Branch("njets_JetRelativePtEC1Up", &jetVeto30_JetRelativePtEC1Up);
+    tree->Branch("njets_JetRelativePtEC2Up", &jetVeto30_JetRelativePtEC2Up);
+    tree->Branch("njets_JetRelativePtHFUp", &jetVeto30_JetRelativePtHFUp);
+    tree->Branch("njets_JetRelativeStatECUp", &jetVeto30_JetRelativeStatECUp);
+    tree->Branch("njets_JetRelativeStatFSRUp", &jetVeto30_JetRelativeStatFSRUp);
+    tree->Branch("njets_JetRelativeStatHFUp", &jetVeto30_JetRelativeStatHFUp);
+    tree->Branch("njets_JetSinglePionECALUp", &jetVeto30_JetSinglePionECALUp);
+    tree->Branch("njets_JetSinglePionHCALUp", &jetVeto30_JetSinglePionHCALUp);
+    tree->Branch("njets_JetTimePtEtaUp", &jetVeto30_JetTimePtEtaUp);
+
+    tree->Branch("njets_JetAbsoluteFlavMapDown", &jetVeto30_JetAbsoluteFlavMapDown);
+    tree->Branch("njets_JetAbsoluteMPFBiasDown", &jetVeto30_JetAbsoluteMPFBiasDown);
+    tree->Branch("njets_JetAbsoluteScaleDown", &jetVeto30_JetAbsoluteScaleDown);
+    tree->Branch("njets_JetAbsoluteStatDown", &jetVeto30_JetAbsoluteStatDown);
+    tree->Branch("njets_JetEnDown", &jetVeto30_JetEnDown);
+    tree->Branch("njets_JetFlavorQCDDown", &jetVeto30_JetFlavorQCDDown);
+    tree->Branch("njets_JetFragmentationDown", &jetVeto30_JetFragmentationDown);
+    tree->Branch("njets_JetPileUpDataMCDown", &jetVeto30_JetPileUpDataMCDown);
+    tree->Branch("njets_JetPileUpPtBBDown", &jetVeto30_JetPileUpPtBBDown);
+    tree->Branch("njets_JetPileUpPtEC1Down", &jetVeto30_JetPileUpPtEC1Down);
+    tree->Branch("njets_JetPileUpPtEC2Down", &jetVeto30_JetPileUpPtEC2Down);
+    tree->Branch("njets_JetPileUpPtHFDown", &jetVeto30_JetPileUpPtHFDown);
+    tree->Branch("njets_JetPileUpPtRefDown", &jetVeto30_JetPileUpPtRefDown);
+    tree->Branch("njets_JetRelativeBalDown", &jetVeto30_JetRelativeBalDown);
+    tree->Branch("njets_JetRelativeFSRDown", &jetVeto30_JetRelativeFSRDown);
+    tree->Branch("njets_JetRelativeJEREC1Down", &jetVeto30_JetRelativeJEREC1Down);
+    tree->Branch("njets_JetRelativeJEREC2Down", &jetVeto30_JetRelativeJEREC2Down);
+    tree->Branch("njets_JetRelativeJERHFDown", &jetVeto30_JetRelativeJERHFDown);
+    tree->Branch("njets_JetRelativePtBBDown", &jetVeto30_JetRelativePtBBDown);
+    tree->Branch("njets_JetRelativePtEC1Down", &jetVeto30_JetRelativePtEC1Down);
+    tree->Branch("njets_JetRelativePtEC2Down", &jetVeto30_JetRelativePtEC2Down);
+    tree->Branch("njets_JetRelativePtHFDown", &jetVeto30_JetRelativePtHFDown);
+    tree->Branch("njets_JetRelativeStatECDown", &jetVeto30_JetRelativeStatECDown);
+    tree->Branch("njets_JetRelativeStatFSRDown", &jetVeto30_JetRelativeStatFSRDown);
+    tree->Branch("njets_JetRelativeStatHFDown", &jetVeto30_JetRelativeStatHFDown);
+    tree->Branch("njets_JetSinglePionECALDown", &jetVeto30_JetSinglePionECALDown);
+    tree->Branch("njets_JetSinglePionHCALDown", &jetVeto30_JetSinglePionHCALDown);
+    tree->Branch("njets_JetTimePtEtaDown", &jetVeto30_JetTimePtEtaDown);
+
+    tree->Branch("mjj_JetAbsoluteFlavMapUp", &vbfMass_JetAbsoluteFlavMapUp);
+    tree->Branch("mjj_JetAbsoluteMPFBiasUp", &vbfMass_JetAbsoluteMPFBiasUp);
+    tree->Branch("mjj_JetAbsoluteScaleUp", &vbfMass_JetAbsoluteScaleUp);
+    tree->Branch("mjj_JetAbsoluteStatUp", &vbfMass_JetAbsoluteStatUp);
+    tree->Branch("mjj_JetEnUp", &vbfMass_JetEnUp);
+    tree->Branch("mjj_JetFlavorQCDUp", &vbfMass_JetFlavorQCDUp);
+    tree->Branch("mjj_JetFragmentationUp", &vbfMass_JetFragmentationUp);
+    tree->Branch("mjj_JetPileUpDataMCUp", &vbfMass_JetPileUpDataMCUp);
+    tree->Branch("mjj_JetPileUpPtBBUp", &vbfMass_JetPileUpPtBBUp);
+    tree->Branch("mjj_JetPileUpPtEC1Up", &vbfMass_JetPileUpPtEC1Up);
+    tree->Branch("mjj_JetPileUpPtEC2Up", &vbfMass_JetPileUpPtEC2Up);
+    tree->Branch("mjj_JetPileUpPtHFUp", &vbfMass_JetPileUpPtHFUp);
+    tree->Branch("mjj_JetPileUpPtRefUp", &vbfMass_JetPileUpPtRefUp);
+    tree->Branch("mjj_JetRelativeBalUp", &vbfMass_JetRelativeBalUp);
+    tree->Branch("mjj_JetRelativeFSRUp", &vbfMass_JetRelativeFSRUp);
+    tree->Branch("mjj_JetRelativeJEREC1Up", &vbfMass_JetRelativeJEREC1Up);
+    tree->Branch("mjj_JetRelativeJEREC2Up", &vbfMass_JetRelativeJEREC2Up);
+    tree->Branch("mjj_JetRelativeJERHFUp", &vbfMass_JetRelativeJERHFUp);
+    tree->Branch("mjj_JetRelativePtBBUp", &vbfMass_JetRelativePtBBUp);
+    tree->Branch("mjj_JetRelativePtEC1Up", &vbfMass_JetRelativePtEC1Up);
+    tree->Branch("mjj_JetRelativePtEC2Up", &vbfMass_JetRelativePtEC2Up);
+    tree->Branch("mjj_JetRelativePtHFUp", &vbfMass_JetRelativePtHFUp);
+    tree->Branch("mjj_JetRelativeStatECUp", &vbfMass_JetRelativeStatECUp);
+    tree->Branch("mjj_JetRelativeStatFSRUp", &vbfMass_JetRelativeStatFSRUp);
+    tree->Branch("mjj_JetRelativeStatHFUp", &vbfMass_JetRelativeStatHFUp);
+    tree->Branch("mjj_JetSinglePionECALUp", &vbfMass_JetSinglePionECALUp);
+    tree->Branch("mjj_JetSinglePionHCALUp", &vbfMass_JetSinglePionHCALUp);
+    tree->Branch("mjj_JetTimePtEtaUp", &vbfMass_JetTimePtEtaUp);
+
+    tree->Branch("mjj_JetAbsoluteFlavMapDown", &vbfMass_JetAbsoluteFlavMapDown);
+    tree->Branch("mjj_JetAbsoluteMPFBiasDown", &vbfMass_JetAbsoluteMPFBiasDown);
+    tree->Branch("mjj_JetAbsoluteScaleDown", &vbfMass_JetAbsoluteScaleDown);
+    tree->Branch("mjj_JetAbsoluteStatDown", &vbfMass_JetAbsoluteStatDown);
+    tree->Branch("mjj_JetEnDown", &vbfMass_JetEnDown);
+    tree->Branch("mjj_JetFlavorQCDDown", &vbfMass_JetFlavorQCDDown);
+    tree->Branch("mjj_JetFragmentationDown", &vbfMass_JetFragmentationDown);
+    tree->Branch("mjj_JetPileUpDataMCDown", &vbfMass_JetPileUpDataMCDown);
+    tree->Branch("mjj_JetPileUpPtBBDown", &vbfMass_JetPileUpPtBBDown);
+    tree->Branch("mjj_JetPileUpPtEC1Down", &vbfMass_JetPileUpPtEC1Down);
+    tree->Branch("mjj_JetPileUpPtEC2Down", &vbfMass_JetPileUpPtEC2Down);
+    tree->Branch("mjj_JetPileUpPtHFDown", &vbfMass_JetPileUpPtHFDown);
+    tree->Branch("mjj_JetPileUpPtRefDown", &vbfMass_JetPileUpPtRefDown);
+    tree->Branch("mjj_JetRelativeBalDown", &vbfMass_JetRelativeBalDown);
+    tree->Branch("mjj_JetRelativeFSRDown", &vbfMass_JetRelativeFSRDown);
+    tree->Branch("mjj_JetRelativeJEREC1Down", &vbfMass_JetRelativeJEREC1Down);
+    tree->Branch("mjj_JetRelativeJEREC2Down", &vbfMass_JetRelativeJEREC2Down);
+    tree->Branch("mjj_JetRelativeJERHFDown", &vbfMass_JetRelativeJERHFDown);
+    tree->Branch("mjj_JetRelativePtBBDown", &vbfMass_JetRelativePtBBDown);
+    tree->Branch("mjj_JetRelativePtEC1Down", &vbfMass_JetRelativePtEC1Down);
+    tree->Branch("mjj_JetRelativePtEC2Down", &vbfMass_JetRelativePtEC2Down);
+    tree->Branch("mjj_JetRelativePtHFDown", &vbfMass_JetRelativePtHFDown);
+    tree->Branch("mjj_JetRelativeStatECDown", &vbfMass_JetRelativeStatECDown);
+    tree->Branch("mjj_JetRelativeStatFSRDown", &vbfMass_JetRelativeStatFSRDown);
+    tree->Branch("mjj_JetRelativeStatHFDown", &vbfMass_JetRelativeStatHFDown);
+    tree->Branch("mjj_JetSinglePionECALDown", &vbfMass_JetSinglePionECALDown);
+    tree->Branch("mjj_JetSinglePionHCALDown", &vbfMass_JetSinglePionHCALDown);
+    tree->Branch("mjj_JetTimePtEtaDown", &vbfMass_JetTimePtEtaDown);
+    tree->Branch("e_t_collinearmass", &m_coll);
+    tree->Branch("e_t_collinearmass_UnclusteredEnUp", &m_coll_uesU);
+    tree->Branch("e_t_collinearmass_UnclusteredEnDown", &m_coll_uesD);
+    tree->Branch("e_t_collinearmass_JetEnUp", &m_coll_jesU);
+    tree->Branch("e_t_collinearmass_JetEnDown", &m_coll_jesD);
+    tree->Branch("e_t_collinearmass_TauEnUp", &m_coll_tesU);
+    tree->Branch("e_t_collinearmass_TauEnDown", &m_coll_tesD);
+    tree->Branch("njets_JESDown", &jetVeto20_JetEnDown);
+    tree->Branch("njetspt20_JESDown", &jetVeto20_JetEnUp);
+    tree->Branch("njets_JESUp", &jetVeto30_JetEnDown);
+    tree->Branch("njetspt20_JESUp", &jetVeto20_JetEnUp);
+  }
+
+  tree->Branch("metphi_JESDown", &type1_pfMet_shiftedPhi_JetEnDown);
+  tree->Branch("metphi_JESUp", &type1_pfMet_shiftedPhi_JetEnUp);
+  tree->Branch("metphi_UESDown", &type1_pfMet_shiftedPhi_UnclusteredEnDown);
+  tree->Branch("metphi_UESUp", &type1_pfMet_shiftedPhi_UnclusteredEnUp);
+  tree->Branch("met_JESDown", &type1_pfMet_shiftedPt_JetEnDown);
+  tree->Branch("met_JESUp", &type1_pfMet_shiftedPt_JetEnUp);
+  tree->Branch("met_UESDown", &type1_pfMet_shiftedPt_UnclusteredEnDown);
+  tree->Branch("met_UESUp", &type1_pfMet_shiftedPt_UnclusteredEnUp);
+  tree->Branch("mjj_JESUp", &mjj_JESUp);
+  tree->Branch("mjj_JESDown", &mjj_JESDown);
   tree->Branch("e_t_collinearmass_UnclusteredEnUp", &m_coll_uesU);
   tree->Branch("e_t_collinearmass_UnclusteredEnDown", &m_coll_uesD);
   tree->Branch("e_t_collinearmass_JetEnUp", &m_coll_jesU);
   tree->Branch("e_t_collinearmass_JetEnDown", &m_coll_jesD);
   tree->Branch("e_t_collinearmass_TauEnUp", &m_coll_tesU);
   tree->Branch("e_t_collinearmass_TauEnDown", &m_coll_tesD);
-  tree->Branch("njets_JESDown", &jetVeto20_JetEnDown);
-  tree->Branch("njetspt20_JESDown", &jetVeto20_JetEnUp);
-  tree->Branch("njets_JESUp", &jetVeto30_JetEnDown);
-  tree->Branch("njetspt20_JESUp", &jetVeto20_JetEnUp);
 
-  tree->Branch("metphi_EESDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
-  tree->Branch("metphi_EESUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
-  tree->Branch("metphi_JESDown", &type1_pfMet_shiftedPhi_JetEnDown);
-  tree->Branch("metphi_JESUp", &type1_pfMet_shiftedPhi_JetEnUp);
-  tree->Branch("metphi_JERDown", &type1_pfMet_shiftedPhi_JetResDown);
-  tree->Branch("metphi_JERUp", &type1_pfMet_shiftedPhi_JetResUp);
-  tree->Branch("metphi_MESDown", &type1_pfMet_shiftedPhi_MuonEnDown);
-  tree->Branch("metphi_MESUp", &type1_pfMet_shiftedPhi_MuonEnUp);
-  tree->Branch("metphi_PESDown", &type1_pfMet_shiftedPhi_PhotonEnDown);
-  tree->Branch("metphi_PESUp", &type1_pfMet_shiftedPhi_PhotonEnUp);
-  tree->Branch("metphi_TESDown", &type1_pfMet_shiftedPhi_TauEnDown);
-  tree->Branch("metphi_TESUp", &type1_pfMet_shiftedPhi_TauEnUp);
-  tree->Branch("metphi_UESDown", &type1_pfMet_shiftedPhi_UnclusteredEnDown);
-  tree->Branch("metphi_UESUp", &type1_pfMet_shiftedPhi_UnclusteredEnUp);
-  tree->Branch("met_EESDown", &type1_pfMet_shiftedPt_ElectronEnDown);
-  tree->Branch("met_EESUp", &type1_pfMet_shiftedPt_ElectronEnUp);
-  tree->Branch("met_JESDown", &type1_pfMet_shiftedPt_JetEnDown);
-  tree->Branch("met_JESUp", &type1_pfMet_shiftedPt_JetEnUp);
-  tree->Branch("met_JERDown", &type1_pfMet_shiftedPt_JetResDown);
-  tree->Branch("met_JERUp", &type1_pfMet_shiftedPt_JetResUp);
-  tree->Branch("met_MESDown", &type1_pfMet_shiftedPt_MuonEnDown);
-  tree->Branch("met_MESUp", &type1_pfMet_shiftedPt_MuonEnUp);
-  tree->Branch("met_PESDown", &type1_pfMet_shiftedPt_PhotonEnDown);
-  tree->Branch("met_PESUp", &type1_pfMet_shiftedPt_PhotonEnUp);
-  tree->Branch("met_TESDown", &type1_pfMet_shiftedPt_TauEnDown);
-  tree->Branch("met_TESUp", &type1_pfMet_shiftedPt_TauEnUp);
-  tree->Branch("met_UESDown", &type1_pfMet_shiftedPt_UnclusteredEnDown);
-  tree->Branch("met_UESUp", &type1_pfMet_shiftedPt_UnclusteredEnUp);
+  //tree->Branch("metphi_EESDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
+  //tree->Branch("metphi_EESUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
+  //tree->Branch("metphi_JERDown", &type1_pfMet_shiftedPhi_JetResDown);
+  //tree->Branch("metphi_JERUp", &type1_pfMet_shiftedPhi_JetResUp);
+  //tree->Branch("metphi_MESDown", &type1_pfMet_shiftedPhi_MuonEnDown);
+  //tree->Branch("metphi_MESUp", &type1_pfMet_shiftedPhi_MuonEnUp);
+  //tree->Branch("metphi_PESDown", &type1_pfMet_shiftedPhi_PhotonEnDown);
+  //tree->Branch("metphi_PESUp", &type1_pfMet_shiftedPhi_PhotonEnUp);
+  //tree->Branch("metphi_TESDown", &type1_pfMet_shiftedPhi_TauEnDown);
+  //tree->Branch("metphi_TESUp", &type1_pfMet_shiftedPhi_TauEnUp);
+  //tree->Branch("met_EESDown", &type1_pfMet_shiftedPt_ElectronEnDown);
+  //tree->Branch("met_EESUp", &type1_pfMet_shiftedPt_ElectronEnUp);
+  //tree->Branch("met_JERDown", &type1_pfMet_shiftedPt_JetResDown);
+  //tree->Branch("met_JERUp", &type1_pfMet_shiftedPt_JetResUp);
+  //tree->Branch("met_MESDown", &type1_pfMet_shiftedPt_MuonEnDown);
+  //tree->Branch("met_MESUp", &type1_pfMet_shiftedPt_MuonEnUp);
+  //tree->Branch("met_PESDown", &type1_pfMet_shiftedPt_PhotonEnDown);
+  //tree->Branch("met_PESUp", &type1_pfMet_shiftedPt_PhotonEnUp);
+  //tree->Branch("met_TESDown", &type1_pfMet_shiftedPt_TauEnDown);
+  //tree->Branch("met_TESUp", &type1_pfMet_shiftedPt_TauEnUp);
 
   // created during skimming
   tree->Branch("pt_1", &pt_1, "pt_1/F");
@@ -651,6 +704,7 @@ void etau_tree::set_branches() {
   tree->Branch("e_2", &e_2, "e_2/F");
   tree->Branch("mjj", &mjj, "mjj/F");
   tree->Branch("jdeta", &jdeta, "jdeta/F");
+  tree->Branch("jdphi", &jdphi, "jdphi/F");
   tree->Branch("njetingap", &njetingap, "njetingap/I");
   tree->Branch("njetingap20", &njetingap20, "njetingap20/I");
   tree->Branch("dijetpt", &dijetpt, "dijetpt/F");
@@ -659,6 +713,16 @@ void etau_tree::set_branches() {
   tree->Branch("visjeteta", &visjeteta, "visjeteta/F");
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
+  tree->Branch("pfmetcorr_ex", &pfmetcorr_ex, "pfmetcorr_ex/F");
+  tree->Branch("pfmetcorr_ey", &pfmetcorr_ey, "pfmetcorr_ey/F");
+  tree->Branch("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp, "pfmetcorr_ex_UESUp/F");
+  tree->Branch("pfmetcorr_ey_UESUp", &pfmetcorr_ey_UESUp, "pfmetcorr_ey_UESUp/F");
+  tree->Branch("pfmetcorr_ex_UESDown", &pfmetcorr_ex_UESDown, "pfmetcorr_ex_UESDown/F");
+  tree->Branch("pfmetcorr_ey_UESDown", &pfmetcorr_ey_UESDown, "pfmetcorr_ey_UESDown/F");
+  tree->Branch("pfmetcorr_ex_JESUp", &pfmetcorr_ex_JESUp, "pfmetcorr_ex_JESUp/F");
+  tree->Branch("pfmetcorr_ey_JESUp", &pfmetcorr_ey_JESUp, "pfmetcorr_ey_JESUp/F");
+  tree->Branch("pfmetcorr_ex_JESDown", &pfmetcorr_ex_JESDown, "pfmetcorr_ex_JESDown/F");
+  tree->Branch("pfmetcorr_ey_JESDown", &pfmetcorr_ey_JESDown, "pfmetcorr_ey_JESDown/F");
 
   // read input tree
 
@@ -709,6 +773,8 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("j1csv", &j1csv);
   original->SetBranchAddress("j1phi", &j1phi);
   original->SetBranchAddress("j1pt", &j1pt);
+  original->SetBranchAddress("jb1hadronflavor", &jb1hadronflavor);
+  original->SetBranchAddress("jb2hadronflavor", &jb2hadronflavor);
   original->SetBranchAddress("j2csv", &j1csv);
   original->SetBranchAddress("j2eta", &j1eta);
   original->SetBranchAddress("j2phi", &j1phi);
@@ -740,9 +806,20 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("e_t_MvaMetCovMatrix10", &e_t_MvaMetCovMatrix10);
   original->SetBranchAddress("e_t_MvaMetCovMatrix01", &e_t_MvaMetCovMatrix01);
   original->SetBranchAddress("e_t_MvaMetCovMatrix11", &e_t_MvaMetCovMatrix11);
+  original->SetBranchAddress("e_t_PZetaVis", &e_t_PZetaVis);
+  original->SetBranchAddress("e_t_PZeta", &e_t_PZeta);
+  original->SetBranchAddress("e_t_Mass", &e_t_Mass);
+  original->SetBranchAddress("eMtToPfMet_type1", &eMtToPfMet_type1);
+  original->SetBranchAddress("tMtToPfMet_type1", &tMtToPfMet_type1);
+  original->SetBranchAddress("tJetPt", &tJetPt);
+  original->SetBranchAddress("tLeadTrackPt", &tLeadTrackPt);
+  original->SetBranchAddress("tNChrgHadrSignalCands", &tNChrgHadrSignalCands);
+  original->SetBranchAddress("tNChrgHadrIsolationCands", &tNChrgHadrIsolationCands);
+  original->SetBranchAddress("tPhotonPtSumOutsideSignalCone", &tPhotonPtSumOutsideSignalCone);
 
   // used to construct something
   original->SetBranchAddress("vbfDeta", &vbfDeta);
+  original->SetBranchAddress("vbfDphi", &vbfDphi);
   original->SetBranchAddress("vbfMass", &vbfMass);
   original->SetBranchAddress("vbfJetVeto20", &vbfJetVeto20);
   original->SetBranchAddress("vbfJetVeto30", &vbfJetVeto30);
