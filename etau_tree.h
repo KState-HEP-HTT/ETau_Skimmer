@@ -15,87 +15,89 @@ public:
 
   // variables copied directly tree to tree
   ULong64_t evt;
-  Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, met_EESDown, met_EESUp, met_JESUp, met_JESDown;
-  Float_t met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp;
-  Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, metphi_JERDown, metphi_JERUp;
-  Float_t mvaMet, mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, dphi_12, dphi_emet, dphi_taumet, singleE25eta2p1TightPass, passEle27, eMatchesEle25TightFilter, eMatchesEle25eta2p1TightPath;
-  Float_t topQuarkPt1, topQuarkPt2, NUP, jetVeto30, bjetCISVVeto20Medium, jetVeto20, eZTTGenMatching, tZTTGenMatching, tZTTGenDR;
-  Float_t tDecayMode, ePVDZ, ePVDXY, eIsoDB03, eCharge, tPVDZ, tPVDXY, tByIsolationMVArun2v1DBoldDMwLTraw, tCharge;
-  Float_t tAgainstMuonTight3, tAgainstMuonLoose3, tAgainstElectronVLooseMVA6, tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6;
-  Float_t tAgainstElectronVTightMVA6, tByLooseCombinedIsolationDeltaBetaCorr3Hits, tByMediumCombinedIsolationDeltaBetaCorr3Hits, tByTightCombinedIsolationDeltaBetaCorr3Hits;
-  Float_t tByCombinedIsolationDeltaBetaCorrRaw3Hits, tByIsolationMVA3oldDMwLTraw, tByIsolationMVA3newDMwLTraw, tByVLooseIsolationMVArun2v1DBoldDMwLT, tByLooseIsolationMVArun2v1DBoldDMwLT;
-  Float_t tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT;
-  Float_t tNeutralIsoPtSum, tChargedIsoPtSum, tPuCorrPtSum, tDecayModeFinding, tDecayModeFindingNewDMs, j1pt, j2pt, j1eta, j2eta, j1phi, j2phi, j1csv, j2csv, jb1pt, jb2pt;
-  Float_t jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, nTruePU, nvtx, rho, extratau_veto, isZtt, idisoweight_2, tByIsolationMVArun2v1DBnewDMwLTraw, jb1hadronflavor, jb2hadronflavor;
-
-  Float_t vbfMass_JetAbsoluteFlavMapUp, vbfMass_JetAbsoluteMPFBiasUp, vbfMass_JetAbsoluteScaleUp, vbfMass_JetAbsoluteStatUp;
-  Float_t vbfMass_JetEnUp, vbfMass_JetFlavorQCDUp, vbfMass_JetFragmentationUp, vbfMass_JetPileUpDataMCUp, vbfMass_JetPileUpPtBBUp;
-  Float_t vbfMass_JetPileUpPtEC1Up, vbfMass_JetPileUpPtEC2Up, vbfMass_JetPileUpPtHFUp, vbfMass_JetPileUpPtRefUp, vbfMass_JetRelativeBalUp;
-  Float_t vbfMass_JetRelativeFSRUp, vbfMass_JetRelativeJEREC1Up, vbfMass_JetRelativeJEREC2Up, vbfMass_JetRelativeJERHFUp;
-  Float_t vbfMass_JetRelativePtBBUp, vbfMass_JetRelativePtEC1Up, vbfMass_JetRelativePtEC2Up, vbfMass_JetRelativePtHFUp;
-  Float_t vbfMass_JetRelativeStatECUp, vbfMass_JetRelativeStatFSRUp, vbfMass_JetRelativeStatHFUp, vbfMass_JetSinglePionECALUp;
-  Float_t vbfMass_JetSinglePionHCALUp, vbfMass_JetTimePtEtaUp, vbfMass_JetAbsoluteFlavMapDown, vbfMass_JetAbsoluteMPFBiasDown;
-  Float_t vbfMass_JetAbsoluteScaleDown, vbfMass_JetAbsoluteStatDown, vbfMass_JetEnDown, vbfMass_JetFlavorQCDDown;
-  Float_t vbfMass_JetFragmentationDown, vbfMass_JetPileUpDataMCDown, vbfMass_JetPileUpPtBBDown, vbfMass_JetPileUpPtEC1Down;
-  Float_t vbfMass_JetPileUpPtEC2Down, vbfMass_JetPileUpPtHFDown, vbfMass_JetPileUpPtRefDown, vbfMass_JetRelativeBalDown;
-  Float_t vbfMass_JetRelativeFSRDown, vbfMass_JetRelativeJEREC1Down, vbfMass_JetRelativeJEREC2Down, vbfMass_JetRelativeJERHFDown;
-  Float_t vbfMass_JetRelativePtBBDown, vbfMass_JetRelativePtEC1Down, vbfMass_JetRelativePtEC2Down, vbfMass_JetRelativePtHFDown;
-  Float_t vbfMass_JetRelativeStatECDown, vbfMass_JetRelativeStatFSRDown, vbfMass_JetRelativeStatHFDown, vbfMass_JetSinglePionECALDown;
-  Float_t vbfMass_JetSinglePionHCALDown, vbfMass_JetTimePtEtaDown;
-
-  Float_t jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleUp, jetVeto30_JetAbsoluteStatUp;
-  Float_t jetVeto30_JetFlavorQCDUp, jetVeto30_JetFragmentationUp, jetVeto30_JetPileUpDataMCUp, jetVeto30_JetPileUpPtBBUp;
-  Float_t jetVeto30_JetPileUpPtEC1Up, jetVeto30_JetPileUpPtEC2Up, jetVeto30_JetPileUpPtHFUp, jetVeto30_JetPileUpPtRefUp;
-  Float_t jetVeto30_JetRelativeBalUp, jetVeto30_JetRelativeFSRUp, jetVeto30_JetRelativeJEREC1Up, jetVeto30_JetRelativeJEREC2Up;
-  Float_t jetVeto30_JetRelativeJERHFUp, jetVeto30_JetRelativePtBBUp, jetVeto30_JetRelativePtEC1Up, jetVeto30_JetRelativePtEC2Up;
-  Float_t jetVeto30_JetRelativePtHFUp, jetVeto30_JetRelativeStatECUp, jetVeto30_JetRelativeStatFSRUp, jetVeto30_JetRelativeStatHFUp;
-  Float_t jetVeto30_JetSinglePionECALUp, jetVeto30_JetSinglePionHCALUp, jetVeto30_JetTimePtEtaUp, jetVeto30_JetAbsoluteFlavMapDown;
-  Float_t jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteStatDown;
-  Float_t jetVeto30_JetFlavorQCDDown, jetVeto30_JetFragmentationDown, jetVeto30_JetPileUpDataMCDown, jetVeto30_JetPileUpPtBBDown;
-  Float_t jetVeto30_JetPileUpPtEC1Down, jetVeto30_JetPileUpPtEC2Down, jetVeto30_JetPileUpPtHFDown, jetVeto30_JetPileUpPtRefDown;
-  Float_t jetVeto30_JetRelativeBalDown, jetVeto30_JetRelativeFSRDown, jetVeto30_JetRelativeJEREC1Down, jetVeto30_JetRelativeJEREC2Down;
-  Float_t jetVeto30_JetRelativeJERHFDown, jetVeto30_JetRelativePtBBDown, jetVeto30_JetRelativePtEC1Down, jetVeto30_JetRelativePtEC2Down;
-  Float_t jetVeto30_JetRelativePtHFDown, jetVeto30_JetRelativeStatECDown, jetVeto30_JetRelativeStatFSRDown, jetVeto30_JetRelativeStatHFDown;
-  Float_t jetVeto30_JetSinglePionECALDown, jetVeto30_JetSinglePionHCALDown, jetVeto30_JetTimePtEtaDown;
-
-  Float_t jetVeto30_JetEnUp, jetVeto30_JetEnDown, jetVeto20_JetEnUp, jetVeto20_JetEnDown;
-
-  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp, type1_pfMet_shiftedPhi_JetEnDown;
-  Float_t type1_pfMet_shiftedPhi_JetEnUp, type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp;
-  Float_t type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp, type1_pfMet_shiftedPhi_PhotonEnDown;
-  Float_t type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown, type1_pfMet_shiftedPhi_TauEnUp;
-  Float_t type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp, type1_pfMet_shiftedPt_ElectronEnDown;
-  Float_t type1_pfMet_shiftedPt_ElectronEnUp, type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp;
-  Float_t type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPt_MuonEnDown;
-  Float_t type1_pfMet_shiftedPt_MuonEnUp, type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp;
-  Float_t type1_pfMet_shiftedPt_TauEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp;
-  Float_t type1_pfMet_shiftedPt_TauEnDown;
-
-  Float_t m_coll, m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
-
-  Float_t pfmetcorr_ex, pfmetcorr_ey, pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown;
-  Float_t e_t_PZeta, e_t_PZetaVis, e_t_Mass, eMtToPfMet_type1, tMtToPfMet_type1, tJetPt, tLeadTrackPt, tNChrgHadrSignalCands, tNChrgHadrIsolationCands, tPhotonPtSumOutsideSignalCone, vbfDphi ;
-
-  Int_t run, lumi, njetingap, njetingap20;
+  Int_t run, lumi;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
 
-  // temporary storage variables
-  Float_t eVetoZTTp001dxyzR0, muVetoZTTp001dxyzR0, dielectronVeto;
+  Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, NUP, rho,
+      met_px, met_py, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi,
+      hdijetphi, visjeteta, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, jdphi, jdeta, mjj, dijetpt, vbfDeta, m_collj1pt, j1pt, j2pt, j1eta, j2eta, j1phi, j2phi,
+      j1csv, j2csv, jb1pt, jb2pt, jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, jb1hadronflavor, jb2hadronflavornTruePU, nvtx, numGenJets, mvaMet,
+      mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, singleE25eta2p1TightPass, eMatchesEle25TightFilter, eMatchesEle25eta2p1TightPath,
+      topQuarkPt1, topQuarkPt2, jetVeto30, bjetCISVVeto20Medium, jetVeto20, eZTTGenMatching, tZTTGenMatching, tZTTGenDR, tDecayMode, ePVDZ, ePVDXY,
+      eIsoDB03, eCharge, tPVDZ, tPVDXY, tByIsolationMVArun2v1DBoldDMwLTraw, tCharge, tAgainstMuonTight3, tAgainstMuonLoose3, tAgainstElectronVLooseMVA6,
+      tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6, tByLooseCombinedIsolationDeltaBetaCorr3Hits,
+      tByMediumCombinedIsolationDeltaBetaCorr3Hits, tByTightCombinedIsolationDeltaBetaCorr3Hits, tByCombinedIsolationDeltaBetaCorrRaw3Hits, m_coll,
+      tByIsolationMVA3oldDMwLTraw, tByIsolationMVA3newDMwLTraw, tByVLooseIsolationMVArun2v1DBoldDMwLT, tByLooseIsolationMVArun2v1DBoldDMwLT,
+      tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT,
+      tNeutralIsoPtSum, tChargedIsoPtSum, tPuCorrPtSum, tDecayModeFinding, tDecayModeFindingNewDMs, extratau_veto, isZtt, idisoweight_2, jb2hadronflavor,
+      tByIsolationMVArun2v1DBnewDMwLTraw, e_t_PZeta, e_t_PZetaVis, e_t_Mass, eMtToPfMet_type1, tMtToPfMet_type1, tJetPt, tLeadTrackPt, tNChrgHadrSignalCands,
+      tNChrgHadrIsolationCands, tPhotonPtSumOutsideSignalCone, vbfDphi, eVetoZTTp001dxyzR0, muVetoZTTp001dxyzR0, dielectronVetobyIsolationMVA3oldDMwoLTraw_2,
+      trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, vbfMass, vbfJetVeto20, vbfJetVeto30, eGenPdgId, extramuon_veto, isZet, nTruePU,
+      eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, photonIso_2, dielectronVeto, njetingap, njetingap20,
+      e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix11
+      ;
 
-  // new variables to store in new tree
-  Float_t met_px, met_py, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi, hdijetphi, visjeteta, isZet;
-  Float_t jdeta, mjj, dijetpt, mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown, jdphi;
-  Float_t weight;
+  Float_t Flag_BadChargedCandidateFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter, Flag_badCloneMuonFilter,
+      Flag_badGlobalMuonFilter, Flag_eeBadScFilter, Flag_globalTightHalo2016Filter, Flag_goodVertices, Flag_BadPFMuonFilter, Flag_HBHENoiseIsoFilter
+      ;
 
-  // forgotten
-  Float_t byIsolationMVA3oldDMwoLTraw_2, trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, numGenJets, vbfDeta_JetEnDown, vbfDeta_JetEnUp;
-  Float_t vbfMass, vbfJetVeto20, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp, vbfJetVeto30, vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp, eGenPdgId, vbfDeta, extramuon_veto;
-  Float_t eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, photonIso_2;
+  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp, type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp,
+      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
+      type1_pfMet_shiftedPhi_PhotonEnDown, type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown,
+      type1_pfMet_shiftedPhi_TauEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp
+      ;
 
-  Float_t Flag_BadChargedCandidateFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter;
-  Float_t Flag_badCloneMuonFilter, Flag_badGlobalMuonFilter;
-  Float_t Flag_eeBadScFilter, Flag_globalTightHalo2016Filter, Flag_goodVertices, Flag_BadPFMuonFilter, Flag_HBHENoiseIsoFilter;
-  Float_t e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix11;
+  Float_t type1_pfMet_shiftedPt_ElectronEnDown, type1_pfMet_shiftedPt_ElectronEnUp, type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp,
+      type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPt_MuonEnDown, type1_pfMet_shiftedPt_MuonEnUp,
+      type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp, type1_pfMet_shiftedPt_TauEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, 
+      type1_pfMet_shiftedPt_UnclusteredEnUp, type1_pfMet_shiftedPt_TauEnDown
+      ;
+
+  Float_t met_EESDown, met_EESUp, met_JESUp, met_JESDown, met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, 
+      met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp
+      ;
+
+  Float_t metphi_JESDown, metphi_MESDown, metphi_MESUp, metphi_PESUp, metphi_PESDown, metphi_TESUp, metphi_TESDown, metphi_UESUp, metphi_UESDown, 
+      metphi_JERDown, metphi_JERUp
+      ;
+
+  Float_t vbfMass_JetAbsoluteFlavMapUp, vbfMass_JetAbsoluteMPFBiasUp, vbfMass_JetAbsoluteScaleUp, vbfMass_JetAbsoluteStatUp, vbfMass_JetEnUp,
+      vbfMass_JetFlavorQCDUp, vbfMass_JetFragmentationUp, vbfMass_JetPileUpDataMCUp, vbfMass_JetPileUpPtBBUp, vbfMass_JetPileUpPtEC1Up,
+      vbfMass_JetPileUpPtEC2Up, vbfMass_JetPileUpPtHFUp, vbfMass_JetPileUpPtRefUp, vbfMass_JetRelativeBalUp, vbfMass_JetRelativeFSRUp,
+      vbfMass_JetRelativeJEREC1Up, vbfMass_JetRelativeJEREC2Up, vbfMass_JetRelativeJERHFUp, vbfMass_JetRelativePtBBUp, vbfMass_JetRelativePtEC1Up,
+      vbfMass_JetRelativePtEC2Up, vbfMass_JetRelativePtHFUp, vbfMass_JetRelativeStatECUp, vbfMass_JetRelativeStatFSRUp, vbfMass_JetRelativeStatHFUp,
+      vbfMass_JetSinglePionECALUp, vbfMass_JetSinglePionHCALUp, vbfMass_JetTimePtEtaUp, vbfMass_JetAbsoluteFlavMapDown, vbfMass_JetAbsoluteMPFBiasDown,
+      vbfMass_JetAbsoluteScaleDown, vbfMass_JetAbsoluteStatDown, vbfMass_JetEnDown, vbfMass_JetFlavorQCDDown, vbfMass_JetFragmentationDown,
+      vbfMass_JetPileUpDataMCDown, vbfMass_JetPileUpPtBBDown, vbfMass_JetPileUpPtEC1Down, vbfMass_JetPileUpPtEC2Down, vbfMass_JetPileUpPtHFDown,
+      vbfMass_JetPileUpPtRefDown, vbfMass_JetRelativeBalDown, vbfMass_JetRelativeFSRDown, vbfMass_JetRelativeJEREC1Down, vbfMass_JetRelativeJEREC2Down,
+      vbfMass_JetRelativeJERHFDown, vbfMass_JetRelativePtBBDown, vbfMass_JetRelativePtEC1Down, vbfMass_JetRelativePtEC2Down,
+      vbfMass_JetRelativePtHFDown, vbfMass_JetRelativeStatECDown, vbfMass_JetRelativeStatFSRDown, vbfMass_JetRelativeStatHFDown,
+      vbfMass_JetSinglePionECALDown, vbfMass_JetSinglePionHCALDown, vbfMass_JetTimePtEtaDown
+      ;
+
+  Float_t jetVeto30_JetAbsoluteFlavMapUp, jetVeto30_JetAbsoluteMPFBiasUp, jetVeto30_JetAbsoluteScaleUp, jetVeto30_JetAbsoluteStatUp,
+      jetVeto30_JetFlavorQCDUp, jetVeto30_JetFragmentationUp, jetVeto30_JetPileUpDataMCUp, jetVeto30_JetPileUpPtBBUp, jetVeto30_JetPileUpPtEC1Up,
+      jetVeto30_JetPileUpPtEC2Up, jetVeto30_JetPileUpPtHFUp, jetVeto30_JetPileUpPtRefUp, jetVeto30_JetRelativeBalUp, jetVeto30_JetRelativeFSRUp,
+      jetVeto30_JetRelativeJEREC1Up, jetVeto30_JetRelativeJEREC2Up, jetVeto30_JetRelativeJERHFUp, jetVeto30_JetRelativePtBBUp, jetVeto30_JetRelativePtEC1Up,
+      jetVeto30_JetRelativePtEC2Up, jetVeto30_JetRelativePtHFUp, jetVeto30_JetRelativeStatECUp, jetVeto30_JetRelativeStatFSRUp, jetVeto30_JetRelativeStatHFUp,
+      jetVeto30_JetSinglePionECALUp, jetVeto30_JetSinglePionHCALUp, jetVeto30_JetTimePtEtaUp, jetVeto30_JetAbsoluteFlavMapDown,
+      jetVeto30_JetAbsoluteMPFBiasDown, jetVeto30_JetAbsoluteScaleDown, jetVeto30_JetAbsoluteStatDown, jetVeto30_JetFlavorQCDDown, jetVeto30_JetFragmentationDown,
+      jetVeto30_JetPileUpDataMCDown, jetVeto30_JetPileUpPtBBDown, jetVeto30_JetPileUpPtEC1Down, jetVeto30_JetPileUpPtEC2Down, jetVeto30_JetPileUpPtHFDown,
+      jetVeto30_JetPileUpPtRefDown, jetVeto30_JetRelativeBalDown, jetVeto30_JetRelativeFSRDown, jetVeto30_JetRelativeJEREC1Down,
+      jetVeto30_JetRelativeJEREC2Down, jetVeto30_JetRelativeJERHFDown, jetVeto30_JetRelativePtBBDown, jetVeto30_JetRelativePtEC1Down,
+      jetVeto30_JetRelativePtEC2Down, jetVeto30_JetRelativePtHFDown, jetVeto30_JetRelativeStatECDown, jetVeto30_JetRelativeStatFSRDown,
+      jetVeto30_JetRelativeStatHFDown, jetVeto30_JetSinglePionECALDown, jetVeto30_JetSinglePionHCALDown, jetVeto30_JetTimePtEtaDown, jetVeto30_JetEnUp,
+      jetVeto30_JetEnDown, jetVeto20_JetEnUp, jetVeto20_JetEnDown
+      ;
+
+  Float_t m_coll_uesU, m_coll_uesD, m_coll_jesU, m_coll_jesD, m_coll_tesU, m_coll_tesD;
+
+  Float_t pfmetcorr_ex, pfmetcorr_ey, pfmetcorr_ex_UESUp, pfmetcorr_ey_UESUp, pfmetcorr_ex_UESDown, pfmetcorr_ey_UESDown, pfmetcorr_ex_JESUp, 
+      pfmetcorr_ey_JESUp, pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown
+      ;
+
+  Float_t mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown;
+  Float_t  vbfDeta_JetEnDown, vbfDeta_JetEnUp, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp,  vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp;
   
   // Member functions
   etau_tree (TTree* orig, TTree* itree, bool isMC);
@@ -510,7 +512,6 @@ void etau_tree::set_branches() {
   tree->Branch("metcov10_v2", &e_t_MvaMetCovMatrix10, "metcov10_v2/F");
   tree->Branch("metcov11_v2", &e_t_MvaMetCovMatrix01, "metcov11_v2/F");
   tree->Branch("metcov01_v2", &e_t_MvaMetCovMatrix11, "metcov01_v2/F");
-  tree->Branch("e_t_collinearmass", &m_coll);
   tree->Branch("mt_1", &eMtToPfMet_type1, "mt_1/F");
   tree->Branch("mt_2", &tMtToPfMet_type1, "mt_2/F");
   tree->Branch("trackpt_2", &tLeadTrackPt, "trackpt_2/F");
@@ -736,15 +737,15 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("metcov11", &metcov11);
   original->SetBranchAddress("NUP", &NUP);
   original->SetBranchAddress("tZTTGenDR", &tZTTGenDR);
-
-  // read from tree and change name
-  original->SetBranchAddress("GenWeight", &GenWeight);
   original->SetBranchAddress("genpX", &genpX);
   original->SetBranchAddress("genpY", &genpY);
   original->SetBranchAddress("vispX", &vispX);
   original->SetBranchAddress("vispY", &vispY);
   original->SetBranchAddress("genpT", &genpT);
   original->SetBranchAddress("genM", &genM);
+
+  // read from tree and change name
+  original->SetBranchAddress("GenWeight", &GenWeight);
   original->SetBranchAddress("type1_pfMetEt", &type1_pfMetEt);
   original->SetBranchAddress("type1_pfMetPhi", &type1_pfMetPhi);
   original->SetBranchAddress("metSig", &metSig);
@@ -974,24 +975,4 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnDown", &type1_pfMet_shiftedPt_UnclusteredEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnUp", &type1_pfMet_shiftedPt_UnclusteredEnUp);
 
-  //    // not needed for sync
-  //    original->SetBranchAddress("vbfMass_JetEnUp", &vbfMass_JetEnUp);
-  //    original->SetBranchAddress("vbfMass_JetEnDown", &vbfMass_JetEnDown);
-  //    original->SetBranchAddress("vbfJetVeto20_JetEnDown", &vbfJetVeto20_JetEnDown);
-  //    original->SetBranchAddress("vbfJetVeto20_JetEnUp", &vbfJetVeto20_JetEnUp);
-  //    original->SetBranchAddress("vbfJetVeto30_JetEnDown", &vbfJetVeto30_JetEnDown);
-  //    original->SetBranchAddress("vbfJetVeto30_JetEnUp", &vbfJetVeto30_JetEnUp);
-  //    original->SetBranchAddress("vbfDeta_JetEnDown", &vbfDeta_JetEnDown);
-  //    original->SetBranchAddress("vbfDeta_JetEnUp", &vbfDeta_JetEnUp);
-  //    original->SetBranchAddress("tauVetoPt20Loose3HitsVtx", &extratau_veto);
-  //    original->SetBranchAddress("isZtautau", &isZtt);
-  //    original->SetBranchAddress("e_t_MvaMet", &mvaMet);
-  //    original->SetBranchAddress("e_t_MvaMetCovMatrix00", &mvaMetcov00);
-  //    original->SetBranchAddress("e_t_MvaMetCovMatrix01", &mvaMetcov01);
-  //    original->SetBranchAddress("e_t_MvaMetCovMatrix10", &mvaMetcov10);
-  //    original->SetBranchAddress("e_t_MvaMetCovMatrix11", &mvaMetcov11);
-  //    original->SetBranchAddress("e_t_MvaMetPhi", &mvaMetphi);
-  //    original->SetBranchAddress("e_t_DPhi", &dphi_12);
-  //    original->SetBranchAddress("eDPhiToPfMet_type1", &dphi_emet);
-  //    original->SetBranchAddress("tDPhiToPfMet_type1", &dphi_taumet);
 }
