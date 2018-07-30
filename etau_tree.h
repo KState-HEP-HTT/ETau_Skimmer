@@ -154,6 +154,7 @@ isMC(IsMC)
   original->SetBranchAddress("tDecayMode", &tDecayMode);
   original->SetBranchAddress("tZTTGenMatching", &tZTTGenMatching);
   original->SetBranchAddress("tRerunMVArun2v1DBoldDMwLTVLoose", &tRerunMVArun2v1DBoldDMwLTVLoose);
+  original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -205,10 +206,10 @@ void etau_tree::do_skimming() {
     if (!eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1) // electron quality selection
       continue;
 
-    if (tPt < tau_pt_min || fabs(tEta) > 2.3 || fabs(tPVDZ) > 0.2) // tau kinematic selection
+    if (tau.Pt() < tau_pt_min || fabs(tau.Eta()) > 2.3 || fabs(tPVDZ) > 0.2) // tau kinematic selection
       continue;
 
-    if (!tByVLooseIsolationMVArun2v1DBoldDMwLT || !tDecayModeFinding || fabs(tCharge) > 1) // tau quality selection
+    if ((!tByVLooseIsolationMVArun2v1DBoldDMwLT && !tRerunMVArun2v1DBoldDMwLTVLoose) || !tDecayModeFinding || fabs(tCharge) > 1) // tau quality selection
       continue;
 
     if (muVetoZTTp001dxyzR0 > 0 || eVetoZTTp001dxyzR0 > 1 || dielectronVeto > 0) // vetos
@@ -218,8 +219,8 @@ void etau_tree::do_skimming() {
       continue;
 
     // implement new sorting per 
-	  // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
-	  if (evt_now != evt_before) { // new event, save the tau candidates
+    // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
+    if (evt_now != evt_before) { // new event, save the tau candidates
       //   since it is new event, do we have the best entry to save? If yes, save it!
       if ( best_evt > -1  )
         good_events.push_back(best_evt);
@@ -227,15 +228,15 @@ void etau_tree::do_skimming() {
       //  this is a new event, so the first tau pair is the best! :)
       best_evt = ievt;
       eleCandidate = std::make_pair(ePt, eIsoDB03);
-      tauCandidate  = std::make_pair(tPt,  tByVLooseIsolationMVArun2v1DBoldDMwLT);
+      tauCandidate  = std::make_pair(tPt,  tByIsolationMVArun2v1DBoldDMwLTraw);
     } 
     else { // not a new event
 
       std::pair<float, float> currEleCandidate(ePt, eIsoDB03);
-      std::pair<float, float> currTauCandidate(tPt, tByVLooseIsolationMVArun2v1DBoldDMwLT);
+      std::pair<float, float> currTauCandidate(tPt, tByIsolationMVArun2v1DBoldDMwLTraw);
 
       // clause 1, select the pair that has most isolated tau lepton 1
-      if (currEleCandidate.second - eleCandidate.second  < 0.0001 ) best_evt = ievt;
+      if (currEleCandidate.second - eleCandidate.second  > 0.0001 ) best_evt = ievt;
 
       // check if the first tau is the same, and if so - move to clause 2
       if ( fabs(currEleCandidate.second - eleCandidate.second)  <  0.0001 ) {
@@ -253,6 +254,8 @@ void etau_tree::do_skimming() {
     } // not a new event
     evt_before = evt_now;
   }
+  if (best_evt > -1)
+    good_events.push_back(best_evt);
 }
 
 //////////////////////////////////////////////////////////////////
@@ -280,8 +283,8 @@ TTree* etau_tree::fill_tree() {
     dilepton_veto = dielectronVeto > 0;
 
     // TLorentzVector ele, tau;
-    // ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
-    // tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
+    ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
+    tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
 
     m_1 = ele.M();
     px_1 = ele.Px();
@@ -399,8 +402,8 @@ void etau_tree::set_branches() {
   tree->Branch("dilepton_veto", &dilepton_veto, "dilepton_veto/F");
   tree->Branch("extraelec_veto", &extraelec_veto, "extraelec/F");
   tree->Branch("extramuon_veto", &extramuon_veto, "extramuon/F");
-  tree->Branch("gen_match_1", &eZTTGenMatching, "gen_match_1/I");
-  tree->Branch("gen_match_2", &tZTTGenMatching, "gen_match_2/I");
+  tree->Branch("gen_match_1", &eZTTGenMatching, "gen_match_1/F");
+  tree->Branch("gen_match_2", &tZTTGenMatching, "gen_match_2/F");
   tree->Branch("againstElectronLooseMVA6_2", &tAgainstElectronLooseMVA6, "againstElectronLooseMVA6_2/F");
   tree->Branch("againstElectronMediumMVA6_2", &tAgainstElectronMediumMVA6, "againstElectronMediumMVA6_2/F");
   tree->Branch("againstElectronTightMVA6_2", &tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
@@ -685,7 +688,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("bjetCISVVeto20Medium", &bjetCISVVeto20Medium);
   original->SetBranchAddress("jetVeto20", &jetVeto20);
   original->SetBranchAddress("eZTTGenMatching", &eZTTGenMatching);
-  original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
   original->SetBranchAddress("tAgainstMuonTight3", &tAgainstMuonTight3);
   original->SetBranchAddress("tAgainstElectronVLooseMVA6", &tAgainstElectronVLooseMVA6);
   original->SetBranchAddress("tAgainstElectronLooseMVA6", &tAgainstElectronLooseMVA6);
@@ -695,7 +697,6 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("tByMediumCombinedIsolationDeltaBetaCorr3Hits", &tByMediumCombinedIsolationDeltaBetaCorr3Hits);
   original->SetBranchAddress("tByTightCombinedIsolationDeltaBetaCorr3Hits", &tByTightCombinedIsolationDeltaBetaCorr3Hits);
   original->SetBranchAddress("tByCombinedIsolationDeltaBetaCorrRaw3Hits", &tByCombinedIsolationDeltaBetaCorrRaw3Hits);
-  original->SetBranchAddress("tByIsolationMVArun2v1DBoldDMwLTraw", &tByIsolationMVArun2v1DBoldDMwLTraw);
   original->SetBranchAddress("tByIsolationMVArun2v1DBnewDMwLTraw", &tByIsolationMVArun2v1DBnewDMwLTraw);
   original->SetBranchAddress("tByLooseIsolationMVArun2v1DBoldDMwLT", &tByLooseIsolationMVArun2v1DBoldDMwLT);
   original->SetBranchAddress("tByVTightIsolationMVArun2v1DBoldDMwLT", &tByVTightIsolationMVArun2v1DBoldDMwLT);

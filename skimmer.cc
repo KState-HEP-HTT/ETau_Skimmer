@@ -22,7 +22,6 @@ void read_directory(const std::string &name, std::vector<std::string> &v) {
 static unsigned events(0);
 int main(int argc, char* argv[]) {
 
-
   std::vector<std::string> all_files;
   std::string dir_name = "test";
   if (argc > 1)
@@ -31,6 +30,11 @@ int main(int argc, char* argv[]) {
   std::string in = samples[dir_name];
   const int dir_err = system(("mkdir "+dir_name).c_str());
   read_directory(in, all_files);
+
+  bool isMC(true);
+  if (in.find("data_") != std::string::npos) {
+    isMC = false;
+  }
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
 
@@ -51,7 +55,6 @@ int main(int argc, char* argv[]) {
     open_file->Close();
     ntuple->Add((in+"/"+ifile).c_str());
     std::string suffix = dir_name+"/Skim_";
-//    auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("etau_tree","etau_tree");
