@@ -5,7 +5,7 @@ std::string sig_pref("/hdfs/store/user/truggles/SMHTT_signals_may30/");
 std::string data_pref("/hdfs/store/user/caillol/SMHTT_reminiaod_feb14/");
 
 static std::map<std::string, std::vector<std::string>> bkg_samples = {
-  {"test", std::vector<std::string>{"root_files"}},
+  {"test", std::vector<std::string>{"root_files/csync"}},
   
   {"DYJets"    , std::vector<std::string>{"DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext1-v2/", "DYJetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext2-v1/"}},
   {"DYJets1"   , std::vector<std::string>{"DY1JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/"}},

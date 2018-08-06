@@ -201,6 +201,8 @@ void etau_tree::do_skimming() {
       tau_pt_min = 29.5;
     else if (tZTTGenMatching <= 4) 
       tau_pt_min = 27.0;
+    else 
+      tau_pt_min = 27.0;
 
     // apply event selection 
     // if (!singleE25eta2p1TightPass || !eMatchesEle25TightFilter || !eMatchesEle25eta2p1TightPath) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching

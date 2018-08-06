@@ -72,7 +72,7 @@ int main(int argc, char* argv[]) {
   TH1F* nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
 
   // I/O files and the ntuple
-  std::cout << "Begin loading files..." << std::endl;
+  std::cout << "Begin loading files " << all_files.size() << " ..." << std::endl;
   unsigned i = 0;
   for (auto& ifile : all_files) {
     std::cout << "Loading file: " << i+1 << " out of " << all_files.size() << " files.\r" << std::flush;
