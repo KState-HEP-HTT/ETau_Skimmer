@@ -42,6 +42,17 @@ int main(int argc, char* argv[]) {
   if (argc > 2)
     jobType = argv[2];
 
+  // recoil corrections
+  int recoil(0);
+  if (argc > 3) {
+    std::string inrecoil(argv[3]);
+    if (inrecoil.find("W") != std::string::npos) {
+      recoil = 1;
+    } else if (inrecoil.find("Z") != std::string::npos) {
+      recoil = 2;
+    }
+  }
+
   // decide which map to look-up files from and which prefix to prepend
   std::vector<std::string> files;
   if (jobType == "bkg") {
@@ -92,7 +103,7 @@ int main(int argc, char* argv[]) {
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("etau_tree","etau_tree");
-    etau_tree* skimmer = new etau_tree(ntuple, newtree, isMC); // hard-code true for now
+    etau_tree* skimmer = new etau_tree(ntuple, newtree, isMC, recoil); // hard-code true for now
     skimmer->do_skimming();
     auto skimmed_tree = skimmer->fill_tree();
     events += skimmed_tree->GetEntries();
