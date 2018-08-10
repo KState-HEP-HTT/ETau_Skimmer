@@ -58,5 +58,12 @@ static std::map<std::string, std::vector<std::string>> data_samples = {
     {"dataET-F", std::vector<std::string>{"data_Tau_Run2016F/"}},
     {"dataET-G", std::vector<std::string>{"data_Tau_Run2016G/"}},
     {"dataET-H", std::vector<std::string>{"data_Tau_Run2016H_v2/", "data_Tau_Run2016H_v3/"}},
+    {"datasE-B", std::vector<std::string>{"data_SingleElectron_Run2016B_v1/", "data_SingleElectron_Run2016B_v2/"}},
+    {"datasE-C", std::vector<std::string>{"data_SingleElectron_Run2016C"}},
+    {"datasE-D", std::vector<std::string>{"data_SingleElectron_Run2016D"}},
+    {"datasE-E", std::vector<std::string>{"data_SingleElectron_Run2016E"}},
+    {"datasE-F", std::vector<std::string>{"data_SingleElectron_Run2016F"}},
+    {"datasE-G", std::vector<std::string>{"data_SingleElectron_Run2016G"}},
+    {"datasE-H", std::vector<std::string>{"data_SingleElectron_Run2016H_v2/", "data_SingleElectron_Run2016H_v3/"}},
 };
 

@@ -80,6 +80,8 @@ int main(int argc, char* argv[]) {
   if (jobType == "data")
     isMC = false;
 
+  RecoilCorrector recoilPFMetCorrector("SMH_ettau/RecoilCorrections/data/TypeI-PFMet_Run2016BtoH.root");
+
   TH1F* nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);
 
   // I/O files and the ntuple
@@ -88,26 +90,27 @@ int main(int argc, char* argv[]) {
   for (auto& ifile : all_files) {
     std::cout << "Loading file: " << i+1 << " out of " << all_files.size() << " files.\r" << std::flush;
     
-    auto ntuple = new TChain("et/final/Ntuple");
+    //auto ntuple = new TChain("et/final/Ntuple");
     auto idir = all_dirs.at(i);
     auto open_file = new TFile((idir+"/"+ifile).c_str(), "READ");
+    auto ntuple = (TTree*)open_file->Get("et/final/Ntuple");
     auto evt_count = (TH1F*)open_file->Get("et/eventCount")->Clone();
     auto wt_count = (TH1F*)open_file->Get("et/summedWeights")->Clone();
 
     nevents->SetBinContent(1, evt_count->Integral());
     nevents->SetBinContent(2, wt_count->Integral());
 
-    open_file->Close();
-    ntuple->Add((idir+"/"+ifile).c_str());
+    //ntuple->Add((idir+"/"+ifile).c_str());
     std::string suffix = dir_name+"/Skim_";
     auto fout = new TFile((suffix+ifile).c_str(), "RECREATE");
 
     TTree* newtree = new TTree("etau_tree","etau_tree");
     etau_tree* skimmer = new etau_tree(ntuple, newtree, isMC, recoil); // hard-code true for now
     skimmer->do_skimming();
-    auto skimmed_tree = skimmer->fill_tree();
+    auto skimmed_tree = skimmer->fill_tree(recoilPFMetCorrector);
     events += skimmed_tree->GetEntries();
 
+    open_file->Close();
     fout->cd();
     nevents->Write();
     skimmed_tree->Write();

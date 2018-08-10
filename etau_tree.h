@@ -20,7 +20,7 @@ public:
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
 
   Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, NUP, rho,
-      met_px, met_py, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi,
+      met_px, met_py, met, metphi, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi,
       hdijetphi, visjeteta, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, jdphi, jdeta, mjj, dijetpt, vbfDeta, m_collj1pt, j1pt, j2pt, j1eta, j2eta, j1phi, j2phi,
       j1csv, j2csv, jb1pt, jb2pt, jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, jb1hadronflavor, jb2hadronflavornTruePU, nvtx, numGenJets, mvaMet,
       mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, singleE25eta2p1TightPass, eMatchesEle25TightFilter, eMatchesEle25eta2p1TightPath,
@@ -99,7 +99,6 @@ public:
 
   Float_t mjj_JESUp, jdeta_JESUp, mjj_JESDown, jdeta_JESDown;
   Float_t  vbfDeta_JetEnDown, vbfDeta_JetEnUp, vbfJetVeto20_JetEnDown, vbfJetVeto20_JetEnUp,  vbfJetVeto30_JetEnDown, vbfJetVeto30_JetEnUp;
-  RecoilCorrector recoilPFMetCorrector;
   Int_t recoil;
 
   // Member functions
@@ -107,7 +106,7 @@ public:
   virtual ~etau_tree () {};
   void do_skimming();
   void set_branches();
-  TTree* fill_tree();
+  TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
 };
 
 //////////////////////////////////////////////////////////////////
@@ -125,8 +124,7 @@ etau_tree::etau_tree(TTree* Original, TTree* itree, bool IsMC, Int_t rec) :
 tree(itree),
 original(Original),
 isMC(IsMC),
-recoil(rec),
-recoilPFMetCorrector("SMH_mutau/RecoilCorrections/data/TypeI-PFMet_Run2016BtoH.root")
+recoil(rec)
 {
   // read only what is needed for skimming and sorting
   original->SetBranchAddress("evt", &evt);
@@ -281,7 +279,7 @@ void etau_tree::do_skimming() {
 // Return: The same TTree passed to the constructor and stored  //
 //         in original, but now it is filled with good events   //
 //////////////////////////////////////////////////////////////////
-TTree* etau_tree::fill_tree() {
+TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 
   set_branches();  // get all the branches set up
 
@@ -292,26 +290,6 @@ TTree* etau_tree::fill_tree() {
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
-
-    if (isMC) {
-      if (tZTTGenMatching == 5) {
-        if (tDecayMode == 0) {
-          tau *= 0.982;
-        } else if (tDecayMode == 1) {
-          tau *= 1.010;
-        } else if (tDecayMode == 10) {
-          tau *= 1.004;
-        }
-      } else if (tZTTGenMatching == 2 || tZTTGenMatching == 4) {
-        if (tDecayMode == 0) {
-          tau *= 0.998;
-        } else if (tDecayMode == 1) {
-          tau *= 1.015;
-        }
-      } else if (tZTTGenMatching == 1 || tZTTGenMatching == 3) {
-        tau *= 1.094;
-      }
-    }
   
     met_px = type1_pfMetEt * cos(type1_pfMetPhi);
     met_py = type1_pfMetEt * sin(type1_pfMetPhi);
@@ -476,6 +454,77 @@ TTree* etau_tree::fill_tree() {
     MET_JESUp.SetPxPyPzE(pfmetcorr_ex_JESUp, pfmetcorr_ey_JESUp, 0, sqrt(pfmetcorr_ex_JESUp * pfmetcorr_ex_JESUp + pfmetcorr_ey_JESUp * pfmetcorr_ey_JESUp));
     MET_JESDown.SetPxPyPzE(pfmetcorr_ex_JESDown, pfmetcorr_ey_JESDown, 0, sqrt(pfmetcorr_ex_JESDown * pfmetcorr_ex_JESDown + pfmetcorr_ey_JESDown * pfmetcorr_ey_JESDown));
 
+    if (isMC) {
+      if (tZTTGenMatching == 5) {
+        if (tDecayMode == 0) {
+          MET = MET + tau - 0.982*tau;
+          MET_JESUp=MET_JESUp+tau-0.982*tau;
+          MET_JESDown=MET_JESDown+tau-0.982*tau;
+          MET_UESUp=MET_UESUp+tau-0.982*tau;
+          MET_UESDown=MET_UESDown+tau-0.982*tau;
+        } else if (tDecayMode == 1) {
+          MET= MET + tau - 1.010*tau;
+          MET_JESUp=MET_JESUp+tau-1.010*tau;
+          MET_JESDown=MET_JESDown+tau-1.010*tau;
+          MET_UESUp=MET_UESUp+tau-1.010*tau;
+          MET_UESDown=MET_UESDown+tau-1.010*tau;
+        } else if (tDecayMode == 10) {
+          MET = MET + tau - 1.004*tau;
+          MET_JESUp=MET_JESUp+tau-1.004*tau;
+          MET_JESDown=MET_JESDown+tau-1.004*tau;
+          MET_UESUp=MET_UESUp+tau-1.004*tau;
+          MET_UESDown=MET_UESDown+tau-1.004*tau;
+        }
+      } else if (tZTTGenMatching == 2 || tZTTGenMatching == 4) {
+        if (tDecayMode == 0) {
+          MET=MET+tau-0.998*tau;
+          MET_JESUp=MET_JESUp+tau-0.998*tau;
+          MET_JESDown=MET_JESDown+tau-0.998*tau;
+          MET_UESUp=MET_UESUp+tau-0.998*tau;
+          MET_UESDown=MET_UESDown+tau-0.998*tau;
+        } else if (tDecayMode == 1) {
+          MET=MET+tau-1.015*tau;
+          MET_JESUp=MET_JESUp+tau-1.015*tau;
+          MET_JESDown=MET_JESDown+tau-1.015*tau;
+          MET_UESUp=MET_UESUp+tau-1.015*tau;
+          MET_UESDown=MET_UESDown+tau-1.015*tau;
+        } 
+      } else if (tZTTGenMatching == 1 || tZTTGenMatching == 3) {
+        if (tDecayMode == 1) {
+          MET=MET+tau-1.095*tau;
+          MET_JESUp=MET_JESUp+tau-1.095*tau;
+          MET_JESDown=MET_JESDown+tau-1.095*tau;
+          MET_UESUp=MET_UESUp+tau-1.095*tau;
+          MET_UESDown=MET_UESDown+tau-1.095*tau;
+        }
+      }
+    }
+
+    met=MET.Pt();
+    metphi=MET.Phi();
+    met_px=MET.Px();
+    met_py=MET.Py();
+
+    if (isMC) {
+      if (tZTTGenMatching == 5) {
+        if (tDecayMode == 0) {
+          tau *= 0.982;
+        } else if (tDecayMode == 1) {
+          tau *= 1.010;
+        } else if (tDecayMode == 10) {
+          tau *= 1.004;
+        }
+      } else if (tZTTGenMatching == 2 || tZTTGenMatching == 4) {
+        if (tDecayMode == 0) {
+          tau *= 0.998;
+        } else if (tDecayMode == 1) {
+          tau *= 1.015;
+        }
+      } else if ((tZTTGenMatching == 1 || tZTTGenMatching == 3) && tDecayMode == 1) {
+        tau *= 1.095;
+      }
+    }
+      
     m_1 = ele.M();
     px_1 = ele.Px();
     py_1 = ele.Py();
@@ -659,7 +708,6 @@ void etau_tree::set_branches() {
   tree->Branch("matchEle25", &eMatchesEle25eta2p1TightPath, "matchEle25/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
   tree->Branch("genweight", &GenWeight, "genweight/F");
-  tree->Branch("byTightIsolationMVArun2v1DBoldDMwLT_2", &tByTightIsolationMVArun2v1DBoldDMwLT, "byTightIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("pt_top1", &topQuarkPt1, "pt_top1/F");
   tree->Branch("pt_top2", &topQuarkPt2, "pt_top2/F");
@@ -880,6 +928,8 @@ void etau_tree::set_branches() {
   tree->Branch("visjeteta", &visjeteta, "visjeteta/F");
   tree->Branch("met_px", &met_px, "met_px/F");
   tree->Branch("met_py", &met_py, "met_py/F");
+  tree->Branch("met", &met, "met/F");
+  tree->Branch("metphi", &metphi, "metphi/F");
   tree->Branch("pfmetcorr_ex", &pfmetcorr_ex, "pfmetcorr_ex/F");
   tree->Branch("pfmetcorr_ey", &pfmetcorr_ey, "pfmetcorr_ey/F");
   tree->Branch("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp, "pfmetcorr_ex_UESUp/F");
