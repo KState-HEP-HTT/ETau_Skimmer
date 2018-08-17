@@ -1,8 +1,8 @@
 #include <map>
 
-std::string bkg_pref("/hdfs/store/user/caillol/SMHTT_mc_feb13/");
+std::string bkg_pref("/hdfs/store/user/ndev/LFV_feb18_mc/");
 std::string sig_pref("/hdfs/store/user/truggles/SMHTT_signals_may30/");
-std::string data_pref("/hdfs/store/user/caillol/SMHTT_reminiaod_feb14/");
+std::string data_pref("/hdfs/store/user/ndev/LFV_reminiaod_feb18/");
 
 static std::map<std::string, std::vector<std::string>> bkg_samples = {
   {"test", std::vector<std::string>{"root_files/csync"}},
@@ -12,12 +12,12 @@ static std::map<std::string, std::vector<std::string>> bkg_samples = {
   {"DYJets2"   , std::vector<std::string>{"DY2JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/"}},
   {"DYJets3"   , std::vector<std::string>{"DY3JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/"}},
   {"DYJets4"   , std::vector<std::string>{"DY4JetsToLL_M-50_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/"}},
-  {"WJets"     , std::vector<std::string>{"WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/"}},
+  {"WJets"     , std::vector<std::string>{"WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/", "WJetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext2-v1"}},
   {"WJets1"    , std::vector<std::string>{"W1JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/"}},
   {"WJets2"    , std::vector<std::string>{"W2JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/", "W2JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext1-v1/"}},
   {"WJets3"    , std::vector<std::string>{"W3JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/", "W3JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext1-v1/"}},
   {"WJets4"    , std::vector<std::string>{"W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6-v1/", "W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext1-v1/", "W4JetsToLNu_TuneCUETP8M1_13TeV-madgraphMLM-pythia8_v6_ext2-v1/"}},
-  {"TT"        , std::vector<std::string>{"TT_TuneCUETP8M2T4_13TeV-powheg-pythia8_v6-v1/", "VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8_v6-v1/"}},
+  {"TT"        , std::vector<std::string>{"TT_TuneCUETP8M2T4_13TeV-powheg-pythia8_v6-v1/"}},
   {"VV2l2nu"   , std::vector<std::string>{"VVTo2L2Nu_13TeV_amcatnloFXFX_madspin_pythia8_v6_ext1-v1/"}},
   {"Tbar-tchan", std::vector<std::string>{"ST_t-channel_antitop_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1_v6-v1/"}},
   {"T-tchan"   , std::vector<std::string>{"ST_t-channel_top_4f_inclusiveDecays_13TeV-powhegV2-madspin-pythia8_TuneCUETP8M1_v6-v1/"}},
@@ -51,13 +51,6 @@ static std::map<std::string, std::vector<std::string>> sig_samples = {
 };
 
 static std::map<std::string, std::vector<std::string>> data_samples = {
-    {"dataET-B", std::vector<std::string>{"data_Tau_Run2016B_v1/", "data_Tau_Run2016B_v2/"}},
-    {"dataET-C", std::vector<std::string>{"data_Tau_Run2016C/"}},
-    {"dataET-D", std::vector<std::string>{"data_Tau_Run2016D/"}},
-    {"dataET-E", std::vector<std::string>{"data_Tau_Run2016E/"}},
-    {"dataET-F", std::vector<std::string>{"data_Tau_Run2016F/"}},
-    {"dataET-G", std::vector<std::string>{"data_Tau_Run2016G/"}},
-    {"dataET-H", std::vector<std::string>{"data_Tau_Run2016H_v2/", "data_Tau_Run2016H_v3/"}},
     {"datasE-B", std::vector<std::string>{"data_SingleElectron_Run2016B_v1/", "data_SingleElectron_Run2016B_v2/"}},
     {"datasE-C", std::vector<std::string>{"data_SingleElectron_Run2016C"}},
     {"datasE-D", std::vector<std::string>{"data_SingleElectron_Run2016D"}},

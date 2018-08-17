@@ -68,7 +68,6 @@ int main(int argc, char* argv[]) {
     std::cerr << "jobType must be bkg, sig, or data. You gave " << jobType << std::endl;
     return -1;
   }
-
   // read all root files in the given directory
   const int dir_err = system(("mkdir "+dir_name).c_str());
   for (auto& ifile : files) {
@@ -79,7 +78,7 @@ int main(int argc, char* argv[]) {
   bool isMC(true);
   if (jobType == "data")
     isMC = false;
-
+  
   RecoilCorrector recoilPFMetCorrector("SMH_ettau/RecoilCorrections/data/TypeI-PFMet_Run2016BtoH.root");
 
   TH1F* nevents = new TH1F("nevents", "N(events)", 2, 0.5, 2.5);

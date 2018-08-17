@@ -18,13 +18,14 @@ public:
   ULong64_t evt;
   Int_t run, lumi;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
+  Float_t jetVeto30, eZTTGenMatching, tZTTGenMatching;
 
   Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, NUP, rho,
       met_px, met_py, met, metphi, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, py_2, pz_2, dijetphi,
       hdijetphi, visjeteta, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, jdphi, jdeta, mjj, dijetpt, vbfDeta, m_collj1pt, j1pt, j2pt, j1eta, j2eta, j1phi, j2phi,
       j1csv, j2csv, jb1pt, jb2pt, jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, jb1hadronflavor, jb2hadronflavornTruePU, nvtx, numGenJets, mvaMet,
       mvaMetcov00, mvaMetcov11, mvaMetcov10, mvaMetcov01, mvaMetphi, singleE25eta2p1TightPass, eMatchesEle25TightFilter, eMatchesEle25eta2p1TightPath,
-      topQuarkPt1, topQuarkPt2, jetVeto30, bjetCISVVeto20Medium, jetVeto20, eZTTGenMatching, tZTTGenMatching, tZTTGenDR, tDecayMode, ePVDZ, ePVDXY,
+      topQuarkPt1, topQuarkPt2, bjetCISVVeto20Medium, jetVeto20, tZTTGenDR, tDecayMode, ePVDZ, ePVDXY,
       eIsoDB03, eCharge, tPVDZ, tPVDXY, tByIsolationMVArun2v1DBoldDMwLTraw, tCharge, tAgainstMuonTight3, tAgainstMuonLoose3, tAgainstElectronVLooseMVA6,
       tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6, tByLooseCombinedIsolationDeltaBetaCorr3Hits,
       tByMediumCombinedIsolationDeltaBetaCorr3Hits, tByTightCombinedIsolationDeltaBetaCorr3Hits, tByCombinedIsolationDeltaBetaCorrRaw3Hits, m_coll,
@@ -42,17 +43,22 @@ public:
       Flag_badGlobalMuonFilter, Flag_eeBadScFilter, Flag_globalTightHalo2016Filter, Flag_goodVertices, Flag_BadPFMuonFilter, Flag_HBHENoiseIsoFilter
       ;
 
-  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp, type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp,
-      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
-      type1_pfMet_shiftedPhi_PhotonEnDown, type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown,
-      type1_pfMet_shiftedPhi_TauEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp
-      ;
+  Float_t type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp,
+          type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp,
+          type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
+          ;
 
-  Float_t type1_pfMet_shiftedPt_ElectronEnDown, type1_pfMet_shiftedPt_ElectronEnUp, type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp,
-      type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPt_MuonEnDown, type1_pfMet_shiftedPt_MuonEnUp,
-      type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp, type1_pfMet_shiftedPt_TauEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, 
-      type1_pfMet_shiftedPt_UnclusteredEnUp, type1_pfMet_shiftedPt_TauEnDown
-      ;
+//  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp, type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp,
+//      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
+//      type1_pfMet_shiftedPhi_PhotonEnDown, type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown,
+//      type1_pfMet_shiftedPhi_TauEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp
+//      ;
+//
+//  Float_t type1_pfMet_shiftedPt_ElectronEnDown, type1_pfMet_shiftedPt_ElectronEnUp, type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp,
+//      type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPt_MuonEnDown, type1_pfMet_shiftedPt_MuonEnUp,
+//      type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp, type1_pfMet_shiftedPt_TauEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, 
+//      type1_pfMet_shiftedPt_UnclusteredEnUp, type1_pfMet_shiftedPt_TauEnDown
+//      ;
 
   Float_t met_EESDown, met_EESUp, met_JESUp, met_JESDown, met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, 
       met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp
@@ -1162,32 +1168,32 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("e_t_collinearmass_JetEnDown", &m_coll_jesD);
   original->SetBranchAddress("e_t_collinearmass_TauEnUp", &m_coll_tesU);
   original->SetBranchAddress("e_t_collinearmass_TauEnDown", &m_coll_tesD);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_ElectronEnDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_ElectronEnUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_ElectronEnDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_ElectronEnUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnDown", &type1_pfMet_shiftedPhi_JetEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_JetEnUp", &type1_pfMet_shiftedPhi_JetEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_JetResDown", &type1_pfMet_shiftedPhi_JetResDown);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_JetResUp", &type1_pfMet_shiftedPhi_JetResUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_MuonEnDown", &type1_pfMet_shiftedPhi_MuonEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_MuonEnUp", &type1_pfMet_shiftedPhi_MuonEnUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_PhotonEnDown", &type1_pfMet_shiftedPhi_PhotonEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_PhotonEnUp", &type1_pfMet_shiftedPhi_PhotonEnUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_TauEnDown", &type1_pfMet_shiftedPhi_TauEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPhi_TauEnUp", &type1_pfMet_shiftedPhi_TauEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_MuonEnDown", &type1_pfMet_shiftedPhi_MuonEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_MuonEnUp", &type1_pfMet_shiftedPhi_MuonEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_PhotonEnDown", &type1_pfMet_shiftedPhi_PhotonEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_PhotonEnUp", &type1_pfMet_shiftedPhi_PhotonEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_TauEnDown", &type1_pfMet_shiftedPhi_TauEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPhi_TauEnUp", &type1_pfMet_shiftedPhi_TauEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnDown", &type1_pfMet_shiftedPhi_UnclusteredEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPhi_UnclusteredEnUp", &type1_pfMet_shiftedPhi_UnclusteredEnUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_ElectronEnDown", &type1_pfMet_shiftedPt_ElectronEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_ElectronEnUp", &type1_pfMet_shiftedPt_ElectronEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_ElectronEnDown", &type1_pfMet_shiftedPt_ElectronEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_ElectronEnUp", &type1_pfMet_shiftedPt_ElectronEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPt_JetEnDown", &type1_pfMet_shiftedPt_JetEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPt_JetEnUp", &type1_pfMet_shiftedPt_JetEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPt_JetResDown", &type1_pfMet_shiftedPt_JetResDown);
   original->SetBranchAddress("type1_pfMet_shiftedPt_JetResUp", &type1_pfMet_shiftedPt_JetResUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_MuonEnDown", &type1_pfMet_shiftedPt_MuonEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_MuonEnUp", &type1_pfMet_shiftedPt_MuonEnUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_PhotonEnDown", &type1_pfMet_shiftedPt_PhotonEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_PhotonEnUp", &type1_pfMet_shiftedPt_PhotonEnUp);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_TauEnDown", &type1_pfMet_shiftedPt_TauEnDown);
-  original->SetBranchAddress("type1_pfMet_shiftedPt_TauEnUp", &type1_pfMet_shiftedPt_TauEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_MuonEnDown", &type1_pfMet_shiftedPt_MuonEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_MuonEnUp", &type1_pfMet_shiftedPt_MuonEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_PhotonEnDown", &type1_pfMet_shiftedPt_PhotonEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_PhotonEnUp", &type1_pfMet_shiftedPt_PhotonEnUp);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_TauEnDown", &type1_pfMet_shiftedPt_TauEnDown);
+//  original->SetBranchAddress("type1_pfMet_shiftedPt_TauEnUp", &type1_pfMet_shiftedPt_TauEnUp);
   original->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnDown", &type1_pfMet_shiftedPt_UnclusteredEnDown);
   original->SetBranchAddress("type1_pfMet_shiftedPt_UnclusteredEnUp", &type1_pfMet_shiftedPt_UnclusteredEnUp);
 
