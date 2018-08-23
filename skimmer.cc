@@ -13,6 +13,24 @@
 #include "etau_tree.h"
 #include "util.h"
 
+void read_directory(const std::string &name, std::vector<std::string> &v, std::vector<std::string> &dir) {
+  DIR *dirp = opendir(name.c_str());
+  struct dirent *dp;
+  while ((dp = readdir(dirp)) != 0) {
+    if (static_cast<std::string>(dp->d_name).find("root") != std::string::npos) {
+      v.push_back(dp->d_name);
+      dir.push_back(name);
+    }
+  }
+  closedir(dirp);
+}
+
+void add_pref(std::vector<std::string> &files, std::string prefix) {
+  for (auto &ifile : files) {
+    ifile = prefix + ifile;
+  }
+}
+
 static unsigned events(0);
 int main(int argc, char *argv[]) {
 
@@ -108,20 +126,4 @@ int main(int argc, char *argv[]) {
   return 0;
 }
 
-void read_directory(const std::string &name, std::vector<std::string> &v, std::vector<std::string> &dir) {
-  DIR *dirp = opendir(name.c_str());
-  struct dirent *dp;
-  while ((dp = readdir(dirp)) != 0) {
-    if (static_cast<std::string>(dp->d_name).find("root") != std::string::npos) {
-      v.push_back(dp->d_name);
-      dir.push_back(name);
-    }
-  }
-  closedir(dirp);
-}
 
-void add_pref(std::vector<std::string> &files, std::string prefix) {
-  for (auto &ifile : files) {
-    ifile = prefix + ifile;
-  }
-}
