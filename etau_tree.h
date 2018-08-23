@@ -972,10 +972,10 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("j1pt", &j1pt);
   original->SetBranchAddress("jb1hadronflavor", &jb1hadronflavor);
   original->SetBranchAddress("jb2hadronflavor", &jb2hadronflavor);
-  original->SetBranchAddress("j2csv", &j1csv);
-  original->SetBranchAddress("j2eta", &j1eta);
-  original->SetBranchAddress("j2phi", &j1phi);
-  original->SetBranchAddress("j2pt", &j1pt);
+  original->SetBranchAddress("j2csv", &j2csv);
+  original->SetBranchAddress("j2eta", &j2eta);
+  original->SetBranchAddress("j2phi", &j2phi);
+  original->SetBranchAddress("j2pt", &j2pt);
   original->SetBranchAddress("jb1csv", &jb1csv);
   original->SetBranchAddress("jb1eta", &jb1eta);
   original->SetBranchAddress("jb1phi", &jb1phi);
