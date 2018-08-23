@@ -29,13 +29,13 @@ public:
       eIsoDB03, eCharge, tPVDZ, tPVDXY, tByIsolationMVArun2v1DBoldDMwLTraw, tCharge, tAgainstMuonTight3, tAgainstMuonLoose3, tAgainstElectronVLooseMVA6,
       tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6, tByLooseCombinedIsolationDeltaBetaCorr3Hits,
       tByMediumCombinedIsolationDeltaBetaCorr3Hits, tByTightCombinedIsolationDeltaBetaCorr3Hits, tByCombinedIsolationDeltaBetaCorrRaw3Hits, m_coll,
-      tByIsolationMVA3oldDMwLTraw, tByIsolationMVA3newDMwLTraw, tByVLooseIsolationMVArun2v1DBoldDMwLT, tByLooseIsolationMVArun2v1DBoldDMwLT,
+      tByIsolationMVA3newDMwLTraw, tByVLooseIsolationMVArun2v1DBoldDMwLT, tByLooseIsolationMVArun2v1DBoldDMwLT,
       tByMediumIsolationMVArun2v1DBoldDMwLT, tByTightIsolationMVArun2v1DBoldDMwLT, tByVTightIsolationMVArun2v1DBoldDMwLT, tByVVTightIsolationMVArun2v1DBoldDMwLT,
-      tNeutralIsoPtSum, tChargedIsoPtSum, tPuCorrPtSum, tDecayModeFinding, tDecayModeFindingNewDMs, extratau_veto, idisoweight_2, jb2hadronflavor,
+      tNeutralIsoPtSum, tChargedIsoPtSum, tPuCorrPtSum, tDecayModeFinding, tDecayModeFindingNewDMs, extratau_veto, jb2hadronflavor,
       tByIsolationMVArun2v1DBnewDMwLTraw, e_t_PZeta, e_t_PZetaVis, e_t_Mass, eMtToPfMet_type1, tMtToPfMet_type1, tJetPt, tLeadTrackPt, tNChrgHadrSignalCands,
       tNChrgHadrIsolationCands, tPhotonPtSumOutsideSignalCone, vbfDphi, eVetoZTTp001dxyzR0, muVetoZTTp001dxyzR0, dielectronVetobyIsolationMVA3oldDMwoLTraw_2,
-      trigweight_2, byIsolationMVA3newDMwoLTraw_2, filterEle27, vbfMass, vbfJetVeto20, vbfJetVeto30, extramuon_veto, nTruePU,
-      eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, photonIso_2, dielectronVeto, njetingap, njetingap20,
+      byIsolationMVA3newDMwoLTraw_2, filterEle27, vbfMass, vbfJetVeto20, vbfJetVeto30, extramuon_veto, nTruePU,
+      eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, dielectronVeto, njetingap, njetingap20,
       e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix11
       ;
 
@@ -48,16 +48,16 @@ public:
           type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
           ;
 
-//  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp, type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp,
+//  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp,
 //      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
 //      type1_pfMet_shiftedPhi_PhotonEnDown, type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown,
-//      type1_pfMet_shiftedPhi_TauEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp
+//      type1_pfMet_shiftedPhi_TauEnUp
 //      ;
 //
-//  Float_t type1_pfMet_shiftedPt_ElectronEnDown, type1_pfMet_shiftedPt_ElectronEnUp, type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp,
+//  Float_t type1_pfMet_shiftedPt_ElectronEnDown, type1_pfMet_shiftedPt_ElectronEnUp,
 //      type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPt_MuonEnDown, type1_pfMet_shiftedPt_MuonEnUp,
-//      type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp, type1_pfMet_shiftedPt_TauEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, 
-//      type1_pfMet_shiftedPt_UnclusteredEnUp, type1_pfMet_shiftedPt_TauEnDown
+//      type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp, type1_pfMet_shiftedPt_TauEnUp, 
+//      type1_pfMet_shiftedPt_TauEnDown
 //      ;
 
   Float_t met_EESDown, met_EESUp, met_JESUp, met_JESDown, met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, 
@@ -662,17 +662,11 @@ void etau_tree::set_branches() {
   tree->Branch("byMediumCombinedIsolationDeltaBetaCorr3Hits_2", &tByMediumCombinedIsolationDeltaBetaCorr3Hits, "byMediumCombinedIsolationDeltaBetaCorr3Hits_2/F");
   tree->Branch("byTightCombinedIsolationDeltaBetaCorr3Hits_2", &tByTightCombinedIsolationDeltaBetaCorr3Hits, "byTightCombinedIsolationDeltaBetaCorr3Hits_2/F");
   tree->Branch("byCombinedIsolationDeltaBetaCorrRaw3Hits_2", &tByCombinedIsolationDeltaBetaCorrRaw3Hits, "byCombinedIsolationDeltaBetaCorrRaw3Hits_2/F");
-  //tree->Branch("byIsolationMVA3oldDMwoLTraw_2", &byIsolationMVA3oldDMwoLTraw_2, "byIsolationMVA3oldDMwoLTraw_2/F");
-  tree->Branch("byIsolationMVA3oldDMwLTraw_2", &tByIsolationMVA3oldDMwLTraw, "byIsolationMVA3oldDMwLTraw_2/F");
-  //tree->Branch("byIsolationMVA3newDMwoLTraw_2", &byIsolationMVA3newDMwoLTraw_2, "byIsolationMVA3newDMwoLTraw_2/F");
-  //tree->Branch("byIsolationMVA3newDMwLTraw_2", &tByIsolationMVA3newDMwLTraw, "byIsolationMVA3newDMwLTraw_2/F");
   tree->Branch("chargedIsoPtSum_2", &tChargedIsoPtSum, "chargedIsoPtSum_2/F");
   tree->Branch("decayModeFinding_2", &tDecayModeFinding, "decayModeFinding_2/F");
   tree->Branch("decayModeFindingNewDMs_2", &tDecayModeFindingNewDMs, "decayModeFindingNewDMs_2/F");
   tree->Branch("neutralIsoPtSum_2", &tNeutralIsoPtSum, "neutralIsoPtSum_2/F");
   tree->Branch("puCorrPtSum_2", &tPuCorrPtSum, "puCorrPtSum_2/F");
-  tree->Branch("trigweight_2", &trigweight_2, "trigweight_2/F");
-  tree->Branch("idisoweight_2", &idisoweight_2, "idisoweight_2/F");
   tree->Branch("met", &type1_pfMetEt, "met/F");
   tree->Branch("metphi", &type1_pfMetPhi, "metphi/F");
   tree->Branch("nbtag", &bjetCISVVeto20Medium, "nbtag/F");
@@ -702,7 +696,6 @@ void etau_tree::set_branches() {
   tree->Branch("matchEle25", &eMatchesEle25eta2p1TightPath, "matchEle25/F");
   tree->Branch("l2_decayMode", &tDecayMode, "l2_decayMode/F");
   tree->Branch("genweight", &GenWeight, "genweight/F");
-  tree->Branch("byMediumIsolationMVArun2v1DBoldDMwLT_2", &tByMediumIsolationMVArun2v1DBoldDMwLT, "byMediumIsolationMVArun2v1DBoldDMwLT_2/F");
   tree->Branch("pt_top1", &topQuarkPt1, "pt_top1/F");
   tree->Branch("pt_top2", &topQuarkPt2, "pt_top2/F");
   tree->Branch("metSig", &metSig, "metSig/F");
@@ -725,7 +718,6 @@ void etau_tree::set_branches() {
   tree->Branch("trackpt_2", &tLeadTrackPt, "trackpt_2/F");
   tree->Branch("charged_signalCone_2", &tNChrgHadrSignalCands, "charged_signalCone_2/F");
   tree->Branch("charged_isoCone_2", &tNChrgHadrIsolationCands, "charged_isoCone_2/F");
-  tree->Branch("tPhotonPtSumOutsideSignalCone", &photonIso_2, "tPhotonPtSumOutsideSignalCone/F");
 
   if (isMC) {
     tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
@@ -866,12 +858,6 @@ void etau_tree::set_branches() {
   tree->Branch("met_UESUp", &type1_pfMet_shiftedPt_UnclusteredEnUp);
   tree->Branch("mjj_JESUp", &mjj_JESUp);
   tree->Branch("mjj_JESDown", &mjj_JESDown);
-  tree->Branch("e_t_collinearmass_UnclusteredEnUp", &m_coll_uesU);
-  tree->Branch("e_t_collinearmass_UnclusteredEnDown", &m_coll_uesD);
-  tree->Branch("e_t_collinearmass_JetEnUp", &m_coll_jesU);
-  tree->Branch("e_t_collinearmass_JetEnDown", &m_coll_jesD);
-  tree->Branch("e_t_collinearmass_TauEnUp", &m_coll_tesU);
-  tree->Branch("e_t_collinearmass_TauEnDown", &m_coll_tesD);
 
   //tree->Branch("metphi_EESDown", &type1_pfMet_shiftedPhi_ElectronEnDown);
   //tree->Branch("metphi_EESUp", &type1_pfMet_shiftedPhi_ElectronEnUp);
