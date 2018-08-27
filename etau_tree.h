@@ -199,6 +199,7 @@ void etau_tree::do_skimming() {
     ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
     tau.SetPtEtaPhiM(tPt, tEta, tPhi, tMass);
 
+    // apply TES
     if (isMC) {
       if (tDecayMode == 0) {
         tau *= 0.982;
@@ -207,9 +208,6 @@ void etau_tree::do_skimming() {
       } else if (tDecayMode == 10) {
         tau *= 1.004;
       }
-      
-      if (tZTTGenMatching < 5 && tDecayMode == 1)
-        tau *= (1.095/1.010);
     }
 
     float el_pt_min(24), tau_pt_min;
