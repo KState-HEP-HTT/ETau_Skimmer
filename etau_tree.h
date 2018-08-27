@@ -208,6 +208,9 @@ void etau_tree::do_skimming() {
       } else if (tDecayMode == 10) {
         tau *= 1.004;
       }
+      
+      if (tZTTGenMatching < 5 && tDecayMode == 1)
+        tau *= (1.095/1.010);
     }
 
     float el_pt_min(24), tau_pt_min;
@@ -514,8 +517,6 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
         } else if (tDecayMode == 1) {
           tau *= 1.015;
         }
-      } else if ((tZTTGenMatching == 1 || tZTTGenMatching == 3) && tDecayMode == 1) {
-        tau *= 1.095;
       }
     }
       
