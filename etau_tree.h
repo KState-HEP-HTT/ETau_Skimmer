@@ -24,7 +24,7 @@ public:
       met_px, met_py, met, metphi, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, 
       py_2, pz_2, dijetphi, hdijetphi, visjeteta, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, jdphi, jdeta, mjj, dijetpt, vbfDeta, 
       j1pt, j2pt, j1eta, j2eta, j1phi, j2phi, j1csv, j2csv, jb1pt, jb2pt, jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, jb1hadronflavor, 
-      jb2hadronflavornTruePU, nvtx, numGenJets, singleE25eta2p1TightPass, 
+      jb2hadronflavornTruePU, nvtx, numGenJets, singleE25eta2p1TightPass, higgs_pT, MT,
       eMatchesEle25TightFilter, eMatchesEle25eta2p1TightPath,topQuarkPt1, topQuarkPt2, bjetCISVVeto20Medium, jetVeto20, tZTTGenDR, tDecayMode, ePVDZ, ePVDXY,
       eIsoDB03, eCharge, tPVDZ, tPVDXY, tByIsolationMVArun2v1DBoldDMwLTraw, tCharge, tAgainstMuonTight3, tAgainstMuonLoose3, tAgainstElectronVLooseMVA6,
       tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6, tByLooseCombinedIsolationDeltaBetaCorr3Hits,
@@ -213,7 +213,7 @@ void etau_tree::do_skimming() {
         tau *= (1.095/1.010);
     }
 
-    float el_pt_min(24), tau_pt_min;
+    float el_pt_min(26), tau_pt_min;
     if (!isMC || tZTTGenMatching > 4)
       tau_pt_min = 29.5;
     else if (tZTTGenMatching <= 4) 
@@ -546,6 +546,10 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
       jet2.SetPtEtaPhiM(j2pt, j2eta, j2phi, 0);
     TLorentzVector dijet=jet1+jet2;
 
+    higgs_pT = (ele + tau + MET).Pt();
+    MT = sqrt( pow(pt_1+met, 2) + pow(px_1+met_px, 2) + pow(py_1+met_py, 2) );
+    
+
     if (jetVeto20 > 1) {
       jdeta = vbfDeta;
       jdphi = vbfDphi;
@@ -719,6 +723,7 @@ void etau_tree::set_branches() {
   tree->Branch("charged_isoCone_2", &tNChrgHadrIsolationCands, "charged_isoCone_2/F");
 
   if (false) {
+    std::cout <<"HELLO"<<std::endl;
     tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
     tree->Branch("njets_JetAbsoluteMPFBiasUp", &jetVeto30_JetAbsoluteMPFBiasUp);
     tree->Branch("njets_JetAbsoluteScaleUp", &jetVeto30_JetAbsoluteScaleUp);
@@ -909,6 +914,8 @@ void etau_tree::set_branches() {
   tree->Branch("met_py", &met_py, "met_py/F");
   tree->Branch("met", &met, "met/F");
   tree->Branch("metphi", &metphi, "metphi/F");
+  tree->Branch("higgs_pT", &higgs_pT, "higgs_pT/F");
+  tree->Branch("MT", &MT, "MT/F");
   tree->Branch("pfmetcorr_ex", &pfmetcorr_ex, "pfmetcorr_ex/F");
   tree->Branch("pfmetcorr_ey", &pfmetcorr_ey, "pfmetcorr_ey/F");
   tree->Branch("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp, "pfmetcorr_ex_UESUp/F");
