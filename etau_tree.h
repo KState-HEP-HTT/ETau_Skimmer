@@ -18,13 +18,13 @@ public:
   ULong64_t evt;
   Int_t run, lumi;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
-  Float_t jetVeto30, eZTTGenMatching, tZTTGenMatching;
+  Float_t jetVeto30, eZTTGenMatching, tZTTGenMatching, j1ptUp, j1ptDown, j2ptUp, j2ptDown;
 
   Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, NUP, rho,
       met_px, met_py, met, metphi, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, 
       py_2, pz_2, dijetphi, hdijetphi, visjeteta, ePt, eMass, ePhi, eEta, tPhi, tEta, tMass, tPt, jdphi, jdeta, mjj, dijetpt, vbfDeta, 
       j1pt, j2pt, j1eta, j2eta, j1phi, j2phi, j1csv, j2csv, jb1pt, jb2pt, jb1eta, jb2eta, jb1phi, jb2phi, jb1csv, jb2csv, jb1hadronflavor, 
-      jb2hadronflavornTruePU, nvtx, numGenJets, singleE25eta2p1TightPass, higgs_pT, MT,
+      jb2hadronflavornTruePU, nvtx, numGenJets, singleE25eta2p1TightPass, higgs_pT, MT, hjj_pT,
       eMatchesEle25TightFilter, eMatchesEle25eta2p1TightPath,topQuarkPt1, topQuarkPt2, bjetCISVVeto20Medium, jetVeto20, tZTTGenDR, tDecayMode, ePVDZ, ePVDXY,
       eIsoDB03, eCharge, tPVDZ, tPVDXY, tByIsolationMVArun2v1DBoldDMwLTraw, tCharge, tAgainstMuonTight3, tAgainstMuonLoose3, tAgainstElectronVLooseMVA6,
       tAgainstElectronLooseMVA6, tAgainstElectronMediumMVA6, tAgainstElectronTightMVA6, tAgainstElectronVTightMVA6, tByLooseCombinedIsolationDeltaBetaCorr3Hits,
@@ -48,17 +48,11 @@ public:
           type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
           ;
 
-//  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp,
-//      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
-//      type1_pfMet_shiftedPhi_PhotonEnDown, type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown,
-//      type1_pfMet_shiftedPhi_TauEnUp
-//      ;
-//
-//  Float_t type1_pfMet_shiftedPt_ElectronEnDown, type1_pfMet_shiftedPt_ElectronEnUp,
-//      type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp, type1_pfMet_shiftedPt_MuonEnDown, type1_pfMet_shiftedPt_MuonEnUp,
-//      type1_pfMet_shiftedPt_PhotonEnDown, type1_pfMet_shiftedPt_PhotonEnUp, type1_pfMet_shiftedPt_TauEnUp, 
-//      type1_pfMet_shiftedPt_TauEnDown
-//      ;
+  Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp,
+      type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
+      type1_pfMet_shiftedPhi_PhotonEnDown, type1_pfMet_shiftedPhi_PhotonEnUp, type1_pfMet_shiftedPhi_TauEnDown,
+      type1_pfMet_shiftedPhi_TauEnUp
+      ;
 
   Float_t met_EESDown, met_EESUp, met_JESUp, met_JESDown, met_MESDown, met_MESUp, met_PESUp, met_PESDown, met_TESUp, met_TESDown, met_UESUp, met_UESDown, 
       met_JERDown, met_JERUp, metphi_EESDown, metphi_EESUp, metphi_JESUp
@@ -547,6 +541,7 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     TLorentzVector dijet=jet1+jet2;
 
     higgs_pT = (ele + tau + MET).Pt();
+    hjj_pT = (ele + tau + MET + jet1 + jet2).Pt();
     MT = sqrt( pow(pt_1+met, 2) + pow(px_1+met_px, 2) + pow(py_1+met_py, 2) );
     
 
@@ -676,10 +671,14 @@ void etau_tree::set_branches() {
   tree->Branch("njets", &jetVeto30, "njets/F");
   tree->Branch("njetspt20", &jetVeto20, "njetspt20/F");
   tree->Branch("jpt_1", &j1pt, "jpt_1/F");
+  tree->Branch("jpt_1_JESUp", &j1ptUp, "jpt_1_JESUp/F");
+  tree->Branch("jpt_1_JESDown", &j1ptDown, "jpt_1_JESDown/F");
   tree->Branch("jeta_1", &j1eta, "jeta_1/F");
   tree->Branch("jphi_1", &j1phi, "jphi_1/F");
   tree->Branch("jcsv_1", &j1csv, "jcsv_1/F");
   tree->Branch("jpt_2", &j2pt, "jpt_2/F");
+  tree->Branch("jpt_2_JESUp", &j2ptUp, "jpt_2_JESUp/F");
+  tree->Branch("jpt_2_JESDown", &j2ptDown, "jpt_2_JESDown/F");
   tree->Branch("jeta_2", &j2eta, "jeta_2/F");
   tree->Branch("jphi_2", &j2phi, "jphi_2/F");
   tree->Branch("jcsv_2", &j2csv, "jcsv_2/F");
@@ -722,8 +721,7 @@ void etau_tree::set_branches() {
   tree->Branch("charged_signalCone_2", &tNChrgHadrSignalCands, "charged_signalCone_2/F");
   tree->Branch("charged_isoCone_2", &tNChrgHadrIsolationCands, "charged_isoCone_2/F");
 
-  if (false) {
-    std::cout <<"HELLO"<<std::endl;
+  if (isMC) {
     tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
     tree->Branch("njets_JetAbsoluteMPFBiasUp", &jetVeto30_JetAbsoluteMPFBiasUp);
     tree->Branch("njets_JetAbsoluteScaleUp", &jetVeto30_JetAbsoluteScaleUp);
@@ -916,6 +914,7 @@ void etau_tree::set_branches() {
   tree->Branch("metphi", &metphi, "metphi/F");
   tree->Branch("higgs_pT", &higgs_pT, "higgs_pT/F");
   tree->Branch("MT", &MT, "MT/F");
+  tree->Branch("hjj_pT", &hjj_pT, "hjj_pT/F");
   tree->Branch("pfmetcorr_ex", &pfmetcorr_ex, "pfmetcorr_ex/F");
   tree->Branch("pfmetcorr_ey", &pfmetcorr_ey, "pfmetcorr_ey/F");
   tree->Branch("pfmetcorr_ex_UESUp", &pfmetcorr_ex_UESUp, "pfmetcorr_ex_UESUp/F");
@@ -976,6 +975,10 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("j1csv", &j1csv);
   original->SetBranchAddress("j1phi", &j1phi);
   original->SetBranchAddress("j1pt", &j1pt);
+  original->SetBranchAddress("j1ptUp", &j1ptUp);
+  original->SetBranchAddress("j1ptDown", &j1ptDown);
+  original->SetBranchAddress("j2ptUp", &j2ptUp);
+  original->SetBranchAddress("j2ptDown", &j2ptDown);
   original->SetBranchAddress("jb1hadronflavor", &jb1hadronflavor);
   original->SetBranchAddress("jb2hadronflavor", &jb2hadronflavor);
   original->SetBranchAddress("j2csv", &j2csv);
