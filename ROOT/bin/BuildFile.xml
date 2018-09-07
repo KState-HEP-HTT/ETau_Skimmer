@@ -1,0 +1,4 @@
+<bin name="Skim" file="skimmer.cc">
+  <use name="rootcore"/>
+  <use name="root"/>
+</bin>
