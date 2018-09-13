@@ -231,7 +231,7 @@ void etau_tree::do_skimming() {
     if ((!tByVLooseIsolationMVArun2v1DBoldDMwLT && !tRerunMVArun2v1DBoldDMwLTVLoose) || !tDecayModeFinding || fabs(tCharge) > 1) // tau quality selection
       continue;
 
-    if (!tAgainstMuonLoose3 || !tAgainstElectronTightMVA6) // tau against leptons
+    if (tAgainstMuonLoose3 <0.5 || tAgainstElectronTightMVA6 < 0.5) // tau against leptons
       continue;
 
     if (muVetoZTTp001dxyzR0 > 0 || eVetoZTTp001dxyzR0 > 1 || dielectronVeto > 0) // vetos

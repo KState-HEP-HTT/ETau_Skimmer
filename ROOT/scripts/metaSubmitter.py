@@ -3,7 +3,6 @@ import subprocess
 from argparse import ArgumentParser
 
 parser = ArgumentParser(description="run on a directory containing directories containing the skimmed ntuples")
-parser.add_argument('-d', '--sampledir', action = 'store', help = 'path to the directory')
 parser.add_argument('-p', '--prefix', action = 'store', help = 'name to prefix all directories')
 parser.add_argument('-j', '--job', action = 'store', help = 'job type')
 args = parser.parse_args()
@@ -79,7 +78,6 @@ data_samples = {
     "datasE-H_ext1": ["data_SingleElectron_Run2016H_v3", '0'],
 }
 
-sampledir = args.sampledir
 prefix = args.prefix
 jobType = args.job
 
