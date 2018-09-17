@@ -14,9 +14,9 @@ private:
 public:
   // Member variables
 
-  // variables copied directly tree to tree
   ULong64_t evt;
-  Int_t run, lumi;
+  UInt_t run, lumi;
+  Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
   Float_t jetVeto30, eZTTGenMatching, tZTTGenMatching, j1ptUp, j1ptDown, j2ptUp, j2ptDown;
 
@@ -296,6 +296,13 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
   // loop through all events pasing skimming/sorting
   for (auto& ievt : good_events) {
     original->GetEntry(ievt);
+
+    // convert from Float_t in FSA to Int_t for analyzer
+    gen_match_1 = eZTTGenMatching;
+    gen_match_2 = tZTTGenMatching;
+    njets = jetVeto30;
+    nbtag = bjetCISVVeto20Medium;
+    njetspt20 = jetVeto20;
 
     // TLorentzVector ele, tau;
     ele.SetPtEtaPhiM(ePt, eEta, ePhi, eMass);
@@ -637,8 +644,8 @@ void etau_tree::set_branches() {
   tree->Branch("dilepton_veto", &dilepton_veto, "dilepton_veto/F");
   tree->Branch("extraelec_veto", &extraelec_veto, "extraelec/F");
   tree->Branch("extramuon_veto", &extramuon_veto, "extramuon/F");
-  tree->Branch("gen_match_1", &eZTTGenMatching, "gen_match_1/F");
-  tree->Branch("gen_match_2", &tZTTGenMatching, "gen_match_2/F");
+  tree->Branch("gen_match_1", &gen_match_1, "gen_match_1/I");
+  tree->Branch("gen_match_2", &gen_match_2, "gen_match_2/I");
   tree->Branch("againstElectronLooseMVA6_2", &tAgainstElectronLooseMVA6, "againstElectronLooseMVA6_2/F");
   tree->Branch("againstElectronMediumMVA6_2", &tAgainstElectronMediumMVA6, "againstElectronMediumMVA6_2/F");
   tree->Branch("againstElectronTightMVA6_2", &tAgainstElectronTightMVA6, "againstElectronTightMVA6_2/F");
@@ -669,9 +676,9 @@ void etau_tree::set_branches() {
   tree->Branch("puCorrPtSum_2", &tPuCorrPtSum, "puCorrPtSum_2/F");
   tree->Branch("met", &type1_pfMetEt, "met/F");
   tree->Branch("metphi", &type1_pfMetPhi, "metphi/F");
-  tree->Branch("nbtag", &bjetCISVVeto20Medium, "nbtag/F");
-  tree->Branch("njets", &jetVeto30, "njets/F");
-  tree->Branch("njetspt20", &jetVeto20, "njetspt20/F");
+  tree->Branch("nbtag", &nbtag, "nbtag/I");
+  tree->Branch("njets", &njets, "njets/I");
+  tree->Branch("njetspt20", &njetspt20, "njetspt20/I");
   tree->Branch("jpt_1", &j1pt, "jpt_1/F");
   tree->Branch("jpt_1_JESUp", &j1ptUp, "jpt_1_JESUp/F");
   tree->Branch("jpt_1_JESDown", &j1ptDown, "jpt_1_JESDown/F");
