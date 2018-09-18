@@ -613,8 +613,8 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
 void etau_tree::set_branches() {
 
   // straight from input tree
-  tree->Branch("run", &run, "run/I");
-  tree->Branch("lumi", &lumi, "lumi/I");
+  tree->Branch("run", &run);
+  tree->Branch("lumi", &lumi);
   tree->Branch("evt", &evt);
   tree->Branch("rho", &rho, "rho/F");
   tree->Branch("metcov00", &metcov00, "metcov00/F");
