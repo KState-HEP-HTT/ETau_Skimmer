@@ -7,7 +7,7 @@
 class etau_tree {
 private:
   TTree *tree, *original;
-  bool isMC;
+  bool isMC, isEmbed;
   std::vector<Int_t> good_events;
   TLorentzVector ele, tau, MET, MET_UESUp, MET_UESDown, MET_JESUp, MET_JESDown;
 
@@ -15,6 +15,7 @@ public:
   // Member variables
 
   ULong64_t evt;
+  Int_t Run, Lumi;
   UInt_t run, lumi;
   Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
@@ -36,7 +37,7 @@ public:
       tNChrgHadrIsolationCands, tPhotonPtSumOutsideSignalCone, vbfDphi, eVetoZTTp001dxyzR0, muVetoZTTp001dxyzR0, dielectronVetobyIsolationMVA3oldDMwoLTraw_2,
       byIsolationMVA3newDMwoLTraw_2, filterEle27, vbfMass, vbfJetVeto20, vbfJetVeto30, extramuon_veto, nTruePU,
       eMVANonTrigWP80, ePassesConversionVeto, eMissingHits, e_t_DR, tRerunMVArun2v1DBoldDMwLTVLoose, dielectronVeto, njetingap, njetingap20,
-      e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix11
+      e_t_MvaMetCovMatrix00, e_t_MvaMetCovMatrix01, e_t_MvaMetCovMatrix10, e_t_MvaMetCovMatrix11, eMatchesSingleE25Tight;
       ;
 
   Float_t Flag_BadChargedCandidateFilter, Flag_EcalDeadCellTriggerPrimitiveFilter, Flag_HBHENoiseFilter, Flag_badCloneMuonFilter,
@@ -102,9 +103,9 @@ public:
   Int_t recoil;
 
   // Member functions
-  etau_tree(TTree *orig, TTree *itree, bool isMC, Int_t rec);
+  etau_tree(TTree *orig, TTree *itree, bool isMC, bool isEmbed, Int_t rec);
   virtual ~etau_tree () {};
-  void do_skimming();
+  void do_skimming(TH1F*);
   void set_branches();
   TTree* fill_tree(RecoilCorrector recoilPFMetCorrector);
 };
@@ -120,10 +121,11 @@ public:
 //   - itree: A newly constructed tree. This tree will be       //
 //            filled for all events passing the skim selection  //
 //////////////////////////////////////////////////////////////////
-etau_tree::etau_tree(TTree* Original, TTree* itree, bool IsMC, Int_t rec) :
+etau_tree::etau_tree(TTree* Original, TTree* itree, bool IsMC, bool IsEmbed, Int_t rec) :
 tree(itree),
 original(Original),
 isMC(IsMC),
+isEmbed(IsEmbed),
 recoil(rec)
 {
   // read only what is needed for skimming and sorting
@@ -144,6 +146,7 @@ recoil(rec)
   original->SetBranchAddress("singleE25eta2p1TightPass", &singleE25eta2p1TightPass);
   original->SetBranchAddress("eMatchesEle25TightFilter", &eMatchesEle25TightFilter);
   original->SetBranchAddress("eMatchesEle25eta2p1TightPath", &eMatchesEle25eta2p1TightPath);
+  original->SetBranchAddress("eMatchesSingleE25Tight", &eMatchesSingleE25Tight);
 
   // tau variables
   original->SetBranchAddress("tPt", &tPt);
@@ -176,7 +179,7 @@ recoil(rec)
 //          Good events will be placed in the good_events       //
 //          vector for later                                    //
 //////////////////////////////////////////////////////////////////
-void etau_tree::do_skimming() {
+void etau_tree::do_skimming(TH1F* cutflow) {
 
   // declare variables for sorting
   ULong64_t evt_now(0);
@@ -215,30 +218,34 @@ void etau_tree::do_skimming() {
     else 
       tau_pt_min = 27.0;
 
+    cutflow->Fill(1., 1.);
     // apply event selection 
-    if (!singleE25eta2p1TightPass || !eMatchesEle25TightFilter || !eMatchesEle25eta2p1TightPath) // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
-      continue;
+    if (isEmbed || (singleE25eta2p1TightPass && eMatchesEle25TightFilter && eMatchesEle25eta2p1TightPath)) cutflow->Fill(2., 1.); // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
+    else  continue;
 
-    if (ePt < el_pt_min || fabs(eEta) > 2.1 || fabs(ePVDZ) > 0.2 || fabs(ePVDXY) > 0.045) // electron kinematic selection
-      continue;
+    if (!isEmbed || (eMatchesSingleE25Tight && singleE25eta2p1TightPass)) cutflow->Fill(3., 1.);
+    else  continue;
 
-    if (!eMVANonTrigWP80 || !ePassesConversionVeto || eMissingHits > 1) // electron quality selection
-      continue;
+    if (ePt > el_pt_min && fabs(eEta) < 2.1 && fabs(ePVDZ) < 0.2 && fabs(ePVDXY) < 0.045) cutflow->Fill(4., 1.); // electron kinematic selection
+    else  continue;
 
-    if (tau.Pt() < tau_pt_min || fabs(tau.Eta()) > 2.3 || fabs(tPVDZ) > 0.2) // tau kinematic selection
-      continue;
+    if (eMVANonTrigWP80 && ePassesConversionVeto && eMissingHits < 2) cutflow->Fill(5., 1.); // electron quality selection
+    else  continue;
 
-    if ((!tByVLooseIsolationMVArun2v1DBoldDMwLT && !tRerunMVArun2v1DBoldDMwLTVLoose) || !tDecayModeFinding || fabs(tCharge) > 1) // tau quality selection
-      continue;
+    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
+    else  continue;
 
-    if (tAgainstMuonLoose3 <0.5 || tAgainstElectronTightMVA6 < 0.5) // tau against leptons
-      continue;
+    if ((tByVLooseIsolationMVArun2v1DBoldDMwLT || tRerunMVArun2v1DBoldDMwLTVLoose) && tDecayModeFinding && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
+    else  continue;
 
-    if (muVetoZTTp001dxyzR0 > 0 || eVetoZTTp001dxyzR0 > 1 || dielectronVeto > 0) // vetos
-      continue;
+    if (tAgainstMuonLoose3 > 0.5 && tAgainstElectronTightMVA6 > 0.5) cutflow->Fill(8., 1.); // tau against leptons
+    else  continue;
 
-    if (e_t_DR < 0.5)
-      continue;
+    if (muVetoZTTp001dxyzR0 == 0 && eVetoZTTp001dxyzR0 < 2 && dielectronVeto == 0) cutflow->Fill(9., 1.); // vetos
+     else continue;
+
+    if (e_t_DR > 0.5) cutflow->Fill(10., 1.);
+    else  continue;
 
     // implement new sorting per 
     // https://twiki.cern.ch/twiki/bin/viewauth/CMS/HiggsToTauTauWorking2017#Baseline_Selection
@@ -298,6 +305,8 @@ TTree* etau_tree::fill_tree(RecoilCorrector recoilPFMetCorrector) {
     original->GetEntry(ievt);
 
     // convert from Float_t in FSA to Int_t for analyzer
+    run = Run;
+    lumi = Lumi;
     gen_match_1 = eZTTGenMatching;
     gen_match_2 = tZTTGenMatching;
     njets = jetVeto30;
@@ -938,8 +947,8 @@ void etau_tree::set_branches() {
   // read input tree
 
   // straight from input tree
-  original->SetBranchAddress("run", &run); 
-  original->SetBranchAddress("lumi", &lumi);
+  original->SetBranchAddress("run", &Run); 
+  original->SetBranchAddress("lumi", &Lumi);
   original->SetBranchAddress("rho", &rho);
   original->SetBranchAddress("metcov00", &metcov00);
   original->SetBranchAddress("metcov01", &metcov01);

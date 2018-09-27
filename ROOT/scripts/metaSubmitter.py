@@ -78,12 +78,23 @@ data_samples = {
     "datasE-H_ext1": ["data_SingleElectron_Run2016H_v3", '0'],
 }
 
+embedded_samples = {
+  'embed-B' : ['EmbeddingRun2016B-v2', '0'],
+  'embed-C' : ['EmbeddingRun2016C-v2', '0'],
+  'embed-D' : ['EmbeddingRun2016D-v2', '0'],
+  'embed-E' : ['EmbeddingRun2016E-v2', '0'],
+  'embed-F' : ['EmbeddingRun2016F-v2', '0'],
+  'embed-G' : ['EmbeddingRun2016G-v2', '0'],
+  'embed-H' : ['EmbeddingRun2016H-v2', '0'],
+}
+
 prefix = args.prefix
 jobType = args.job
 
 bkg_pref = "/hdfs/store/user/ndev/LFV_feb18_mc/"
 sig_pref = "/hdfs/store/user/truggles/SMHTT_signals_may30/"
 data_pref = "/hdfs/store/user/ndev/LFV_reminiaod_feb18/"
+embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et/'
 
 samples = bkg_samples
 pref = bkg_pref
@@ -93,6 +104,9 @@ if args.job == 'sig':
 elif args.job == 'data':
   samples = data_samples
   pref = data_pref
+elif args.job == 'embed':
+  samples = embedded_samples
+  pref = embed_pref
 
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
