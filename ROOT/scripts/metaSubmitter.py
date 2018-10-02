@@ -95,6 +95,7 @@ bkg_pref = "/hdfs/store/user/ndev/LFV_feb18_mc/"
 sig_pref = "/hdfs/store/user/truggles/SMHTT_signals_may30/"
 data_pref = "/hdfs/store/user/ndev/LFV_reminiaod_feb18/"
 embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et/'
+embed_H_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v4/'
 
 samples = bkg_samples
 pref = bkg_pref
