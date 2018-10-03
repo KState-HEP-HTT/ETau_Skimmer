@@ -10,8 +10,8 @@
 #include "TTree.h"
 
 // user includes
-#include "HTT2016_skimmer/ROOT/src/etau_tree.h"
-#include "HTT2016_skimmer/ROOT/src/CLParser.h"
+#include "ETau_Skimmer/ROOT/src/etau_tree.h"
+#include "ETau_Skimmer/ROOT/src/CLParser.h"
 
 static unsigned events(0);
 int main(int argc, char *argv[]) {

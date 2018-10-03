@@ -45,13 +45,13 @@ bkg_samples = {
   "EWKZ2nu"      : ["EWKZ2Jets_ZToNuNu_13TeV-madgraph-pythia8_v6-v1",  '0'],
   "EWKZ2nu_ext1" : ["EWKZ2Jets_ZToNuNu_13TeV-madgraph-pythia8_v6_ext1-v1",  '0'],
   "EWKZ2nu_ext2" : ["EWKZ2Jets_ZToNuNu_13TeV-madgraph-pythia8_v6_ext2-v1", '0'],
-  "ggH_WW125"    : ["GluGluHToWWTo2L2Nu_M125_13TeV_powheg_pythia8_v6-v1", '0'],
-  "VBF_WW125"    : ["VBFHToWWTo2L2Nu_M125_13TeV_powheg_pythia8_v6-v1", '0'],
-  "WGLNu"        : ["WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_v6_ext1-v1",  '0'],
-  "WGLNu_ext1"   : ["WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_v6_ext2-v1", '0'],
-  "WGstarEE"     : ["WGstarToLNuEE_012Jets_13TeV-madgraph_v6-v1", '0'],
-  "WGstarMuMu"   : ["WGstarToLNuMuMu_012Jets_13TeV-madgraph_v6-v1", '0'],
-  "WWW"          : ["WWW_4F_TuneCUETP8M1_13TeV-amcatnlo-pythia8_v6-v1", '0'],
+  #"ggH_WW125"    : ["GluGluHToWWTo2L2Nu_M125_13TeV_powheg_pythia8_v6-v1", '0'],
+  #"VBF_WW125"    : ["VBFHToWWTo2L2Nu_M125_13TeV_powheg_pythia8_v6-v1", '0'],
+  #"WGLNu"        : ["WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_v6_ext1-v1",  '0'],
+  #"WGLNu_ext1"   : ["WGToLNuG_TuneCUETP8M1_13TeV-amcatnloFXFX-pythia8_v6_ext2-v1", '0'],
+  #"WGstarEE"     : ["WGstarToLNuEE_012Jets_13TeV-madgraph_v6-v1", '0'],
+  #"WGstarMuMu"   : ["WGstarToLNuMuMu_012Jets_13TeV-madgraph_v6-v1", '0'],
+  #"WWW"          : ["WWW_4F_TuneCUETP8M1_13TeV-amcatnlo-pythia8_v6-v1", '0'],
   "WZ3l1nu"      : ["WZJToLLLNu_TuneCUETP8M1_13TeV-amcnlo-pythia8_v6-v1", '0'],
   "WZ1l1nu2q"    : ["WZTo1L1Nu2Q_13TeV_amcatnloFXFX_madspin_pythia8_v6-v3", '0'],
   "WZ1l3nu"      : ["WZTo1L3Nu_13TeV_amcatnloFXFX_madspin_pythia8_v6-v1", '0'],
@@ -95,6 +95,7 @@ bkg_pref = "/hdfs/store/user/ndev/LFV_feb18_mc/"
 sig_pref = "/hdfs/store/user/truggles/SMHTT_signals_may30/"
 data_pref = "/hdfs/store/user/ndev/LFV_reminiaod_feb18/"
 embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et/'
+embed_H_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v4/'
 
 samples = bkg_samples
 pref = bkg_pref
@@ -111,5 +112,9 @@ elif args.job == 'embed':
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
   path = samples[sample][0]
-  #print('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s' % (sample, path, prefix, jobType, recoil))
+  hold_pref = pref
+  if 'embed-H' in sample:
+    pref = embed_H_pref
+  else:
+    pref = hold_pref
   subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s' % (sample, pref+path, prefix, jobType, recoil), shell=True)
