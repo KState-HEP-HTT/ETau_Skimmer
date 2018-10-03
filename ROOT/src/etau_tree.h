@@ -210,16 +210,16 @@ void etau_tree::do_skimming(TH1F* cutflow) {
         tau *= (1.095/1.010);
     }
 
-    float el_pt_min(26), tau_pt_min;
-    if (!isMC || tZTTGenMatching > 4)
-      tau_pt_min = 29.5;
-    else if (tZTTGenMatching <= 4) 
-      tau_pt_min = 27.0;
-    else 
-      tau_pt_min = 27.0;
-
-    // loose temporarily
-    tau_pt_min = 20.;
+//    float el_pt_min(26), tau_pt_min;
+//    if (!isMC || tZTTGenMatching > 4)
+//      tau_pt_min = 29.5;
+//    else if (tZTTGenMatching <= 4) 
+//      tau_pt_min = 27.0;
+//    else 
+//      tau_pt_min = 27.0;
+//
+//    // loose temporarily
+//    tau_pt_min = 20.;
 
     cutflow->Fill(1., 1.);
     // apply event selection 
