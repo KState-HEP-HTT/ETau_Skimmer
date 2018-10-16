@@ -210,6 +210,14 @@ void etau_tree::do_skimming(TH1F* cutflow) {
         tau *= (1.095/1.010);
     }
 
+    float el_pt_min(26), tau_pt_min;
+    if (!isMC || tZTTGenMatching > 4)
+      tau_pt_min = 29.5;
+    else if (tZTTGenMatching <= 4) 
+      tau_pt_min = 27.0;
+    else 
+      tau_pt_min = 27.0;
+
     cutflow->Fill(1., 1.);
     // apply event selection 
     if (isEmbed || (singleE25eta2p1TightPass && eMatchesEle25TightFilter && eMatchesEle25eta2p1TightPath)) cutflow->Fill(2., 1.); // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
@@ -218,22 +226,25 @@ void etau_tree::do_skimming(TH1F* cutflow) {
     if (!isEmbed || (eMatchesSingleE25Tight && singleE25eta2p1TightPass)) cutflow->Fill(3., 1.);
     else  continue;
 
-    if (fabs(ePVDZ) < 0.2 && fabs(ePVDXY) < 0.045) cutflow->Fill(4., 1.); // electron kinematic selection
+    if (ePt > el_pt_min && fabs(eEta) < 2.1 && fabs(ePVDZ) < 0.2 && fabs(ePVDXY) < 0.045) cutflow->Fill(4., 1.); // electron kinematic selection
     else  continue;
 
     if (eMVANonTrigWP80 && ePassesConversionVeto && eMissingHits < 2) cutflow->Fill(5., 1.); // electron quality selection
     else  continue;
 
-    if (fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
+    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
     else  continue;
 
     if ((tByVLooseIsolationMVArun2v1DBoldDMwLT || tRerunMVArun2v1DBoldDMwLTVLoose) && tDecayModeFinding && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
     else  continue;
 
-    if (muVetoZTTp001dxyzR0 == 0 && eVetoZTTp001dxyzR0 < 2 && dielectronVeto == 0) cutflow->Fill(8., 1.); // vetos
+    if (tAgainstMuonLoose3 > 0.5 && tAgainstElectronTightMVA6 > 0.5) cutflow->Fill(8., 1.); // tau against leptons
+    else  continue;
+
+    if (muVetoZTTp001dxyzR0 == 0 && eVetoZTTp001dxyzR0 < 2 && dielectronVeto == 0) cutflow->Fill(9., 1.); // vetos
      else continue;
 
-    if (e_t_DR > 0.5) cutflow->Fill(9., 1.);
+    if (e_t_DR > 0.5) cutflow->Fill(10., 1.);
     else  continue;
 
     // implement new sorting per 
