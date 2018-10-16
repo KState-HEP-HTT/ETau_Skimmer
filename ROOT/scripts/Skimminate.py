@@ -29,9 +29,6 @@ def main(argv=None):
     print "svfit standalone submit"
     args = parse_command_line(argv)
     jobName = args.jobName
-    channel = "ETau"
-    period = 13
-    dryrun = args.dryrun
     sampledir = args.sampledir
     sample_name = os.path.basename(sampledir)
     print "sample_name:",args.samplename
@@ -57,17 +54,14 @@ def main(argv=None):
 
     # create file list
     filelist = ['%s/%s' % (sampledir, x) for x in os.listdir(sampledir)]
-    numfiles = len(filelist)
-    totalsize = sum([os.path.getsize(f) for f in filelist])
-    averagesize = totalsize/numfiles
     filesperjob = 1
     input_name = '%s/%s.txt' % (dag_dir+'inputs', args.samplename)
     with open(input_name,'w') as file:
         for f in filelist:
             file.write('%s\n' % f.replace('/hdfs','',1))
 
-# create bash script
-    bash_name = '%s/%s_%i_%s.sh' % (dag_dir+'inputs', channel, period, args.samplename)
+    # create bash script
+    bash_name = '%s/%s.sh' % (dag_dir+'inputs', args.samplename)
     bashScript = "#!/bin/bash\n value=$(<$INPUT)\n echo \"$value\"\n"
     bashScript += '$CMSSW_BASE/bin/$SCRAM_ARCH/Skim -d %s -j %s -r %s -i $value -o \'$OUTPUT\'' % (args.samplename, args.job, args.recoil)
     bashScript += '\n'
@@ -75,7 +69,7 @@ def main(argv=None):
         file.write(bashScript)
     os.system('chmod +x %s' % bash_name)
                 
-# create farmout command
+    # create farmout command
     farmoutString = 'farmoutAnalysisJobs --infer-cmssw-path --fwklite --input-file-list=%s' % (input_name)
     farmoutString += ' --submit-dir=%s --output-dag-file=%s --output-dir=%s' % (submit_dir, dag_dir, output_dir)
     farmoutString += ' --input-files-per-job=%i %s %s ' % (filesperjob, jobName, bash_name)

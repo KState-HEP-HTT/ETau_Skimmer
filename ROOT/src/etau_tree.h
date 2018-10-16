@@ -20,6 +20,7 @@ public:
   Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
   Float_t jetVeto30, eZTTGenMatching, tZTTGenMatching, j1ptUp, j1ptDown, j2ptUp, j2ptDown;
+  Float_t Rivet_nJets30, Rivet_higgsPt;
 
   Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, NUP, rho,
       met_px, met_py, met, metphi, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, 
@@ -45,9 +46,9 @@ public:
       ;
 
   Float_t type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp,
-          type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp,
-          type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
-          ;
+      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp,
+      type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
+      ;
 
   Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp,
       type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
@@ -738,6 +739,8 @@ void etau_tree::set_branches() {
   tree->Branch("trackpt_2", &tLeadTrackPt, "trackpt_2/F");
   tree->Branch("charged_signalCone_2", &tNChrgHadrSignalCands, "charged_signalCone_2/F");
   tree->Branch("charged_isoCone_2", &tNChrgHadrIsolationCands, "charged_isoCone_2/F");
+  tree->Branch("Rivet_higgsPt", &Rivet_higgsPt, "Rivet_higgsPt/F");
+  tree->Branch("Rivet_nJets30", &Rivet_nJets30, "Rivet_nJets30/F");
 
   if (isMC) {
     tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
@@ -1040,6 +1043,8 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("tNChrgHadrSignalCands", &tNChrgHadrSignalCands);
   original->SetBranchAddress("tNChrgHadrIsolationCands", &tNChrgHadrIsolationCands);
   original->SetBranchAddress("tPhotonPtSumOutsideSignalCone", &tPhotonPtSumOutsideSignalCone);
+  original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
+  original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
 
   // used to construct something
   original->SetBranchAddress("vbfDeta", &vbfDeta);
