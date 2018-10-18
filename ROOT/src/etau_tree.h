@@ -1044,7 +1044,7 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("tNChrgHadrIsolationCands", &tNChrgHadrIsolationCands);
   original->SetBranchAddress("tPhotonPtSumOutsideSignalCone", &tPhotonPtSumOutsideSignalCone);
   original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
-  original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
+  original->SetBranchAddress("Rivet_higgsPt", &Rivet_higgsPt);
 
   // used to construct something
   original->SetBranchAddress("vbfDeta", &vbfDeta);
