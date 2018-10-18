@@ -20,6 +20,7 @@ public:
   Int_t gen_match_1, gen_match_2, njets, nbtag, njetspt20;
   Int_t njetingap_JESUp, njetingap20_JESUp, njetingap_JESDown, njetingap20_JESDown, njets_JESUp, njetspt20_JESUp, njets_JESDown, njetspt20_JESDown;
   Float_t jetVeto30, eZTTGenMatching, tZTTGenMatching, j1ptUp, j1ptDown, j2ptUp, j2ptDown;
+  Float_t Rivet_nJets30, Rivet_higgsPt;
 
   Float_t GenWeight, genpX, genpY, vispX, vispY, genpT, genM, type1_pfMetEt, type1_pfMetPhi, metSig, metcov00, metcov01, metcov10, metcov11, NUP, rho,
       met_px, met_py, met, metphi, extraelec_veto, dilepton_veto, m_1, pt_1, eta_1, phi_1, e_1, px_1, py_1, pz_1, m_2, pt_2, eta_2, phi_2, e_2, px_2, 
@@ -45,9 +46,9 @@ public:
       ;
 
   Float_t type1_pfMet_shiftedPhi_JetEnDown, type1_pfMet_shiftedPhi_JetEnUp, type1_pfMet_shiftedPhi_UnclusteredEnDown, type1_pfMet_shiftedPhi_UnclusteredEnUp,
-          type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp,
-          type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
-          ;
+      type1_pfMet_shiftedPhi_JetResDown, type1_pfMet_shiftedPhi_JetResUp, type1_pfMet_shiftedPt_JetResDown, type1_pfMet_shiftedPt_JetResUp,
+      type1_pfMet_shiftedPt_JetEnDown, type1_pfMet_shiftedPt_JetEnUp, type1_pfMet_shiftedPt_UnclusteredEnDown, type1_pfMet_shiftedPt_UnclusteredEnUp
+      ;
 
   Float_t type1_pfMet_shiftedPhi_ElectronEnDown, type1_pfMet_shiftedPhi_ElectronEnUp,
       type1_pfMet_shiftedPhi_MuonEnDown, type1_pfMet_shiftedPhi_MuonEnUp,
@@ -210,6 +211,14 @@ void etau_tree::do_skimming(TH1F* cutflow) {
         tau *= (1.095/1.010);
     }
 
+    float el_pt_min(26), tau_pt_min;
+    if (!isMC || tZTTGenMatching > 4)
+      tau_pt_min = 29.5;
+    else if (tZTTGenMatching <= 4) 
+      tau_pt_min = 27.0;
+    else 
+      tau_pt_min = 27.0;
+
     cutflow->Fill(1., 1.);
     // apply event selection 
     if (isEmbed || (singleE25eta2p1TightPass && eMatchesEle25TightFilter && eMatchesEle25eta2p1TightPath)) cutflow->Fill(2., 1.); // apply trigger HLT Ele25 eta2p1 WPTight Gsf with matching
@@ -218,22 +227,25 @@ void etau_tree::do_skimming(TH1F* cutflow) {
     if (!isEmbed || (eMatchesSingleE25Tight && singleE25eta2p1TightPass)) cutflow->Fill(3., 1.);
     else  continue;
 
-    if (fabs(ePVDZ) < 0.2 && fabs(ePVDXY) < 0.045) cutflow->Fill(4., 1.); // electron kinematic selection
+    if (ePt > el_pt_min && fabs(eEta) < 2.1 && fabs(ePVDZ) < 0.2 && fabs(ePVDXY) < 0.045) cutflow->Fill(4., 1.); // electron kinematic selection
     else  continue;
 
     if (eMVANonTrigWP80 && ePassesConversionVeto && eMissingHits < 2) cutflow->Fill(5., 1.); // electron quality selection
     else  continue;
 
-    if (fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
+    if (tau.Pt() > tau_pt_min && fabs(tau.Eta()) < 2.3 && fabs(tPVDZ) < 0.2) cutflow->Fill(6., 1.); // tau kinematic selection
     else  continue;
 
     if ((tByVLooseIsolationMVArun2v1DBoldDMwLT || tRerunMVArun2v1DBoldDMwLTVLoose) && tDecayModeFinding && fabs(tCharge) < 2) cutflow->Fill(7., 1.); // tau quality selection
     else  continue;
 
-    if (muVetoZTTp001dxyzR0 == 0 && eVetoZTTp001dxyzR0 < 2 && dielectronVeto == 0) cutflow->Fill(8., 1.); // vetos
+    if (tAgainstMuonLoose3 > 0.5 && tAgainstElectronTightMVA6 > 0.5) cutflow->Fill(8., 1.); // tau against leptons
+    else  continue;
+
+    if (muVetoZTTp001dxyzR0 == 0 && eVetoZTTp001dxyzR0 < 2 && dielectronVeto == 0) cutflow->Fill(9., 1.); // vetos
      else continue;
 
-    if (e_t_DR > 0.5) cutflow->Fill(9., 1.);
+    if (e_t_DR > 0.5) cutflow->Fill(10., 1.);
     else  continue;
 
     // implement new sorting per 
@@ -727,6 +739,8 @@ void etau_tree::set_branches() {
   tree->Branch("trackpt_2", &tLeadTrackPt, "trackpt_2/F");
   tree->Branch("charged_signalCone_2", &tNChrgHadrSignalCands, "charged_signalCone_2/F");
   tree->Branch("charged_isoCone_2", &tNChrgHadrIsolationCands, "charged_isoCone_2/F");
+  tree->Branch("Rivet_higgsPt", &Rivet_higgsPt, "Rivet_higgsPt/F");
+  tree->Branch("Rivet_nJets30", &Rivet_nJets30, "Rivet_nJets30/F");
 
   if (isMC) {
     tree->Branch("njets_JetAbsoluteFlavMapUp", &jetVeto30_JetAbsoluteFlavMapUp);
@@ -1029,6 +1043,8 @@ void etau_tree::set_branches() {
   original->SetBranchAddress("tNChrgHadrSignalCands", &tNChrgHadrSignalCands);
   original->SetBranchAddress("tNChrgHadrIsolationCands", &tNChrgHadrIsolationCands);
   original->SetBranchAddress("tPhotonPtSumOutsideSignalCone", &tPhotonPtSumOutsideSignalCone);
+  original->SetBranchAddress("Rivet_nJets30", &Rivet_nJets30);
+  original->SetBranchAddress("Rivet_higgsPt", &Rivet_higgsPt);
 
   // used to construct something
   original->SetBranchAddress("vbfDeta", &vbfDeta);

@@ -59,7 +59,8 @@ bkg_samples = {
 }
 
 sig_samples = {
-  "ggHtoTauTau125"  : ["GluGluHToTauTau_M125_13TeV_powheg_pythia8_v6-v1", 'Z'],
+  "ggHtoTauTau125_v1"  : ["GluGluHToTauTau_M125_13TeV_powheg_pythia8_v6-v1", 'Z'],
+  "ggHtoTauTau125_v2"  : ["GluGluHToTauTau_M125_13TeV_powheg_pythia8_v6-v2", 'Z'],
   "VBFHtoTauTau125" : ["VBFHToTauTau_M125_13TeV_powheg_pythia8_v6-v1", 'Z'],
   "WPlusHTauTau125" : ["WplusHToTauTau_M125_13TeV_powheg_pythia8_v6-v1", '0'],
   "WMinusHTauTau125": ["WminusHToTauTau_M125_13TeV_powheg_pythia8_v6-v1", '0'],
@@ -94,8 +95,8 @@ jobType = args.job
 bkg_pref = "/hdfs/store/user/ndev/LFV_feb18_mc/"
 sig_pref = "/hdfs/store/user/truggles/SMHTT_signals_may30/"
 data_pref = "/hdfs/store/user/ndev/LFV_reminiaod_feb18/"
-embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et/'
-embed_H_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v4/'
+embed_pref = '/hdfs/store/user/abdollah/MiniAOD_Embed_et_v5/'
+ggH_pref = '/hdfs/store/user/truggles/SM-HTT_HTXS_ggH_aug31_v1/'
 
 samples = bkg_samples
 pref = bkg_pref
@@ -112,9 +113,6 @@ elif args.job == 'embed':
 for sample in sorted(samples.keys()):
   recoil = samples[sample][1]
   path = samples[sample][0]
-  hold_pref = pref
-  if 'embed-H' in sample:
-    pref = embed_H_pref
-  else:
-    pref = hold_pref
+  if 'ggHtoTauTau125' in sample:
+    pref = ggH_pref
   subprocess.call('python Skimminate.py -sn %s -sd %s --jobName %s -j %s -r %s' % (sample, pref+path, prefix, jobType, recoil), shell=True)
